@@ -378,7 +378,9 @@ module sha256_k_constants(
             tmp_K = 32'hc67178f2;
           end
       endcase // case (addr)
-      
+    end // block: addr_mux
+endmodule // sha256_k_constants
+
 //======================================================================
 // sha256_k_constants.v
 //======================================================================
