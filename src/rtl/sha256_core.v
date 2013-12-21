@@ -55,6 +55,15 @@ module sha256_core(
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
+  parameter H0 = 32'h6a09e667;
+  parameter H1 = 32'hbb67ae85;
+  parameter H2 = 32'h3c6ef372;
+  parameter H3 = 32'ha54ff53a;
+  parameter H4 = 32'h510e527f;
+  parameter H5 = 32'h9b05688c;
+  parameter H6 = 32'h1f83d9ab;
+  parameter H7 = 32'h5be0cd19;
+
   parameter CTRL_IDLE   = 0;
   parameter CTRL_INIT   = 1;
   parameter CTRL_NEXT   = 2;
@@ -69,6 +78,12 @@ module sha256_core(
   reg [2 : 0] sha256_ctrl_new;
   reg sha256_ctrl_we;
    
+  reg [6 : 0] t_ctr_reg;
+  reg [6 : 0] t_ctr_new;
+  reg t_ctr_we;
+  reg t_ctr_inc;
+  reg t_ctr_rst;
+
   
   //----------------------------------------------------------------
   // Wires.
@@ -105,10 +120,16 @@ module sha256_core(
       if (!reset_n)
         begin
 
+          t_ctr_reg       = 7'b0000000;
           sha256_ctrl_reg = CTRL_IDLE;
         end
       else
         begin
+          
+          if (t_ctr_we)
+            begin
+              t_ctr_reg <= t_ctr_new;
+            end
           
           if (sha256_ctrl_we)
             begin
@@ -116,8 +137,32 @@ module sha256_core(
             end
         end
     end // reg_update
-  
 
+  
+  //----------------------------------------------------------------
+  // t_ctr
+  // Update logic for the round counter, a monotonically 
+  // increasing counter with reset.
+  //----------------------------------------------------------------
+  always @*
+    begin : t_ctr
+      t_ctr_new = 0;
+      t_ctr_we  = 0;
+      
+      if (t_ctr_rst)
+        begin
+          t_ctr_new = 0;
+          t_ctr_we  = 1;
+        end
+
+      if (t_ctr_inc)
+        begin
+          t_ctr_new = t_ctr_reg + 1;
+          t_ctr_we  = 1;
+        end
+    end // t_ctr
+
+  
   //----------------------------------------------------------------
   // sha256_ctrl_fsm
   // Logic for the state machine controlling the core behaviour.
@@ -125,6 +170,9 @@ module sha256_core(
   always @*
     begin : sha256_ctrl_fsm
       ready_flag = 0;
+
+      t_ctr_inc = 0;
+      t_ctr_rst = 0;
       
       sha256_ctrl_new = CTRL_IDLE;
       sha256_ctrl_we  = 0;
