@@ -55,22 +55,48 @@ module sha256_core(
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
-
+  parameter CTRL_IDLE   = 0;
+  parameter CTRL_INIT   = 1;
+  parameter CTRL_NEXT   = 2;
+  parameter CTRL_ROUNDS = 3;
+  parameter CTRL_DONE   = 4;
+  
   
   //----------------------------------------------------------------
   // Registers including update variables and write enable.
   //----------------------------------------------------------------
+  reg [2 : 0] sha256_ctrl_reg;
+  reg [2 : 0] sha256_ctrl_new;
+  reg sha256_ctrl_we;
   
+    = CTRL_IDLE;
+      sha256_ctrl_we     = 0;
+   
   
   //----------------------------------------------------------------
   // Wires.
   //----------------------------------------------------------------
+  reg [5 : 0] K_addr;
+  wire        K;
 
+  reg ready_flag;
+  
 
+  //----------------------------------------------------------------
+  // Module instantiantions.
+  //----------------------------------------------------------------
+  sha256_k_constants k_constants(
+                                 .addr(K_addr),
+                                 .K(K)
+                                 );
+
+  
   //----------------------------------------------------------------
   // Concurrent connectivity for ports etc.
   //----------------------------------------------------------------
-
+  assign ready = ready_flag;
+  
+  
   //----------------------------------------------------------------
   // reg_update
   // Update functionality for all registers in the core.
@@ -81,14 +107,18 @@ module sha256_core(
     begin : reg_update
       if (!reset_n)
         begin
-          
+
+          sha256_ctrl_reg = CTRL_IDLE;
         end
       else
         begin
-
+          
+          if (sha256_ctrl_we)
+            begin
+              sha256_ctrl_reg <= sha256_ctrl_new;
+            end
         end
     end // reg_update
-
   
 
   //----------------------------------------------------------------
@@ -97,13 +127,29 @@ module sha256_core(
   //----------------------------------------------------------------
   always @*
     begin : sha256_ctrl_fsm
+      ready_flag = 0;
       
-      sha256_ctrl_new    = CTRL_IDLE;
-      sha256_ctrl_we     = 0;
-      
+      sha256_ctrl_new = CTRL_IDLE;
+      sha256_ctrl_we  = 0;
       
       case (sha256_ctrl_reg)
         CTRL_IDLE:
+          begin
+          end
+
+        CTRL_INIT:
+          begin
+          end
+        
+        CTRL_NEXT:
+          begin
+          end
+        
+        CTRL_ROUNDS:
+          begin
+          end
+
+        CTRL_DONE:
           begin
           end
       endcase // case (sha256_ctrl_reg)
