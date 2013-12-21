@@ -74,15 +74,33 @@ module sha256_core(
   //----------------------------------------------------------------
   // Registers including update variables and write enable.
   //----------------------------------------------------------------
-  reg [2 : 0] sha256_ctrl_reg;
-  reg [2 : 0] sha256_ctrl_new;
-  reg sha256_ctrl_we;
+  reg [31 : 0] a_reg;
+  reg [31 : 0] a_new;
+  reg [31 : 0] b_reg;
+  reg [31 : 0] b_new;
+  reg [31 : 0] c_reg;
+  reg [31 : 0] c_new;
+  reg [31 : 0] d_reg;
+  reg [31 : 0] d_new;
+  reg [31 : 0] e_reg;
+  reg [31 : 0] e_new;
+  reg [31 : 0] f_reg;
+  reg [31 : 0] f_new;
+  reg [31 : 0] g_reg;
+  reg [31 : 0] g_new;
+  reg [31 : 0] h_reg;
+  reg [31 : 0] h_new;
+  reg          a_h_we;
    
   reg [6 : 0] t_ctr_reg;
   reg [6 : 0] t_ctr_new;
   reg t_ctr_we;
   reg t_ctr_inc;
   reg t_ctr_rst;
+  
+  reg [2 : 0] sha256_ctrl_reg;
+  reg [2 : 0] sha256_ctrl_new;
+  reg sha256_ctrl_we;
 
   
   //----------------------------------------------------------------
@@ -91,9 +109,13 @@ module sha256_core(
   reg [5 : 0]   K_addr;
   wire [31 : 0] K;
 
+  reg state_init;
+  reg state_update;
+  
   reg ready_flag;
   
 
+  
   //----------------------------------------------------------------
   // Module instantiantions.
   //----------------------------------------------------------------
@@ -119,12 +141,31 @@ module sha256_core(
     begin : reg_update
       if (!reset_n)
         begin
-
-          t_ctr_reg       = 7'b0000000;
-          sha256_ctrl_reg = CTRL_IDLE;
+          a_reg           <= 32'h00000000;
+          b_reg           <= 32'h00000000;
+          c_reg           <= 32'h00000000;
+          d_reg           <= 32'h00000000;
+          e_reg           <= 32'h00000000;
+          f_reg           <= 32'h00000000;
+          g_reg           <= 32'h00000000;
+          h_reg           <= 32'h00000000;
+          t_ctr_reg       <= 7'b0000000;
+          sha256_ctrl_reg <= CTRL_IDLE;
         end
       else
         begin
+          
+          if (a_h_we)
+            begin
+              a_reg <= a_new;
+              b_reg <= b_new;
+              c_reg <= c_new;
+              d_reg <= d_new;
+              e_reg <= e_new;
+              f_reg <= f_new;
+              g_reg <= g_new;
+              h_reg <= h_new;
+            end
           
           if (t_ctr_we)
             begin
@@ -138,6 +179,45 @@ module sha256_core(
         end
     end // reg_update
 
+  
+  //----------------------------------------------------------------
+  // state_logic
+  //
+  // The logic needed to init as well as update the state during
+  // round processing.
+  //----------------------------------------------------------------
+  always @*
+    begin : state_logic
+      a_new  = 32'h00000000;
+      b_new  = 32'h00000000;
+      c_new  = 32'h00000000;
+      d_new  = 32'h00000000;
+      e_new  = 32'h00000000;
+      f_new  = 32'h00000000;
+      g_new  = 32'h00000000;
+      h_new  = 32'h00000000;
+      a_h_we = 0;
+      
+      if (state_init)
+        begin
+          a_new  = H0;
+          b_new  = H1;
+          c_new  = H2;
+          d_new  = H3;
+          e_new  = H4;
+          f_new  = H5;
+          g_new  = H6;
+          h_new  = H7;
+          a_h_we = 1;
+        end
+
+      if (state_update)
+        begin
+
+        end
+      
+      
+    end // state_logic
   
   //----------------------------------------------------------------
   // t_ctr
@@ -169,6 +249,9 @@ module sha256_core(
   //----------------------------------------------------------------
   always @*
     begin : sha256_ctrl_fsm
+      state_init   = 0;
+      state_update = 0;
+      
       ready_flag = 0;
 
       t_ctr_inc = 0;
@@ -180,22 +263,49 @@ module sha256_core(
       case (sha256_ctrl_reg)
         CTRL_IDLE:
           begin
+            ready_flag = 1;
+            
+            if (init)
+              begin
+                sha256_ctrl_new = CTRL_INIT;
+                sha256_ctrl_we  = 1;
+              end
+
+            if (next)
+              begin
+                sha256_ctrl_new = CTRL_NEXT;
+                sha256_ctrl_we  = 1;
+              end
           end
 
         CTRL_INIT:
           begin
+            state_init      = 1;
+
+            sha256_ctrl_new = CTRL_ROUNDS;
+            sha256_ctrl_we  = 1;
           end
         
         CTRL_NEXT:
           begin
+            sha256_ctrl_new = CTRL_ROUNDS;
+            sha256_ctrl_we  = 1;
           end
         
         CTRL_ROUNDS:
           begin
+            state_update    = 1;
+
+            sha256_ctrl_new = CTRL_DONE;
+            sha256_ctrl_we  = 1;
           end
 
         CTRL_DONE:
           begin
+            ready_flag = 1;
+
+            sha256_ctrl_new = CTRL_IDLE;
+            sha256_ctrl_we  = 1;
           end
       endcase // case (sha256_ctrl_reg)
     end // sha256_ctrl_fsm
