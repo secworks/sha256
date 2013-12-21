@@ -68,16 +68,13 @@ module sha256_core(
   reg [2 : 0] sha256_ctrl_reg;
   reg [2 : 0] sha256_ctrl_new;
   reg sha256_ctrl_we;
-  
-    = CTRL_IDLE;
-      sha256_ctrl_we     = 0;
    
   
   //----------------------------------------------------------------
   // Wires.
   //----------------------------------------------------------------
-  reg [5 : 0] K_addr;
-  wire        K;
+  reg [5 : 0]   K_addr;
+  wire [31 : 0] K;
 
   reg ready_flag;
   
