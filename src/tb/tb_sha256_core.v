@@ -101,6 +101,11 @@ module tb_sha256_core();
   initial
     begin : sha256_core_test
       $display("   -- Testbench for sha256 core started --");
+
+
+      // TC1: Empty block
+      // digest 0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
       $display("*** chacha simulation done.");
       $finish;
     end // sha256_core_test
