@@ -55,14 +55,14 @@ module sha256_core(
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
-  parameter H0 = 32'h6a09e667;
-  parameter H1 = 32'hbb67ae85;
-  parameter H2 = 32'h3c6ef372;
-  parameter H3 = 32'ha54ff53a;
-  parameter H4 = 32'h510e527f;
-  parameter H5 = 32'h9b05688c;
-  parameter H6 = 32'h1f83d9ab;
-  parameter H7 = 32'h5be0cd19;
+  parameter H0_0 = 32'h6a09e667;
+  parameter H0_1 = 32'hbb67ae85;
+  parameter H0_2 = 32'h3c6ef372;
+  parameter H0_3 = 32'ha54ff53a;
+  parameter H0_4 = 32'h510e527f;
+  parameter H0_5 = 32'h9b05688c;
+  parameter H0_6 = 32'h1f83d9ab;
+  parameter H0_7 = 32'h5be0cd19;
 
   parameter CTRL_IDLE   = 0;
   parameter CTRL_INIT   = 1;
@@ -91,16 +91,38 @@ module sha256_core(
   reg [31 : 0] h_reg;
   reg [31 : 0] h_new;
   reg          a_h_we;
-   
+
+  reg [31 : 0] H0_reg;
+  reg [31 : 0] H0_new;
+  reg [31 : 0] H1_reg;
+  reg [31 : 0] H1_new;
+  reg [31 : 0] H2_reg;
+  reg [31 : 0] H2_new;
+  reg [31 : 0] H3_reg;
+  reg [31 : 0] H3_new;
+  reg [31 : 0] H4_reg;
+  reg [31 : 0] H4_new;
+  reg [31 : 0] H5_reg;
+  reg [31 : 0] H5_new;
+  reg [31 : 0] H6_reg;
+  reg [31 : 0] H6_new;
+  reg [31 : 0] H7_reg;
+  reg [31 : 0] H7_new;
+  reg          H_we;
+  
   reg [6 : 0] t_ctr_reg;
   reg [6 : 0] t_ctr_new;
-  reg t_ctr_we;
-  reg t_ctr_inc;
-  reg t_ctr_rst;
+  reg         t_ctr_we;
+  reg         t_ctr_inc;
+  reg         t_ctr_rst;
+
+  reg digest_out_valid_reg;
+  reg digest_out_valid_new;
+  reg digest_out_valid_we;
   
   reg [2 : 0] sha256_ctrl_reg;
   reg [2 : 0] sha256_ctrl_new;
-  reg sha256_ctrl_we;
+  reg         sha256_ctrl_we;
 
   
   //----------------------------------------------------------------
@@ -130,6 +152,9 @@ module sha256_core(
   //----------------------------------------------------------------
   assign ready = ready_flag;
   
+  assign digest_out = {H0_reg, H1_reg, H2_reg, H3_reg,
+                       H4_reg, H5_reg, H6_reg, H7_reg};
+  
   
   //----------------------------------------------------------------
   // reg_update
@@ -141,16 +166,25 @@ module sha256_core(
     begin : reg_update
       if (!reset_n)
         begin
-          a_reg           <= 32'h00000000;
-          b_reg           <= 32'h00000000;
-          c_reg           <= 32'h00000000;
-          d_reg           <= 32'h00000000;
-          e_reg           <= 32'h00000000;
-          f_reg           <= 32'h00000000;
-          g_reg           <= 32'h00000000;
-          h_reg           <= 32'h00000000;
-          t_ctr_reg       <= 7'b0000000;
-          sha256_ctrl_reg <= CTRL_IDLE;
+          a_reg                <= 32'h00000000;
+          b_reg                <= 32'h00000000;
+          c_reg                <= 32'h00000000;
+          d_reg                <= 32'h00000000;
+          e_reg                <= 32'h00000000;
+          f_reg                <= 32'h00000000;
+          g_reg                <= 32'h00000000;
+          h_reg                <= 32'h00000000;
+          H0_reg               <= 32'h00000000;
+          H1_reg               <= 32'h00000000;
+          H2_reg               <= 32'h00000000;
+          H3_reg               <= 32'h00000000;
+          H4_reg               <= 32'h00000000;
+          H5_reg               <= 32'h00000000;
+          H6_reg               <= 32'h00000000;
+          H7_reg               <= 32'h00000000;
+          digest_out_valid_reg <= 0;
+          t_ctr_reg            <= 7'b0000000;
+          sha256_ctrl_reg      <= CTRL_IDLE;
         end
       else
         begin
@@ -166,6 +200,18 @@ module sha256_core(
               g_reg <= g_new;
               h_reg <= h_new;
             end
+
+          if (H_we)
+            begin
+              H0_reg <= H0_new;
+              H1_reg <= H1_new;
+              H2_reg <= H2_new;
+              H3_reg <= H3_new;
+              H4_reg <= H4_new;
+              H5_reg <= H5_new;
+              H6_reg <= H6_new;
+              H7_reg <= H7_new;
+            end
           
           if (t_ctr_we)
             begin
@@ -178,7 +224,7 @@ module sha256_core(
             end
         end
     end // reg_update
-
+  
   
   //----------------------------------------------------------------
   // state_logic
@@ -200,14 +246,14 @@ module sha256_core(
       
       if (state_init)
         begin
-          a_new  = H0;
-          b_new  = H1;
-          c_new  = H2;
-          d_new  = H3;
-          e_new  = H4;
-          f_new  = H5;
-          g_new  = H6;
-          h_new  = H7;
+          a_new  = H0_0;
+          b_new  = H0_1;
+          c_new  = H0_2;
+          d_new  = H0_3;
+          e_new  = H0_4;
+          f_new  = H0_5;
+          g_new  = H0_6;
+          h_new  = H0_7;
           a_h_we = 1;
         end
 
@@ -256,6 +302,9 @@ module sha256_core(
 
       t_ctr_inc = 0;
       t_ctr_rst = 0;
+      
+      digest_out_valid_new = 0;
+      digest_out_valid_we = 0;
       
       sha256_ctrl_new = CTRL_IDLE;
       sha256_ctrl_we  = 0;
