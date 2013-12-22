@@ -141,6 +141,10 @@ module sha256_core(
 
   reg ready_flag;
 
+  reg [31 : 0] T1;
+  reg [31 : 0] T2;
+  
+  
   
   //----------------------------------------------------------------
   // Module instantiantions.
@@ -274,6 +278,31 @@ module sha256_core(
         end
     end // digest_logic
   
+
+  //----------------------------------------------------------------
+  // T1_logic
+  //
+  // Logic to compute the T1 variable.
+  //----------------------------------------------------------------
+  always @*
+    begin : T1_logic
+      T1 = 32'h00000000;
+      
+      
+      end // T1_logic
+  
+
+  //----------------------------------------------------------------
+  // T2_logic
+  //
+  // Logic to compute the T2 variable.
+  //----------------------------------------------------------------
+  always @*
+    begin : T2_logic
+      T2 = 32'h00000000;
+
+      end // T2_logic
+  
   
   //----------------------------------------------------------------
   // state_logic
@@ -326,11 +355,11 @@ module sha256_core(
       
       if (state_update)
         begin
-          a_new  = tmp1 + tmp2;
+          a_new  = T1 + T2;
           b_new  = a_reg;
           c_new  = b_reg;
           d_new  = c_reg;
-          e_new  = d_reg + tmp1;
+          e_new  = d_reg + T1;
           f_new  = e_reg;
           g_new  = f_reg;
           h_new  = g_reg;
