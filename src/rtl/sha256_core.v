@@ -131,6 +131,9 @@ module sha256_core(
   reg [5 : 0]   K_addr;
   wire [31 : 0] K;
 
+  reg digest_init;
+  reg digest_update;
+
   reg state_init;
   reg state_update;
   
@@ -224,6 +227,51 @@ module sha256_core(
             end
         end
     end // reg_update
+
+  
+  //----------------------------------------------------------------
+  // digest_logic
+  //
+  // The logic needed to init as well as update the digest.
+  //----------------------------------------------------------------
+  always @*
+    begin : digest_logic
+      H0_new = 32'h00000000;
+      H1_new = 32'h00000000;
+      H2_new = 32'h00000000;
+      H3_new = 32'h00000000;
+      H4_new = 32'h00000000;
+      H5_new = 32'h00000000;
+      H6_new = 32'h00000000;
+      H7_new = 32'h00000000;
+      H_we = 0;
+
+      if (digest_init)
+        begin
+          H0_new = H0_0;
+          H1_new = H0_1;
+          H2_new = H0_2;
+          H3_new = H0_3;
+          H4_new = H0_4;
+          H5_new = H0_5;
+          H6_new = H0_6;
+          H7_new = H0_7;
+          H_we = 1;
+        end
+
+      if (digest_update)
+        begin
+          H0_new = H0_reg + a_reg;
+          H1_new = H1_reg + b_reg;
+          H2_new = H2_reg + c_reg;
+          H3_new = H3_reg + d_reg;
+          H4_new = H4_reg + e_reg;
+          H5_new = H5_reg + f_reg;
+          H6_new = H6_reg + g_reg;
+          H7_new = H7_reg + h_reg;
+          H_we = 1;
+        end
+    end // digest_logic
   
   
   //----------------------------------------------------------------
@@ -295,19 +343,23 @@ module sha256_core(
   //----------------------------------------------------------------
   always @*
     begin : sha256_ctrl_fsm
-      state_init   = 0;
-      state_update = 0;
-      
-      ready_flag = 0;
+      digest_init          = 0;
+      digest_update        = 0;
 
-      t_ctr_inc = 0;
-      t_ctr_rst = 0;
+      state_init           = 0;
+      state_update         = 0;
+      
+      ready_flag           = 0;
+
+      t_ctr_inc            = 0;
+      t_ctr_rst            = 0;
       
       digest_out_valid_new = 0;
-      digest_out_valid_we = 0;
+      digest_out_valid_we  = 0;
       
-      sha256_ctrl_new = CTRL_IDLE;
-      sha256_ctrl_we  = 0;
+      sha256_ctrl_new      = CTRL_IDLE;
+      sha256_ctrl_we       = 0;
+
       
       case (sha256_ctrl_reg)
         CTRL_IDLE:
@@ -329,10 +381,13 @@ module sha256_core(
 
         CTRL_INIT:
           begin
-            state_init      = 1;
+            digest_init          = 1;
+            state_init           = 1;
+            digest_out_valid_new = 0;
+            digest_out_valid_we  = 1;
 
-            sha256_ctrl_new = CTRL_ROUNDS;
-            sha256_ctrl_we  = 1;
+            sha256_ctrl_new      = CTRL_ROUNDS;
+            sha256_ctrl_we       = 1;
           end
         
         CTRL_NEXT:
@@ -351,10 +406,13 @@ module sha256_core(
 
         CTRL_DONE:
           begin
-            ready_flag = 1;
+            ready_flag           = 1;
+            digest_update        = 1;
+            digest_out_valid_new = 1;
+            digest_out_valid_we  = 1;
 
-            sha256_ctrl_new = CTRL_IDLE;
-            sha256_ctrl_we  = 1;
+            sha256_ctrl_new      = CTRL_IDLE;
+            sha256_ctrl_we       = 1;
           end
       endcase // case (sha256_ctrl_reg)
     end // sha256_ctrl_fsm
