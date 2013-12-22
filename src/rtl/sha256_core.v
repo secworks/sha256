@@ -136,9 +136,10 @@ module sha256_core(
 
   reg state_init;
   reg state_update;
-  
+
+  reg first_block;
+
   reg ready_flag;
-  
 
   
   //----------------------------------------------------------------
@@ -294,24 +295,38 @@ module sha256_core(
       
       if (state_init)
         begin
-          a_new  = H0_0;
-          b_new  = H0_1;
-          c_new  = H0_2;
-          d_new  = H0_3;
-          e_new  = H0_4;
-          f_new  = H0_5;
-          g_new  = H0_6;
-          h_new  = H0_7;
-          a_h_we = 1;
+          if (first_block)
+            begin
+              a_new  = H0_0;
+              b_new  = H0_1;
+              c_new  = H0_2;
+              d_new  = H0_3;
+              e_new  = H0_4;
+              f_new  = H0_5;
+              g_new  = H0_6;
+              h_new  = H0_7;
+              a_h_we = 1;
+            end
+          else
+            begin
+              a_new  = H0_reg;
+              b_new  = H1_reg;
+              c_new  = H2_reg;
+              d_new  = H3_reg;
+              e_new  = H4_reg;
+              f_new  = H5_reg;
+              g_new  = H6_reg;
+              h_new  = H7_reg;
+              a_h_we = 1;
+            end
         end
-
+      
       if (state_update)
         begin
 
         end
-      
-      
     end // state_logic
+
   
   //----------------------------------------------------------------
   // t_ctr
@@ -349,6 +364,7 @@ module sha256_core(
       state_init           = 0;
       state_update         = 0;
       
+      first_block          = 0;
       ready_flag           = 0;
 
       t_ctr_inc            = 0;
@@ -368,12 +384,17 @@ module sha256_core(
             
             if (init)
               begin
+                digest_init     = 1;
+                state_init      = 1;
+                first_block     = 1;
+                
                 sha256_ctrl_new = CTRL_INIT;
                 sha256_ctrl_we  = 1;
               end
 
             if (next)
               begin
+                state_init      = 1;
                 sha256_ctrl_new = CTRL_NEXT;
                 sha256_ctrl_we  = 1;
               end
