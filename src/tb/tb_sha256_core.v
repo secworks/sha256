@@ -68,18 +68,18 @@ module tb_sha256_core();
   // Chacha device under test.
   //----------------------------------------------------------------
   sha256_core dut(
-                   clk(tb_clk),
-                   reset_n(tb_reset_n),
+                   .clk(tb_clk),
+                   .reset_n(tb_reset_n),
                  
-                   init(tb_init),
-                   next(tb_next),
+                   .init(tb_init),
+                   .next(tb_next),
 
-                   block(tb_block),
+                   .block(tb_block),
                    
-                   ready(tb_ready),
+                   .ready(tb_ready),
                    
-                   digest_out(tb:_digest_out),
-                   digest_valid(tb_digest_valid)
+                   .digest_out(tb_digest_out),
+                   .digest_valid(tb_digest_valid)
                  );
   
 
