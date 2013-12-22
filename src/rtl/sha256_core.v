@@ -283,6 +283,9 @@ module sha256_core(
   //----------------------------------------------------------------
   always @*
     begin : state_logic
+      reg [31 : 0] tmp1;
+      reg [31 : 0] tmp2;
+      
       a_new  = 32'h00000000;
       b_new  = 32'h00000000;
       c_new  = 32'h00000000;
@@ -323,7 +326,15 @@ module sha256_core(
       
       if (state_update)
         begin
-
+          a_new  = tmp1 + tmp2;
+          b_new  = a_reg;
+          c_new  = b_reg;
+          d_new  = c_reg;
+          e_new  = d_reg + tmp1;
+          f_new  = e_reg;
+          g_new  = f_reg;
+          h_new  = g_reg;
+          a_h_we = 1;
         end
     end // state_logic
 
