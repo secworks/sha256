@@ -85,7 +85,153 @@ module sha256_w_mem(
   reg [31 : 0] w16_reg;
   reg [31 : 0] w16_new;
   reg          w16_we;
-
+  reg [31 : 0] w17_reg;
+  reg [31 : 0] w17_new;
+  reg          w17_we;
+  reg [31 : 0] w18_reg;
+  reg [31 : 0] w18_new;
+  reg          w18_we;
+  reg [31 : 0] w19_reg;
+  reg [31 : 0] w19_new;
+  reg          w19_we;
+  
+  reg [31 : 0] w20_reg;
+  reg [31 : 0] w20_new;
+  reg          w20_we;
+  reg [31 : 0] w21_reg;
+  reg [31 : 0] w21_new;
+  reg          w21_we;
+  reg [31 : 0] w22_reg;
+  reg [31 : 0] w22_new;
+  reg          w22_we;
+  reg [31 : 0] w23_reg;
+  reg [31 : 0] w23_new;
+  reg          w23_we;
+  reg [31 : 0] w24_reg;
+  reg [31 : 0] w24_new;
+  reg          w24_we;
+  reg [31 : 0] w25_reg;
+  reg [31 : 0] w25_new;
+  reg          w25_we;
+  reg [31 : 0] w26_reg;
+  reg [31 : 0] w26_new;
+  reg          w26_we;
+  reg [31 : 0] w27_reg;
+  reg [31 : 0] w27_new;
+  reg          w27_we;
+  reg [31 : 0] w28_reg;
+  reg [31 : 0] w28_new;
+  reg          w28_we;
+  reg [31 : 0] w29_reg;
+  reg [31 : 0] w29_new;
+  reg          w29_we;
+  
+  reg [31 : 0] w30_reg;
+  reg [31 : 0] w30_new;
+  reg          w30_we;
+  reg [31 : 0] w31_reg;
+  reg [31 : 0] w31_new;
+  reg          w31_we;
+  reg [31 : 0] w32_reg;
+  reg [31 : 0] w32_new;
+  reg          w32_we;
+  reg [31 : 0] w33_reg;
+  reg [31 : 0] w33_new;
+  reg          w33_we;
+  reg [31 : 0] w34_reg;
+  reg [31 : 0] w34_new;
+  reg          w34_we;
+  reg [31 : 0] w35_reg;
+  reg [31 : 0] w35_new;
+  reg          w35_we;
+  reg [31 : 0] w36_reg;
+  reg [31 : 0] w36_new;
+  reg          w36_we;
+  reg [31 : 0] w37_reg;
+  reg [31 : 0] w37_new;
+  reg          w37_we;
+  reg [31 : 0] w38_reg;
+  reg [31 : 0] w38_new;
+  reg          w38_we;
+  reg [31 : 0] w39_reg;
+  reg [31 : 0] w39_new;
+  reg          w39_we;
+  
+  reg [31 : 0] w40_reg;
+  reg [31 : 0] w40_new;
+  reg          w40_we;
+  reg [31 : 0] w41_reg;
+  reg [31 : 0] w41_new;
+  reg          w41_we;
+  reg [31 : 0] w42_reg;
+  reg [31 : 0] w42_new;
+  reg          w42_we;
+  reg [31 : 0] w43_reg;
+  reg [31 : 0] w43_new;
+  reg          w43_we;
+  reg [31 : 0] w44_reg;
+  reg [31 : 0] w44_new;
+  reg          w44_we;
+  reg [31 : 0] w45_reg;
+  reg [31 : 0] w45_new;
+  reg          w45_we;
+  reg [31 : 0] w46_reg;
+  reg [31 : 0] w46_new;
+  reg          w46_we;
+  reg [31 : 0] w47_reg;
+  reg [31 : 0] w47_new;
+  reg          w47_we;
+  reg [31 : 0] w48_reg;
+  reg [31 : 0] w48_new;
+  reg          w48_we;
+  reg [31 : 0] w49_reg;
+  reg [31 : 0] w49_new;
+  reg          w49_we;
+  
+  reg [31 : 0] w50_reg;
+  reg [31 : 0] w50_new;
+  reg          w50_we;
+  reg [31 : 0] w51_reg;
+  reg [31 : 0] w51_new;
+  reg          w51_we;
+  reg [31 : 0] w52_reg;
+  reg [31 : 0] w52_new;
+  reg          w52_we;
+  reg [31 : 0] w53_reg;
+  reg [31 : 0] w53_new;
+  reg          w53_we;
+  reg [31 : 0] w54_reg;
+  reg [31 : 0] w54_new;
+  reg          w54_we;
+  reg [31 : 0] w55_reg;
+  reg [31 : 0] w55_new;
+  reg          w55_we;
+  reg [31 : 0] w56_reg;
+  reg [31 : 0] w56_new;
+  reg          w56_we;
+  reg [31 : 0] w57_reg;
+  reg [31 : 0] w57_new;
+  reg          w57_we;
+  reg [31 : 0] w58_reg;
+  reg [31 : 0] w58_new;
+  reg          w58_we;
+  reg [31 : 0] w59_reg;
+  reg [31 : 0] w59_new;
+  reg          w59_we;
+  
+  reg [31 : 0] w60_reg;
+  reg [31 : 0] w60_new;
+  reg          w60_we;
+  reg [31 : 0] w61_reg;
+  reg [31 : 0] w61_new;
+  reg          w61_we;
+  reg [31 : 0] w62_reg;
+  reg [31 : 0] w62_new;
+  reg          w62_we;
+  reg [31 : 0] w63_reg;
+  reg [31 : 0] w63_new;
+  reg          w63_we;
+  
   reg [5 : 0] w_ctr_reg;
   reg [5 : 0] w_ctr_new;
   reg         w_ctr_we;
@@ -174,18 +320,274 @@ module sha256_w_mem(
 
   
   //----------------------------------------------------------------
-  // addr_mux
+  // external_addr_mux
   //
   // Mux for the external read operation.
   //----------------------------------------------------------------
   always @*
-    begin : addr_mux
+    begin : external_addr_mux
       case (addr)
         0:
           begin
             w_tmp = w0_reg;
           end
-    end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+        0:
+          begin
+            w_tmp = w0_reg;
+          end
+    end // external_addr_mux
   
   
   //----------------------------------------------------------------
