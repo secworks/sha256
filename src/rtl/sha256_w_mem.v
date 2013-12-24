@@ -83,153 +83,105 @@ module sha256_w_mem(
   reg          w0_15_we;
   
   reg [31 : 0] w16_reg;
-  reg [31 : 0] w16_new;
   reg          w16_we;
   reg [31 : 0] w17_reg;
-  reg [31 : 0] w17_new;
   reg          w17_we;
   reg [31 : 0] w18_reg;
-  reg [31 : 0] w18_new;
   reg          w18_we;
   reg [31 : 0] w19_reg;
-  reg [31 : 0] w19_new;
   reg          w19_we;
   
   reg [31 : 0] w20_reg;
-  reg [31 : 0] w20_new;
   reg          w20_we;
   reg [31 : 0] w21_reg;
-  reg [31 : 0] w21_new;
   reg          w21_we;
   reg [31 : 0] w22_reg;
-  reg [31 : 0] w22_new;
   reg          w22_we;
   reg [31 : 0] w23_reg;
-  reg [31 : 0] w23_new;
   reg          w23_we;
   reg [31 : 0] w24_reg;
-  reg [31 : 0] w24_new;
   reg          w24_we;
   reg [31 : 0] w25_reg;
-  reg [31 : 0] w25_new;
   reg          w25_we;
   reg [31 : 0] w26_reg;
-  reg [31 : 0] w26_new;
   reg          w26_we;
   reg [31 : 0] w27_reg;
-  reg [31 : 0] w27_new;
   reg          w27_we;
   reg [31 : 0] w28_reg;
-  reg [31 : 0] w28_new;
   reg          w28_we;
   reg [31 : 0] w29_reg;
-  reg [31 : 0] w29_new;
   reg          w29_we;
   
   reg [31 : 0] w30_reg;
-  reg [31 : 0] w30_new;
   reg          w30_we;
   reg [31 : 0] w31_reg;
-  reg [31 : 0] w31_new;
   reg          w31_we;
   reg [31 : 0] w32_reg;
-  reg [31 : 0] w32_new;
   reg          w32_we;
   reg [31 : 0] w33_reg;
-  reg [31 : 0] w33_new;
   reg          w33_we;
   reg [31 : 0] w34_reg;
-  reg [31 : 0] w34_new;
   reg          w34_we;
   reg [31 : 0] w35_reg;
-  reg [31 : 0] w35_new;
   reg          w35_we;
   reg [31 : 0] w36_reg;
-  reg [31 : 0] w36_new;
   reg          w36_we;
   reg [31 : 0] w37_reg;
-  reg [31 : 0] w37_new;
   reg          w37_we;
   reg [31 : 0] w38_reg;
-  reg [31 : 0] w38_new;
   reg          w38_we;
   reg [31 : 0] w39_reg;
-  reg [31 : 0] w39_new;
   reg          w39_we;
   
   reg [31 : 0] w40_reg;
-  reg [31 : 0] w40_new;
   reg          w40_we;
   reg [31 : 0] w41_reg;
-  reg [31 : 0] w41_new;
   reg          w41_we;
   reg [31 : 0] w42_reg;
-  reg [31 : 0] w42_new;
   reg          w42_we;
   reg [31 : 0] w43_reg;
-  reg [31 : 0] w43_new;
   reg          w43_we;
   reg [31 : 0] w44_reg;
-  reg [31 : 0] w44_new;
   reg          w44_we;
   reg [31 : 0] w45_reg;
-  reg [31 : 0] w45_new;
   reg          w45_we;
   reg [31 : 0] w46_reg;
-  reg [31 : 0] w46_new;
   reg          w46_we;
   reg [31 : 0] w47_reg;
-  reg [31 : 0] w47_new;
   reg          w47_we;
   reg [31 : 0] w48_reg;
-  reg [31 : 0] w48_new;
   reg          w48_we;
   reg [31 : 0] w49_reg;
-  reg [31 : 0] w49_new;
   reg          w49_we;
   
   reg [31 : 0] w50_reg;
-  reg [31 : 0] w50_new;
   reg          w50_we;
   reg [31 : 0] w51_reg;
-  reg [31 : 0] w51_new;
   reg          w51_we;
   reg [31 : 0] w52_reg;
-  reg [31 : 0] w52_new;
   reg          w52_we;
   reg [31 : 0] w53_reg;
-  reg [31 : 0] w53_new;
   reg          w53_we;
   reg [31 : 0] w54_reg;
-  reg [31 : 0] w54_new;
   reg          w54_we;
   reg [31 : 0] w55_reg;
-  reg [31 : 0] w55_new;
   reg          w55_we;
   reg [31 : 0] w56_reg;
-  reg [31 : 0] w56_new;
   reg          w56_we;
   reg [31 : 0] w57_reg;
-  reg [31 : 0] w57_new;
   reg          w57_we;
   reg [31 : 0] w58_reg;
-  reg [31 : 0] w58_new;
   reg          w58_we;
   reg [31 : 0] w59_reg;
-  reg [31 : 0] w59_new;
   reg          w59_we;
   
   reg [31 : 0] w60_reg;
-  reg [31 : 0] w60_new;
   reg          w60_we;
   reg [31 : 0] w61_reg;
-  reg [31 : 0] w61_new;
   reg          w61_we;
   reg [31 : 0] w62_reg;
-  reg [31 : 0] w62_new;
   reg          w62_we;
   reg [31 : 0] w63_reg;
-  reg [31 : 0] w63_new;
   reg          w63_we;
   
   reg [5 : 0] w_ctr_reg;
@@ -247,6 +199,7 @@ module sha256_w_mem(
   // Wires.
   //----------------------------------------------------------------
   reg [31 : 0] w_tmp;
+  reg [31 : 0] w_new;
 
   
   //----------------------------------------------------------------
@@ -361,6 +314,246 @@ module sha256_w_mem(
               w0 <= block[95  :  64];
               w0 <= block[63  :  32];
               w0 <= block[31  :   0];
+            end
+          
+          if (w16_we)
+            begin
+              w16_reg <= w_new;
+            end
+          
+          if (w17_we)
+            begin
+              w17_reg <= w_new;
+            end
+          
+          if (w18_we)
+            begin
+              w18_reg <= w_new;
+            end
+          
+          if (w19_we)
+            begin
+              w19_reg <= w_new;
+            end
+          
+          if (w20_we)
+            begin
+              w20_reg <= w_new;
+            end
+          
+          if (w21_we)
+            begin
+              w21_reg <= w_new;
+            end
+          
+          if (w22_we)
+            begin
+              w22_reg <= w_new;
+            end
+          
+          if (w23_we)
+            begin
+              w23_reg <= w_new;
+            end
+          
+          if (w24_we)
+            begin
+              w24_reg <= w_new;
+            end
+          
+          if (w25_we)
+            begin
+              w25_reg <= w_new;
+            end
+          
+          if (w26_we)
+            begin
+              w26_reg <= w_new;
+            end
+          
+          if (w27_we)
+            begin
+              w27_reg <= w_new;
+            end
+          
+          if (w28_we)
+            begin
+              w28_reg <= w_new;
+            end
+          
+          if (w29_we)
+            begin
+              w29_reg <= w_new;
+            end
+          
+          if (w30_we)
+            begin
+              w30_reg <= w_new;
+            end
+          
+          if (w31_we)
+            begin
+              w31_reg <= w_new;
+            end
+          
+          if (w32_we)
+            begin
+              w32_reg <= w_new;
+            end
+          
+          if (w33_we)
+            begin
+              w33_reg <= w_new;
+            end
+          
+          if (w34_we)
+            begin
+              w34_reg <= w_new;
+            end
+          
+          if (w35_we)
+            begin
+              w35_reg <= w_new;
+            end
+          
+          if (w36_we)
+            begin
+              w36_reg <= w_new;
+            end
+          
+          if (w37_we)
+            begin
+              w37_reg <= w_new;
+            end
+          
+          if (w38_we)
+            begin
+              w38_reg <= w_new;
+            end
+          
+          if (w39_we)
+            begin
+              w39_reg <= w_new;
+            end
+          
+          if (w40_we)
+            begin
+              w40_reg <= w_new;
+            end
+          
+          if (w41_we)
+            begin
+              w41_reg <= w_new;
+            end
+          
+          if (w42_we)
+            begin
+              w42_reg <= w_new;
+            end
+          
+          if (w43_we)
+            begin
+              w43_reg <= w_new;
+            end
+          
+          if (w44_we)
+            begin
+              w44_reg <= w_new;
+            end
+          
+          if (w45_we)
+            begin
+              w45_reg <= w_new;
+            end
+          
+          if (w46_we)
+            begin
+              w46_reg <= w_new;
+            end
+          
+          if (w47_we)
+            begin
+              w47_reg <= w_new;
+            end
+          
+          if (w48_we)
+            begin
+              w48_reg <= w_new;
+            end
+          
+          if (w49_we)
+            begin
+              w49_reg <= w_new;
+            end
+          
+          if (w50_we)
+            begin
+              w50_reg <= w_new;
+            end
+          
+          if (w51_we)
+            begin
+              w51_reg <= w_new;
+            end
+          
+          if (w52_we)
+            begin
+              w52_reg <= w_new;
+            end
+          
+          if (w53_we)
+            begin
+              w53_reg <= w_new;
+            end
+          
+          if (w54_we)
+            begin
+              w54_reg <= w_new;
+            end
+          
+          if (w55_we)
+            begin
+              w55_reg <= w_new;
+            end
+          
+          if (w56_we)
+            begin
+              w56_reg <= w_new;
+            end
+          
+          if (w57_we)
+            begin
+              w57_reg <= w_new;
+            end
+          
+          if (w58_we)
+            begin
+              w58_reg <= w_new;
+            end
+          
+          if (w59_we)
+            begin
+              w59_reg <= w_new;
+            end
+          
+          if (w60_we)
+            begin
+              w60_reg <= w_new;
+            end
+          
+          if (w61_we)
+            begin
+              w61_reg <= w_new;
+            end
+          
+          if (w62_we)
+            begin
+              w62_reg <= w_new;
+            end
+          
+          if (w63_we)
+            begin
+              w63_reg <= w_new;
             end
           
           if (w_ctr_we)
