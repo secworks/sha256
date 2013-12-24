@@ -582,261 +582,263 @@ module sha256_w_mem(
           begin
             w_tmp = w0_reg;
           end
-        0:
+        1:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w1_reg;
           end
-        0:
+        2:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w2_reg;
           end
-        0:
+        3:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w3_reg;
           end
-        0:
+        4:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w4_reg;
           end
-        0:
+        5:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w5_reg;
           end
-        0:
+        6:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w6_reg;
           end
-        0:
+        7:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w7_reg;
           end
-        0:
+        8:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w8_reg;
           end
-        0:
+        9:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w9_reg;
           end
-        0:
+
+        10:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w10_reg;
           end
-        0:
+        11:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w11_reg;
           end
-        0:
+        12:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w12_reg;
           end
-        0:
+        13:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w13_reg;
           end
-        0:
+        14:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w14_reg;
           end
-        0:
+        15:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w15_reg;
           end
-        0:
+        16:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w16_reg;
           end
-        0:
+        17:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w17_reg;
           end
-        0:
+        18:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w18_reg;
           end
-        0:
+        19:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w19_reg;
           end
-        0:
+
+        20:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w20_reg;
           end
-        0:
+        21:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w21_reg;
           end
-        0:
+        22:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w22_reg;
           end
-        0:
+        23:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w23_reg;
           end
-        0:
+        24:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w24_reg;
           end
-        0:
+        25:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w25_reg;
           end
-        0:
+        26:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w26_reg;
           end
-        0:
+        27:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w27_reg;
           end
-        0:
+        28:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w28_reg;
           end
-        0:
+        29:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w29_reg;
           end
-        0:
+
+        30:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w30_reg;
           end
-        0:
+        31:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w31_reg;
           end
-        0:
+        32:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w32_reg;
           end
-        0:
+        33:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w33_reg;
           end
-        0:
+        34:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w34_reg;
           end
-        0:
+        35:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w35_reg;
           end
-        0:
+        36:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w36_reg;
           end
-        0:
+        37:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w37_reg;
           end
-        0:
+        38:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w38_reg;
           end
-        0:
+        39:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w39_reg;
           end
-        0:
+
+        40:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w40_reg;
           end
-        0:
+        41:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w41_reg;
           end
-        0:
+        42:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w42_reg;
           end
-        0:
+        43:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w43_reg;
           end
-        0:
+        44:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w44_reg;
           end
-        0:
+        45:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w45_reg;
           end
-        0:
+        46:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w46_reg;
           end
-        0:
+        47:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w47_reg;
           end
-        0:
+        48:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w48_reg;
           end
-        0:
+        49:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w49_reg;
           end
-        0:
+
+        50:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w50_reg;
           end
-        0:
+        51:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w51_reg;
           end
-        0:
+        52:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w52_reg;
           end
-        0:
+        53:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w53_reg;
           end
-        0:
+        54:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w54_reg;
           end
-        0:
+        55:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w55_reg;
           end
-        0:
+        56:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w56_reg;
           end
-        0:
+        57:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w57_reg;
           end
-        0:
+        58:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w58_reg;
           end
-        0:
+        59:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w59_reg;
           end
-        0:
+
+        60:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w60_reg;
           end
-        0:
+        61:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w61_reg;
           end
-        0:
+        62:
           begin
-            w_tmp = w0_reg;
+            w_tmp = w62_reg;
           end
-        0:
+        63:
           begin
-            w_tmp = w0_reg;
-          end
-        0:
-          begin
-            w_tmp = w0_reg;
+            w_tmp = w63_reg;
           end
     end // external_addr_mux
   
