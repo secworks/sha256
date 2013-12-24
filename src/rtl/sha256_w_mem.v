@@ -850,6 +850,217 @@ module sha256_w_mem(
 
 
   //----------------------------------------------------------------
+  // w_7_logic
+  //----------------------------------------------------------------
+  always @*
+    begin : w_7_logic
+      reg [5 : 0] w_16_addr;
+
+      w_16_addr = w_ctr_reg - 7;
+
+      case (w_7_addr)
+        9:
+          begin
+            w_7 = w9_reg;
+          end
+
+        10:
+          begin
+            w_7 = w10_reg;
+          end
+        11:
+          begin
+            w_7 = w11_reg;
+          end
+        12:
+          begin
+            w_7 = w12_reg;
+          end
+        13:
+          begin
+            w_7 = w13_reg;
+          end
+        14:
+          begin
+            w_7 = w14_reg;
+          end
+        15:
+          begin
+            w_7 = w15_reg;
+          end
+        16:
+          begin
+            w_7 = w16_reg;
+          end
+        17:
+          begin
+            w_7 = w17_reg;
+          end
+        18:
+          begin
+            w_7 = w18_reg;
+          end
+        19:
+          begin
+            w_7 = w19_reg;
+          end
+
+        20:
+          begin
+            w_7 = w20_reg;
+          end
+        21:
+          begin
+            w_7 = w21_reg;
+          end
+        22:
+          begin
+            w_7 = w22_reg;
+          end
+        23:
+          begin
+            w_7 = w23_reg;
+          end
+        24:
+          begin
+            w_7 = w24_reg;
+          end
+        25:
+          begin
+            w_7 = w25_reg;
+          end
+        26:
+          begin
+            w_7 = w26_reg;
+          end
+        27:
+          begin
+            w_7 = w27_reg;
+          end
+        28:
+          begin
+            w_7 = w28_reg;
+          end
+        29:
+          begin
+            w_7 = w29_reg;
+          end
+
+        30:
+          begin
+            w_7 = w30_reg;
+          end
+        31:
+          begin
+            w_7 = w31_reg;
+          end
+        32:
+          begin
+            w_7 = w32_reg;
+          end
+        33:
+          begin
+            w_7 = w33_reg;
+          end
+        34:
+          begin
+            w_7 = w34_reg;
+          end
+        35:
+          begin
+            w_7 = w35_reg;
+          end
+        36:
+          begin
+            w_7 = w36_reg;
+          end
+        37:
+          begin
+            w_7 = w37_reg;
+          end
+        38:
+          begin
+            w_7 = w38_reg;
+          end
+        39:
+          begin
+            w_7 = w39_reg;
+          end
+
+        40:
+          begin
+            w_7 = w40_reg;
+          end
+        41:
+          begin
+            w_7 = w41_reg;
+          end
+        42:
+          begin
+            w_7 = w42_reg;
+          end
+        43:
+          begin
+            w_7 = w43_reg;
+          end
+        44:
+          begin
+            w_7 = w44_reg;
+          end
+        45:
+          begin
+            w_7 = w45_reg;
+          end
+        46:
+          begin
+            w_7 = w46_reg;
+          end
+        47:
+          begin
+            w_7 = w47_reg;
+          end
+        48:
+          begin
+            w_7 = w48_reg;
+          end
+        49:
+          begin
+            w_7 = w49_reg;
+          end
+
+        50:
+          begin
+            w_7 = w50_reg;
+          end
+        51:
+          begin
+            w_7 = w51_reg;
+          end
+        52:
+          begin
+            w_7 = w52_reg;
+          end
+        53:
+          begin
+            w_7 = w53_reg;
+          end
+        54:
+          begin
+            w_7 = w54_reg;
+          end
+        55:
+          begin
+            w_7 = w55_reg;
+          end
+        56:
+          begin
+            w_7 = w56_reg;
+          end
+      endcase // case (w_7_addr)
+    end // w_7_logic
+
+
+  //----------------------------------------------------------------
   // w_16_logic
   //----------------------------------------------------------------
   always @*
