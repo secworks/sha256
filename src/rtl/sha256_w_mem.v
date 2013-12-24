@@ -1276,6 +1276,222 @@ module sha256_w_mem(
 
 
   //----------------------------------------------------------------
+  // d1_logic
+  //----------------------------------------------------------------
+  always @*
+    begin : d1_logic
+      reg [31 : 0] w_2;
+      reg [5 : 0]  w_2_addr;
+
+      w_2_addr = w_ctr_reg - 2;
+
+      case (w_2_addr)
+        14:
+          begin
+            w_2 = w14_reg;
+          end
+        15:
+          begin
+            w_2 = w15_reg;
+          end
+        16:
+          begin
+            w_2 = w16_reg;
+          end
+        17:
+          begin
+            w_2 = w17_reg;
+          end
+        18:
+          begin
+            w_2 = w18_reg;
+          end
+        19:
+          begin
+            w_2 = w19_reg;
+          end
+
+        20:
+          begin
+            w_2 = w20_reg;
+          end
+        21:
+          begin
+            w_2 = w21_reg;
+          end
+        22:
+          begin
+            w_2 = w22_reg;
+          end
+        23:
+          begin
+            w_2 = w23_reg;
+          end
+        24:
+          begin
+            w_2 = w24_reg;
+          end
+        25:
+          begin
+            w_2 = w25_reg;
+          end
+        26:
+          begin
+            w_2 = w26_reg;
+          end
+        27:
+          begin
+            w_2 = w27_reg;
+          end
+        28:
+          begin
+            w_2 = w28_reg;
+          end
+        29:
+          begin
+            w_2 = w29_reg;
+          end
+
+        30:
+          begin
+            w_2 = w30_reg;
+          end
+        31:
+          begin
+            w_2 = w31_reg;
+          end
+        32:
+          begin
+            w_2 = w32_reg;
+          end
+        33:
+          begin
+            w_2 = w33_reg;
+          end
+        34:
+          begin
+            w_2 = w34_reg;
+          end
+        35:
+          begin
+            w_2 = w35_reg;
+          end
+        36:
+          begin
+            w_2 = w36_reg;
+          end
+        37:
+          begin
+            w_2 = w37_reg;
+          end
+        38:
+          begin
+            w_2 = w38_reg;
+          end
+        39:
+          begin
+            w_2 = w39_reg;
+          end
+
+        40:
+          begin
+            w_2 = w40_reg;
+          end
+        41:
+          begin
+            w_2 = w41_reg;
+          end
+        42:
+          begin
+            w_2 = w42_reg;
+          end
+        43:
+          begin
+            w_2 = w43_reg;
+          end
+        44:
+          begin
+            w_2 = w44_reg;
+          end
+        45:
+          begin
+            w_2 = w45_reg;
+          end
+        46:
+          begin
+            w_2 = w46_reg;
+          end
+        47:
+          begin
+            w_2 = w47_reg;
+          end
+        48:
+          begin
+            w_2 = w48_reg;
+          end
+        49:
+          begin
+            w_2 = w49_reg;
+          end
+
+        50:
+          begin
+            w_2 = w50_reg;
+          end
+        51:
+          begin
+            w_2 = w51_reg;
+          end
+        52:
+          begin
+            w_2 = w52_reg;
+          end
+        53:
+          begin
+            w_2 = w53_reg;
+          end
+        54:
+          begin
+            w_2 = w54_reg;
+          end
+        55:
+          begin
+            w_2 = w55_reg;
+          end
+        56:
+          begin
+            w_2 = w56_reg;
+          end
+        57:
+          begin
+            w_2 = w57_reg;
+          end
+        58:
+          begin
+            w_2 = w58_reg;
+          end
+        59:
+          begin
+            w_2 = w59_reg;
+          end
+
+        60:
+          begin
+            w_2 = w60_reg;
+          end
+        61:
+          begin
+            w_2 = w61_reg;
+          end
+      endcase // case (w_2_addr)
+
+      d1 = {w_2[16 : 0], w_2[31 : 17]} ^ 
+           {w_2[18 : 0], w_2[31 : 19]} ^ 
+           {10'b0000000000, w_2[31 : 10]};
+    end // d1_logic
+  
+
+  //----------------------------------------------------------------
   // w_schedule
   //----------------------------------------------------------------
   always @*
