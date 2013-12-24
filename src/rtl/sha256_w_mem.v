@@ -48,15 +48,6 @@ module sha256_w_mem(
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
-  parameter H0_0 = 32'h6a09e667;
-  parameter H0_1 = 32'hbb67ae85;
-  parameter H0_2 = 32'h3c6ef372;
-  parameter H0_3 = 32'ha54ff53a;
-  parameter H0_4 = 32'h510e527f;
-  parameter H0_5 = 32'h9b05688c;
-  parameter H0_6 = 32'h1f83d9ab;
-  parameter H0_7 = 32'h5be0cd19;
-
   parameter CTRL_IDLE   = 0;
   parameter CTRL_UPDATE = 1;
   
@@ -1067,7 +1058,7 @@ module sha256_w_mem(
     begin : w_16_logic
       reg [5 : 0] w_16_addr;
 
-      w_16_1ddr = w_ctr_reg - 16;
+      w_16_addr = w_ctr_reg - 16;
 
       case (w_16_addr)
         0:
@@ -1278,7 +1269,7 @@ module sha256_w_mem(
       reg [31 : 0] w_15;
       reg [5 : 0]  w_15_addr;
 
-      w_15_1ddr = w_ctr_reg - 15;
+      w_15_addr = w_ctr_reg - 15;
 
       case (w_15_addr)
         1:
