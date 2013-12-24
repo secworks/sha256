@@ -201,6 +201,9 @@ module sha256_w_mem(
   reg [31 : 0] w_tmp;
   reg [31 : 0] w_new;
 
+  reg [31 : 0] d1;
+  reg [31 : 0] d0;
+  reg [31 : 0] w_7;
   reg [31 : 0] w_16;
   
   
@@ -851,13 +854,11 @@ module sha256_w_mem(
   //----------------------------------------------------------------
   always @*
     begin : w_16_logic
-      reg [5 : 0] w16addr;
-      
-      w_16 = 32'h00000000;
+      reg [5 : 0] w_16_addr;
 
-      w161ddr = w_ctr_reg - 16;
+      w_16_1ddr = w_ctr_reg - 16;
 
-      case (w161ddr)
+      case (w_16_addr)
         0:
           begin
             w_16 = w0_reg;
@@ -1054,17 +1055,283 @@ module sha256_w_mem(
           begin
             w_16 = w47_reg;
           end
-      endcase // case (w161ddr)
-    end
+      endcase // case (w_16_addr)
+    end // w_16_logic
 
-  
+
+  //----------------------------------------------------------------
+  // d0_logic
+  //----------------------------------------------------------------
+  always @*
+    begin : d0_logic
+      reg [31 : 0] w_15;
+      reg [5 : 0]  w_15_addr;
+
+      w_15_1ddr = w_ctr_reg - 15;
+
+      case (w_15_addr)
+        1:
+          begin
+            w_15 = w1_reg;
+          end
+        2:
+          begin
+            w_15 = w2_reg;
+          end
+        3:
+          begin
+            w_15 = w3_reg;
+          end
+        4:
+          begin
+            w_15 = w4_reg;
+          end
+        5:
+          begin
+            w_15 = w5_reg;
+          end
+        6:
+          begin
+            w_15 = w6_reg;
+          end
+        7:
+          begin
+            w_15 = w7_reg;
+          end
+        8:
+          begin
+            w_15 = w8_reg;
+          end
+        9:
+          begin
+            w_15 = w9_reg;
+          end
+
+        10:
+          begin
+            w_15 = w10_reg;
+          end
+        11:
+          begin
+            w_15 = w11_reg;
+          end
+        12:
+          begin
+            w_15 = w12_reg;
+          end
+        13:
+          begin
+            w_15 = w13_reg;
+          end
+        14:
+          begin
+            w_15 = w14_reg;
+          end
+        15:
+          begin
+            w_15 = w15_reg;
+          end
+        16:
+          begin
+            w_15 = w16_reg;
+          end
+        17:
+          begin
+            w_15 = w17_reg;
+          end
+        18:
+          begin
+            w_15 = w18_reg;
+          end
+        19:
+          begin
+            w_15 = w19_reg;
+          end
+
+        20:
+          begin
+            w_15 = w20_reg;
+          end
+        21:
+          begin
+            w_15 = w21_reg;
+          end
+        22:
+          begin
+            w_15 = w22_reg;
+          end
+        23:
+          begin
+            w_15 = w23_reg;
+          end
+        24:
+          begin
+            w_15 = w24_reg;
+          end
+        25:
+          begin
+            w_15 = w25_reg;
+          end
+        26:
+          begin
+            w_15 = w26_reg;
+          end
+        27:
+          begin
+            w_15 = w27_reg;
+          end
+        28:
+          begin
+            w_15 = w28_reg;
+          end
+        29:
+          begin
+            w_15 = w29_reg;
+          end
+
+        30:
+          begin
+            w_15 = w30_reg;
+          end
+        31:
+          begin
+            w_15 = w31_reg;
+          end
+        32:
+          begin
+            w_15 = w32_reg;
+          end
+        33:
+          begin
+            w_15 = w33_reg;
+          end
+        34:
+          begin
+            w_15 = w34_reg;
+          end
+        35:
+          begin
+            w_15 = w35_reg;
+          end
+        36:
+          begin
+            w_15 = w36_reg;
+          end
+        37:
+          begin
+            w_15 = w37_reg;
+          end
+        38:
+          begin
+            w_15 = w38_reg;
+          end
+        39:
+          begin
+            w_15 = w39_reg;
+          end
+
+        40:
+          begin
+            w_15 = w40_reg;
+          end
+        41:
+          begin
+            w_15 = w41_reg;
+          end
+        42:
+          begin
+            w_15 = w42_reg;
+          end
+        43:
+          begin
+            w_15 = w43_reg;
+          end
+        44:
+          begin
+            w_15 = w44_reg;
+          end
+        45:
+          begin
+            w_15 = w45_reg;
+          end
+        46:
+          begin
+            w_15 = w46_reg;
+          end
+        47:
+          begin
+            w_15 = w47_reg;
+          end
+        48:
+          begin
+            w_15 = w48_reg;
+          end
+      endcase // case (w_15_addr)
+
+      d0 = {w_15[6  : 0], w_15[31 :  7]} ^ 
+           {w_15[17 : 0], w_15[31 : 18]} ^ 
+           {3'b000, w_15[31 : 3]};
+
+    end // d0_logic
+
+
   //----------------------------------------------------------------
   // w_schedule
   //----------------------------------------------------------------
   always @*
     begin : w_schedule
       w0_15_we = 0;
-
+      w16_we   = 0;
+      w17_we   = 0;
+      w18_we   = 0;
+      w19_we   = 0;
+      w20_we   = 0;
+      w21_we   = 0;
+      w22_we   = 0;
+      w23_we   = 0;
+      w24_we   = 0;
+      w25_we   = 0;
+      w26_we   = 0;
+      w27_we   = 0;
+      w28_we   = 0;
+      w29_we   = 0;
+      w30_we   = 0;
+      w31_we   = 0;
+      w32_we   = 0;
+      w33_we   = 0;
+      w34_we   = 0;
+      w35_we   = 0;
+      w36_we   = 0;
+      w37_we   = 0;
+      w38_we   = 0;
+      w39_we   = 0;
+      w40_we   = 0;
+      w41_we   = 0;
+      w42_we   = 0;
+      w43_we   = 0;
+      w44_we   = 0;
+      w45_we   = 0;
+      w46_we   = 0;
+      w47_we   = 0;
+      w48_we   = 0;
+      w49_we   = 0;
+      w50_we   = 0;
+      w51_we   = 0;
+      w52_we   = 0;
+      w53_we   = 0;
+      w54_we   = 0;
+      w55_we   = 0;
+      w56_we   = 0;
+      w57_we   = 0;
+      w58_we   = 0;
+      w59_we   = 0;
+      w60_we   = 0;
+      w61_we   = 0;
+      w62_we   = 0;
+      w63_we   = 0;
+      
+      w_new = d1 + w_7 + d0 + w_16;
+      
       if (w_init)
         begin
           w0_15_we = 1;
@@ -1072,283 +1339,208 @@ module sha256_w_mem(
 
       if (w_update)
         begin
+          case (w_ctr_reg)
+            16:
+              begin
+                w16_we = 1;
+              end
+            17:
+              begin
+                w17_we = 1;
+              end
+            18:
+              begin
+                w18_we = 1;
+              end
+            19:
+              begin
+                w19_we = 1;
+              end
 
-        end
+            20:
+              begin
+                w20_we = 1;
+              end
+            21:
+              begin
+                w21_we = 1;
+              end
+            22:
+              begin
+                w22_we = 1;
+              end
+            23:
+              begin
+                w23_we = 1;
+              end
+            24:
+              begin
+                w24_we = 1;
+              end
+            25:
+              begin
+                w25_we = 1;
+              end
+            26:
+              begin
+                w26_we = 1;
+              end
+            27:
+              begin
+                w27_we = 1;
+              end
+            28:
+              begin
+                w28_we = 1;
+              end
+            29:
+              begin
+                w29_we = 1;
+              end
+
+            30:
+              begin
+                w30_we = 1;
+              end
+            31:
+              begin
+                w31_we = 1;
+              end
+            32:
+              begin
+                w32_we = 1;
+              end
+            33:
+              begin
+                w33_we = 1;
+              end
+            34:
+              begin
+                w34_we = 1;
+              end
+            35:
+              begin
+                w35_we = 1;
+              end
+            36:
+              begin
+                w36_we = 1;
+              end
+            37:
+              begin
+                w37_we = 1;
+              end
+            38:
+              begin
+                w38_we = 1;
+              end
+            39:
+              begin
+                w39_we = 1;
+              end
+
+            40:
+              begin
+                w40_we = 1;
+              end
+            41:
+              begin
+                w41_we = 1;
+              end
+            42:
+              begin
+                w42_we = 1;
+              end
+            43:
+              begin
+                w43_we = 1;
+              end
+            44:
+              begin
+                w44_we = 1;
+              end
+            45:
+              begin
+                w45_we = 1;
+              end
+            46:
+              begin
+                w46_we = 1;
+              end
+            47:
+              begin
+                w47_we = 1;
+              end
+            48:
+              begin
+                w48_we = 1;
+              end
+            49:
+              begin
+                w49_we = 1;
+              end
+
+            50:
+              begin
+                w50_we = 1;
+              end
+            51:
+              begin
+                w51_we = 1;
+              end
+            52:
+              begin
+                w52_we = 1;
+              end
+            53:
+              begin
+                w53_we = 1;
+              end
+            54:
+              begin
+                w54_we = 1;
+              end
+            55:
+              begin
+                w55_we = 1;
+              end
+            56:
+              begin
+                w56_we = 1;
+              end
+            57:
+              begin
+                w57_we = 1;
+              end
+            58:
+              begin
+                w58_we = 1;
+              end
+            59:
+              begin
+                w59_we = 1;
+              end
+
+            60:
+              begin
+                w60_we = 1;
+              end
+            61:
+              begin
+                w61_we = 1;
+              end
+            62:
+              begin
+                w62_we = 1;
+              end
+            63:
+              begin
+                w63_we = 1;
+              end
+          endcase // case (w_ctr_reg)
+        end // if (w_update)
     end // w_schedule
-  
 
-  
-  //----------------------------------------------------------------
-  // w_write_ctrl
-  //
-  // Logic that selects which w word [16..63] that is written to.
-  //----------------------------------------------------------------
-  always @*
-    begin : w_write_ctrl
-      case (addr)
-        0:
-          begin
-            w_tmp = w0_reg;
-          end
-        1:
-          begin
-            w_tmp = w1_reg;
-          end
-        2:
-          begin
-            w_tmp = w2_reg;
-          end
-        3:
-          begin
-            w_tmp = w3_reg;
-          end
-        4:
-          begin
-            w_tmp = w4_reg;
-          end
-        5:
-          begin
-            w_tmp = w5_reg;
-          end
-        6:
-          begin
-            w_tmp = w6_reg;
-          end
-        7:
-          begin
-            w_tmp = w7_reg;
-          end
-        8:
-          begin
-            w_tmp = w8_reg;
-          end
-        9:
-          begin
-            w_tmp = w9_reg;
-          end
-
-        10:
-          begin
-            w_tmp = w10_reg;
-          end
-        11:
-          begin
-            w_tmp = w11_reg;
-          end
-        12:
-          begin
-            w_tmp = w12_reg;
-          end
-        13:
-          begin
-            w_tmp = w13_reg;
-          end
-        14:
-          begin
-            w_tmp = w14_reg;
-          end
-        15:
-          begin
-            w_tmp = w15_reg;
-          end
-        16:
-          begin
-            w_tmp = w16_reg;
-          end
-        17:
-          begin
-            w_tmp = w17_reg;
-          end
-        18:
-          begin
-            w_tmp = w18_reg;
-          end
-        19:
-          begin
-            w_tmp = w19_reg;
-          end
-
-        20:
-          begin
-            w_tmp = w20_reg;
-          end
-        21:
-          begin
-            w_tmp = w21_reg;
-          end
-        22:
-          begin
-            w_tmp = w22_reg;
-          end
-        23:
-          begin
-            w_tmp = w23_reg;
-          end
-        24:
-          begin
-            w_tmp = w24_reg;
-          end
-        25:
-          begin
-            w_tmp = w25_reg;
-          end
-        26:
-          begin
-            w_tmp = w26_reg;
-          end
-        27:
-          begin
-            w_tmp = w27_reg;
-          end
-        28:
-          begin
-            w_tmp = w28_reg;
-          end
-        29:
-          begin
-            w_tmp = w29_reg;
-          end
-
-        30:
-          begin
-            w_tmp = w30_reg;
-          end
-        31:
-          begin
-            w_tmp = w31_reg;
-          end
-        32:
-          begin
-            w_tmp = w32_reg;
-          end
-        33:
-          begin
-            w_tmp = w33_reg;
-          end
-        34:
-          begin
-            w_tmp = w34_reg;
-          end
-        35:
-          begin
-            w_tmp = w35_reg;
-          end
-        36:
-          begin
-            w_tmp = w36_reg;
-          end
-        37:
-          begin
-            w_tmp = w37_reg;
-          end
-        38:
-          begin
-            w_tmp = w38_reg;
-          end
-        39:
-          begin
-            w_tmp = w39_reg;
-          end
-
-        40:
-          begin
-            w_tmp = w40_reg;
-          end
-        41:
-          begin
-            w_tmp = w41_reg;
-          end
-        42:
-          begin
-            w_tmp = w42_reg;
-          end
-        43:
-          begin
-            w_tmp = w43_reg;
-          end
-        44:
-          begin
-            w_tmp = w44_reg;
-          end
-        45:
-          begin
-            w_tmp = w45_reg;
-          end
-        46:
-          begin
-            w_tmp = w46_reg;
-          end
-        47:
-          begin
-            w_tmp = w47_reg;
-          end
-        48:
-          begin
-            w_tmp = w48_reg;
-          end
-        49:
-          begin
-            w_tmp = w49_reg;
-          end
-
-        50:
-          begin
-            w_tmp = w50_reg;
-          end
-        51:
-          begin
-            w_tmp = w51_reg;
-          end
-        52:
-          begin
-            w_tmp = w52_reg;
-          end
-        53:
-          begin
-            w_tmp = w53_reg;
-          end
-        54:
-          begin
-            w_tmp = w54_reg;
-          end
-        55:
-          begin
-            w_tmp = w55_reg;
-          end
-        56:
-          begin
-            w_tmp = w56_reg;
-          end
-        57:
-          begin
-            w_tmp = w57_reg;
-          end
-        58:
-          begin
-            w_tmp = w58_reg;
-          end
-        59:
-          begin
-            w_tmp = w59_reg;
-          end
-
-        60:
-          begin
-            w_tmp = w60_reg;
-          end
-        61:
-          begin
-            w_tmp = w61_reg;
-          end
-        62:
-          begin
-            w_tmp = w62_reg;
-          end
-        63:
-          begin
-            w_tmp = w63_reg;
-          end
-    end // w_write_ctrl
   
   //----------------------------------------------------------------
   // w_ctr
