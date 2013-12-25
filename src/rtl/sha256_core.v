@@ -141,17 +141,14 @@ module sha256_core(
 
   reg ready_flag;
 
-  reg [31 : 0] w;
-  
-  reg [31 : 0] sum0;
-  reg [31 : 0] sum1;
-
-  reg [31 : 0] ch;
-  reg [31 : 0] maj;
-
   reg [31 : 0] t1;
   reg [31 : 0] t2;
-  
+
+  reg [5 : 0]   w_addr;
+  reg           w_init;
+  wire          w_ready;
+  wire [31 : 0] w;
+              
   
   //----------------------------------------------------------------
   // Module instantiantions.
@@ -160,6 +157,20 @@ module sha256_core(
                                  .addr(K_addr),
                                  .K(K)
                                  );
+
+
+  sha256_w_mem w_mem(
+                     .clk(clk),
+                     .reset_n(reset_n),
+
+                     .init(w_init),
+
+                     .block(block),
+                     .addr(w_addr),
+
+                     .ready(w_ready),
+                     .w(w)
+                   );
 
   
   //----------------------------------------------------------------
@@ -377,11 +388,11 @@ module sha256_core(
       
       if (state_update)
         begin
-          a_new  = T1 + T2;
+          a_new  = t1 + t2;
           b_new  = a_reg;
           c_new  = b_reg;
           d_new  = c_reg;
-          e_new  = d_reg + T1;
+          e_new  = d_reg + t1;
           f_new  = e_reg;
           g_new  = f_reg;
           h_new  = g_reg;
