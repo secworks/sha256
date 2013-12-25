@@ -37,9 +37,14 @@
 //======================================================================
 
 module sha256_w_mem(
-                    input wire [511 : 0] block,
+                    input wire           clk,
+                    input wire           reset_n,
+
                     input wire           init,
+
+                    input wire [511 : 0] block,
                     input wire  [5 : 0]  addr,
+
                     output wire          ready,
                     output wire [31 : 0] w
                    );
@@ -181,9 +186,9 @@ module sha256_w_mem(
   reg         w_ctr_inc;
   reg         w_ctr_set;
   
-  reg [1 : 0]  sha256_w_mem_fsm_reg;
-  reg [1 : 0]  sha256_w_mem_fsm_reg;
-  reg          sha256_w_mem_fsm_we;
+  reg [1 : 0]  sha256_w_mem_ctrl_reg;
+  reg [1 : 0]  sha256_w_mem_ctrl_new;
+  reg          sha256_w_mem_ctrl_we;
   
   
   //----------------------------------------------------------------
@@ -197,11 +202,17 @@ module sha256_w_mem(
   reg [31 : 0] w_7;
   reg [31 : 0] w_16;
   
+  reg w_init;
+  reg w_update;
+  
+  reg ready_tmp;
+  
   
   //----------------------------------------------------------------
   // Concurrent connectivity for ports etc.
   //----------------------------------------------------------------
   assign w = w_tmp;
+  assign ready = ready_tmp;
   
   
   //----------------------------------------------------------------
@@ -287,29 +298,29 @@ module sha256_w_mem(
 
           w_ctr_reg       <= 6'h00;
 
-          sha256_ctrl_reg <= CTRL_IDLE;
+          sha256_w_mem_ctrl_reg <= CTRL_IDLE;
         end
       else
         begin
 
           if (w0_15_we)
             begin
-              w0 <= block[511 : 480];
-              w0 <= block[479 : 448];
-              w0 <= block[447 : 416];
-              w0 <= block[415 : 384];
-              w0 <= block[383 : 352];
-              w0 <= block[351 : 320];
-              w0 <= block[319 : 288];
-              w0 <= block[287 : 256];
-              w0 <= block[255 : 224];
-              w0 <= block[223 : 192];
-              w0 <= block[191 : 160];
-              w0 <= block[159 : 128];
-              w0 <= block[127 :  96];
-              w0 <= block[95  :  64];
-              w0 <= block[63  :  32];
-              w0 <= block[31  :   0];
+              w0_reg  <= block[511 : 480];
+              w1_reg  <= block[479 : 448];
+              w2_reg  <= block[447 : 416];
+              w3_reg  <= block[415 : 384];
+              w4_reg  <= block[383 : 352];
+              w5_reg  <= block[351 : 320];
+              w6_reg  <= block[319 : 288];
+              w7_reg  <= block[287 : 256];
+              w8_reg  <= block[255 : 224];
+              w9_reg  <= block[223 : 192];
+              w10_reg <= block[191 : 160];
+              w11_reg <= block[159 : 128];
+              w12_reg <= block[127 :  96];
+              w13_reg <= block[95  :  64];
+              w14_reg <= block[63  :  32];
+              w16_reg <= block[31  :   0];
             end
           
           if (w16_we)
@@ -557,9 +568,9 @@ module sha256_w_mem(
               w_ctr_reg <= w_ctr_new;
             end
           
-          if (sha256_w_mem_we)
+          if (sha256_w_mem_ctrl_we)
             begin
-              sha256_w_mem_reg <= sha256_w_mem_new;
+              sha256_w_mem_ctrl_reg <= sha256_w_mem_ctrl_new;
             end
         end
     end // reg_update
@@ -845,9 +856,9 @@ module sha256_w_mem(
   //----------------------------------------------------------------
   always @*
     begin : w_7_logic
-      reg [5 : 0] w_16_addr;
+      reg [5 : 0] w_7_addr;
 
-      w_16_addr = w_ctr_reg - 7;
+      w_7_addr = w_ctr_reg - 7;
 
       case (w_7_addr)
         9:
@@ -1992,30 +2003,39 @@ module sha256_w_mem(
     begin : sha256_w_mem_fsm
       w_ctr_set       = 1;
       
-      sha256_w_mem_fsm_new = CTRL_IDLE;
-      sha256_w_mem_fsm_we  = 0;
+      w_init   = 0;
+      w_update = 0;
+
+      ready_tmp = 0;
       
-      case (sha256_w_mem_fsm_reg)
+      sha256_w_mem_ctrl_new = CTRL_IDLE;
+      sha256_w_mem_ctrl_we  = 0;
+      
+      case (sha256_w_mem_ctrl_reg)
         CTRL_IDLE:
           begin
-            ready_flag = 1;
+            ready_tmp = 1;
             
             if (init)
               begin
-                w_init  = 1;
-                w_ctr_set       = 1;
+                w_init    = 1;
+                w_ctr_set = 1;
                 
-                sha256_w_mem_fsm = CTRL_UPDATE;
-                sha256_w_mem_we  = 1;
+                sha256_w_mem_ctrl_new = CTRL_UPDATE;
+                sha256_w_mem_ctrl_we  = 1;
               end
-
+          end
+        
         CTRL_UPDATE:
           begin
             w_update  = 1;
             w_ctr_inc = 1;
 
-            if (w_ctr_reg = 6'h3f)
-              sha256_w_mem_fsm = CTRL_IDLE;
+            if (w_ctr_reg == 6'h3f)
+              begin
+                sha256_w_mem_ctrl_new = CTRL_IDLE;
+                sha256_w_mem_ctrl_we  = 1;
+              end
           end
       endcase // case (sha256_ctrl_reg)
     end // sha256_ctrl_fsm
