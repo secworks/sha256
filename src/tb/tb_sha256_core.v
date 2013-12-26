@@ -53,7 +53,7 @@ module tb_sha256_core();
   //----------------------------------------------------------------
   // Register and Wire declarations.
   //----------------------------------------------------------------
-  reg           tb_clk;
+  reg            tb_clk;
   reg            tb_reset_n;
   reg            tb_init;
   reg            tb_next;
@@ -65,7 +65,7 @@ module tb_sha256_core();
   
   
   //----------------------------------------------------------------
-  // Chacha device under test.
+  // Device Under Test.
   //----------------------------------------------------------------
   sha256_core dut(
                    .clk(tb_clk),
@@ -106,7 +106,7 @@ module tb_sha256_core();
       // TC1: Empty block
       // digest 0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 
-      $display("*** chacha simulation done.");
+      $display("*** Simulation done.");
       $finish;
     end // sha256_core_test
 endmodule // tb_sha256_core
