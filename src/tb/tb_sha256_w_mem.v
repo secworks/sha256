@@ -40,9 +40,78 @@
 //------------------------------------------------------------------
 `timescale 1ns/10ps
 
+  
+
 module tb_sha256_w_mem();
 
-endmodule // tb_sha256_w_mem
+  //----------------------------------------------------------------
+  // Internal constant and parameter definitions.
+  //----------------------------------------------------------------
+
+  
+  //----------------------------------------------------------------
+  // Registers including update variables and write enable.
+  //----------------------------------------------------------------
+
+  
+  //----------------------------------------------------------------
+  // Wires.
+  //----------------------------------------------------------------
+  reg            tb_clk;
+  reg            tb_reset_n;
+
+  reg           tb_init;
+  reg [511 : 0] tb_block;
+  reg [5 : 0]   tb_addr;
+  wire          tb_ready;
+  wire [31 : 0] tb_w;
+
+  
+  //----------------------------------------------------------------
+  // Device Under Test.
+  //----------------------------------------------------------------
+  sha256_w_mem dut(
+                   .clk(clk),
+                   .reset_n(reset_n),
+                   
+                   .init(w_init),
+                   
+                   .block(block),
+                   .addr(w_addr),
+                   
+                   .ready(w_ready),
+                   .w(w)
+                  );
+  
+
+  //----------------------------------------------------------------
+  // clk_gen
+  //
+  // Clock generator process. 
+  //----------------------------------------------------------------
+  always 
+    begin : clk_gen
+      #CLK_HALF_PERIOD tb_clk = !tb_clk;
+    end // clk_gen
+  
+    
+    
+  //----------------------------------------------------------------
+  // The main test functionality. 
+  //----------------------------------------------------------------
+  initial
+    begin : w_mem_test
+      $display("   -- Testbench for sha256 w memory started --");
+
+
+      // TC1: Empty block
+      // digest 0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+      $display("*** Simulation done.");
+      $finish;
+    end // sha256_core_test
+  
+endmodule // w_mem_test
   
 //======================================================================
 // EOF tb_sha256_w_mem.v
