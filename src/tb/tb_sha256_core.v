@@ -93,19 +93,81 @@ module tb_sha256_core();
       #CLK_HALF_PERIOD tb_clk = !tb_clk;
     end // clk_gen
     
+
+  //----------------------------------------------------------------
+  //----------------------------------------------------------------
+  task init_dut();
+    begin
+
+    end
+  endtask // init_dut
+
+  
+  //----------------------------------------------------------------
+  //----------------------------------------------------------------
+  task single_block_test(input [7 : 0] tc_number,
+                         input [511 : 0] block,
+                         input [255 : 0] expected);
+   begin
+
+      $display("*** Single block test case %d: Done", tc_number);
+      $display("");
+   end
+  endtask // single_block_test
+
+  
+  //----------------------------------------------------------------
+  //----------------------------------------------------------------
+  task double_block_test(input [7 : 0] tc_number,
+                         input [511 : 0] block1,
+                         input [255 : 0] expected1,
+                         input [511 : 0] block2,
+                         input [255 : 0] expected2);
+   begin
+
+      $display("*** Double block test case %d: Done", tc_number);
+      $display("");
+   end
+  endtask // single_block_test
+                         
     
   //----------------------------------------------------------------
   // sha256_core_test
   // The main test functionality. 
+  //
+  // Test cases taken from:
+  // http://csrc.nist.gov/groups/ST/toolkit/documents/Examples/SHA256.pdf
   //----------------------------------------------------------------
   initial
     begin : sha256_core_test
+      reg [511 : 0] tc1;
+      reg [255 : 0] res1;
+
+      reg [511 : 0] tc2_1;
+      reg [255 : 0] res2_1;
+      reg [511 : 0] tc2_2;
+      reg [255 : 0] res2_2;
+      
       $display("   -- Testbench for sha256 core started --");
 
+      init_dut();
+      
+      // TC1: Single block message: "abc".
+      tc1 = 512'h61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018;
+      res1 = 256'hBA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD;
+      single_block_test(1, tc1, res1);
+      
 
-      // TC1: Empty block
-      // digest 0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-
+      // TC2: Double block message.
+      // "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq"
+      tc2_1 = 512'h6162636462636465636465666465666765666768666768696768696A68696A6B696A6B6C6A6B6C6D6B6C6D6E6C6D6E6F6D6E6F706E6F70718000000000000000;
+      res2_1 = 256'h85E655D6417A17953363376A624CDE5C76E09589CAC5F811CC4B32C1F20E533A;
+      
+      tc2_2 = 512'h000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001C0;
+      res2_2 = 256'h248D6A61D20638B8E5C026930C3E6039A33CE45964FF2167F6ECEDD419DB06C1;
+      double_block_test(2, tc2_1, res2_1, tc2_2, res2_2);
+      
+      
       $display("*** Simulation done.");
       $finish;
     end // sha256_core_test
