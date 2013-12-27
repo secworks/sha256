@@ -129,10 +129,13 @@ module tb_sha256_w_mem();
   
   
   //----------------------------------------------------------------
-  // init_dut
+  // init_sim
   //----------------------------------------------------------------
-  task init_dut();
+  task init_sim();
     begin
+      tb_clk = 0;
+      tb_reset_n = 1;
+      
       tb_init = 0;
       tb_block = 512'h00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
       tb_addr = 0;
@@ -148,7 +151,7 @@ module tb_sha256_w_mem();
       $display("   -- Testbench for sha256 w memory started --");
       tb_clk = 0;
       
-      init_dut();
+      init_sim();
       reset_dut();
 
       tb_init = 1;
