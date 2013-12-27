@@ -40,13 +40,14 @@
 //------------------------------------------------------------------
 `timescale 1ns/10ps
 
-  
-
 module tb_sha256_w_mem();
 
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
+  parameter DEBUG = 0;
+
+  parameter CLK_HALF_PERIOD = 2;
 
   
   //----------------------------------------------------------------
@@ -66,6 +67,10 @@ module tb_sha256_w_mem();
   wire          tb_ready;
   wire [31 : 0] tb_w;
 
+  reg [63 : 0] cycle_ctr;
+  reg [31 : 0] error_ctr;
+  reg [31 : 0] tc_ctr;
+  
   
   //----------------------------------------------------------------
   // Device Under Test.
@@ -74,13 +79,13 @@ module tb_sha256_w_mem();
                    .clk(clk),
                    .reset_n(reset_n),
                    
-                   .init(w_init),
+                   .init(tb_init),
                    
-                   .block(block),
-                   .addr(w_addr),
+                   .block(tb_block),
+                   .addr(tb_addr),
                    
-                   .ready(w_ready),
-                   .w(w)
+                   .ready(tb_ready),
+                   .w(tb_w)
                   );
   
 
@@ -93,7 +98,46 @@ module tb_sha256_w_mem();
     begin : clk_gen
       #CLK_HALF_PERIOD tb_clk = !tb_clk;
     end // clk_gen
+
   
+  //--------------------------------------------------------------------
+  // dut_monitor
+  //
+  // Monitor displaying information every cycle.
+  // Includes the cycle counter.
+  //--------------------------------------------------------------------
+  always @ (posedge tb_clk)
+    begin : dut_monitor
+      cycle_ctr = cycle_ctr + 1;
+
+      $display("cycle = %016x:", cycle_ctr);
+
+      $display("dut ctrl_state = %02x:", dut.sha256_w_mem_ctrl_reg);
+    end // dut_monitor
+
+  
+  //----------------------------------------------------------------
+  // reset_dut
+  //----------------------------------------------------------------
+  task reset_dut();
+    begin
+      tb_reset_n = 0;
+      #(4 * CLK_HALF_PERIOD);
+      tb_reset_n = 1;
+    end
+  endtask // reset_dut
+  
+  
+  //----------------------------------------------------------------
+  // init_dut
+  //----------------------------------------------------------------
+  task init_dut();
+    begin
+      tb_init = 0;
+      tb_block = 512'h00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
+      tb_addr = 0;
+    end
+  endtask // reset_dut
     
     
   //----------------------------------------------------------------
@@ -102,14 +146,23 @@ module tb_sha256_w_mem();
   initial
     begin : w_mem_test
       $display("   -- Testbench for sha256 w memory started --");
+      tb_clk = 0;
+      
+      init_dut();
+      reset_dut();
 
+      tb_init = 1;
+      #(4 * CLK_HALF_PERIOD);
+      tb_init = 0;
 
+      #(100 * CLK_HALF_PERIOD);
+      
       // TC1: Empty block
       // digest 0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 
       $display("*** Simulation done.");
       $finish;
-    end // sha256_core_test
+    end
   
 endmodule // w_mem_test
   
