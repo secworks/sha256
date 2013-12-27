@@ -2001,10 +2001,10 @@ module sha256_w_mem(
   //----------------------------------------------------------------
   always @*
     begin : sha256_w_mem_fsm
-      w_ctr_set       = 1;
-      
-      w_init   = 0;
-      w_update = 0;
+      w_ctr_set = 0;
+      w_ctr_inc = 0;
+      w_init    = 0;
+      w_update  = 0;
 
       ready_tmp = 0;
       
