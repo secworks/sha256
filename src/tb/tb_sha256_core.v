@@ -59,7 +59,7 @@ module tb_sha256_core();
   reg            tb_next;
   reg [511 : 0]  tb_block;
   wire           tb_ready;
-  wire [255 : 0] tb_digest_out;
+  wire [255 : 0] tb_digest;
   wire           tb_digest_valid;
   
   
@@ -78,7 +78,7 @@ module tb_sha256_core();
                    
                    .ready(tb_ready),
                    
-                   .digest_out(tb_digest_out),
+                   .digest(tb_digest),
                    .digest_valid(tb_digest_valid)
                  );
   
