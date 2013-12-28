@@ -47,7 +47,7 @@ module sha256_core(
                    
                    output wire           ready,
                     
-                   output wire [255 : 0] digest_out,
+                   output wire [255 : 0] digest,
                    output wire           digest_valid
                   );
 
@@ -116,9 +116,9 @@ module sha256_core(
   reg         t_ctr_inc;
   reg         t_ctr_rst;
 
-  reg digest_out_valid_reg;
-  reg digest_out_valid_new;
-  reg digest_out_valid_we;
+  reg digest_valid_reg;
+  reg digest_valid_new;
+  reg digest_valid_we;
   
   reg [2 : 0] sha256_ctrl_reg;
   reg [2 : 0] sha256_ctrl_new;
@@ -178,8 +178,8 @@ module sha256_core(
   //----------------------------------------------------------------
   assign ready = ready_flag;
   
-  assign digest_out = {H0_reg, H1_reg, H2_reg, H3_reg,
-                       H4_reg, H5_reg, H6_reg, H7_reg};
+  assign digest = {H0_reg, H1_reg, H2_reg, H3_reg,
+                   H4_reg, H5_reg, H6_reg, H7_reg};
   
   
   //----------------------------------------------------------------
@@ -192,25 +192,25 @@ module sha256_core(
     begin : reg_update
       if (!reset_n)
         begin
-          a_reg                <= 32'h00000000;
-          b_reg                <= 32'h00000000;
-          c_reg                <= 32'h00000000;
-          d_reg                <= 32'h00000000;
-          e_reg                <= 32'h00000000;
-          f_reg                <= 32'h00000000;
-          g_reg                <= 32'h00000000;
-          h_reg                <= 32'h00000000;
-          H0_reg               <= 32'h00000000;
-          H1_reg               <= 32'h00000000;
-          H2_reg               <= 32'h00000000;
-          H3_reg               <= 32'h00000000;
-          H4_reg               <= 32'h00000000;
-          H5_reg               <= 32'h00000000;
-          H6_reg               <= 32'h00000000;
-          H7_reg               <= 32'h00000000;
-          digest_out_valid_reg <= 0;
-          t_ctr_reg            <= 7'b0000000;
-          sha256_ctrl_reg      <= CTRL_IDLE;
+          a_reg            <= 32'h00000000;
+          b_reg            <= 32'h00000000;
+          c_reg            <= 32'h00000000;
+          d_reg            <= 32'h00000000;
+          e_reg            <= 32'h00000000;
+          f_reg            <= 32'h00000000;
+          g_reg            <= 32'h00000000;
+          h_reg            <= 32'h00000000;
+          H0_reg           <= 32'h00000000;
+          H1_reg           <= 32'h00000000;
+          H2_reg           <= 32'h00000000;
+          H3_reg           <= 32'h00000000;
+          H4_reg           <= 32'h00000000;
+          H5_reg           <= 32'h00000000;
+          H6_reg           <= 32'h00000000;
+          H7_reg           <= 32'h00000000;
+          digest_valid_reg <= 0;
+          t_ctr_reg        <= 7'b0000000;
+          sha256_ctrl_reg  <= CTRL_IDLE;
         end
       else
         begin
@@ -431,23 +431,23 @@ module sha256_core(
   //----------------------------------------------------------------
   always @*
     begin : sha256_ctrl_fsm
-      digest_init          = 0;
-      digest_update        = 0;
+      digest_init      = 0;
+      digest_update    = 0;
 
-      state_init           = 0;
-      state_update         = 0;
+      state_init       = 0;
+      state_update     = 0;
       
-      first_block          = 0;
-      ready_flag           = 0;
+      first_block      = 0;
+      ready_flag       = 0;
 
-      t_ctr_inc            = 0;
-      t_ctr_rst            = 0;
+      t_ctr_inc        = 0;
+      t_ctr_rst        = 0;
       
-      digest_out_valid_new = 0;
-      digest_out_valid_we  = 0;
+      digest_valid_new = 0;
+      digest_valid_we  = 0;
       
-      sha256_ctrl_new      = CTRL_IDLE;
-      sha256_ctrl_we       = 0;
+      sha256_ctrl_new  = CTRL_IDLE;
+      sha256_ctrl_we   = 0;
 
       
       case (sha256_ctrl_reg)
@@ -473,22 +473,25 @@ module sha256_core(
               end
           end
 
+        
         CTRL_INIT:
           begin
-            digest_init          = 1;
-            state_init           = 1;
-            digest_out_valid_new = 0;
-            digest_out_valid_we  = 1;
+            digest_init      = 1;
+            state_init       = 1;
+            digest_valid_new = 0;
+            digest_valid_we  = 1;
 
-            sha256_ctrl_new      = CTRL_ROUNDS;
-            sha256_ctrl_we       = 1;
+            sha256_ctrl_new  = CTRL_ROUNDS;
+            sha256_ctrl_we   = 1;
           end
+
         
         CTRL_NEXT:
           begin
             sha256_ctrl_new = CTRL_ROUNDS;
             sha256_ctrl_we  = 1;
           end
+
         
         CTRL_ROUNDS:
           begin
@@ -498,15 +501,16 @@ module sha256_core(
             sha256_ctrl_we  = 1;
           end
 
+        
         CTRL_DONE:
           begin
-            ready_flag           = 1;
-            digest_update        = 1;
-            digest_out_valid_new = 1;
-            digest_out_valid_we  = 1;
+            ready_flag       = 1;
+            digest_update    = 1;
+            digest_valid_new = 1;
+            digest_valid_we  = 1;
 
-            sha256_ctrl_new      = CTRL_IDLE;
-            sha256_ctrl_we       = 1;
+            sha256_ctrl_new  = CTRL_IDLE;
+            sha256_ctrl_we   = 1;
           end
       endcase // case (sha256_ctrl_reg)
     end // sha256_ctrl_fsm
