@@ -21,7 +21,7 @@ TOP_TB_SRC=../src/tb/tb_sha256.v
 CC=iverilog
 
 
-all: top core
+all: top core wmem
 
 
 top: $(TOP_TB_SRC) $(TOP_SRC)
