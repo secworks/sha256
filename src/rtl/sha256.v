@@ -242,6 +242,8 @@ module sha256(
           init_reg         <= 0;
           next_reg         <= 0;
           ready_reg        <= 0;
+          digest_reg       <= 256'h0000000000000000000000000000000000000000000000000000000000000000;
+          digest_valid_reg <= 0;
           block0_reg       <= 32'h00000000;
           block1_reg       <= 32'h00000000;
           block2_reg       <= 32'h00000000;
@@ -258,15 +260,107 @@ module sha256(
           block13_reg      <= 32'h00000000;
           block14_reg      <= 32'h00000000;
           block15_reg      <= 32'h00000000;
-          digest_reg       <= 256'h0000000000000000000000000000000000000000000000000000000000000000;
-          digest_valid_reg <= 0;
-          
         end
       else
         begin
           ready_reg        <= core_ready;
           digest_valid_reg <= core_digest_valid;
 
+          if (init_we)
+            begin
+              init_reg <= init_new;
+            end
+
+          if (next_we)
+            begin
+              next_reg <= next_new;
+            end
+          
+          if (core_digest_valid)
+            begin
+              digest_reg <= core_digest;
+            end
+
+          if (block0_we)
+            begin
+              block0_reg <= block0_new;
+            end
+
+          if (block1_we)
+            begin
+              block1_reg <= block1_new;
+            end
+
+          if (block2_we)
+            begin
+              block2_reg <= block2_new;
+            end
+
+          if (block3_we)
+            begin
+              block3_reg <= block3_new;
+            end
+
+          if (block4_we)
+            begin
+              block4_reg <= block4_new;
+            end
+
+          if (block5_we)
+            begin
+              block5_reg <= block5_new;
+            end
+
+          if (block6_we)
+            begin
+              block6_reg <= block6_new;
+            end
+
+          if (block7_we)
+            begin
+              block7_reg <= block7_new;
+            end
+
+          if (block8_we)
+            begin
+              block8_reg <= block8_new;
+            end
+
+          if (block9_we)
+            begin
+              block9_reg <= block9_new;
+            end
+
+          if (block10_we)
+            begin
+              block10_reg <= block10_new;
+            end
+
+          if (block11_we)
+            begin
+              block11_reg <= block11_new;
+            end
+
+          if (block12_we)
+            begin
+              block12_reg <= block12_new;
+            end
+
+          if (block13_we)
+            begin
+              block13_reg <= block13_new;
+            end
+
+          if (block14_we)
+            begin
+              block14_reg <= block14_new;
+            end
+
+          if (block15_we)
+            begin
+              block15_reg <= block15_new;
+            end
+          
         end
     end // reg_update
 
@@ -276,6 +370,39 @@ module sha256(
   //----------------------------------------------------------------
   always @*
     begin : addr_decoder
+      block0_new  = 32'h00000000;
+      block0_we   = 0;
+      block1_new  = 32'h00000000;
+      block1_we   = 0;
+      block2_new  = 32'h00000000;
+      block2_we   = 0;
+      block3_new  = 32'h00000000;
+      block3_we   = 0;
+      block4_new  = 32'h00000000;
+      block4_we   = 0;
+      block5_new  = 32'h00000000;
+      block5_we   = 0;
+      block6_new  = 32'h00000000;
+      block6_we   = 0;
+      block7_new  = 32'h00000000;
+      block7_we   = 0;
+      block8_new  = 32'h00000000;
+      block8_we   = 0;
+      block9_new  = 32'h00000000;
+      block9_we   = 0;
+      block10_new = 32'h00000000;
+      block10_we  = 0;
+      block11_new = 32'h00000000;
+      block11_we  = 0;
+      block12_new = 32'h00000000;
+      block12_we  = 0;
+      block13_new = 32'h00000000;
+      block13_we  = 0;
+      block14_new = 32'h00000000;
+      block14_we  = 0;
+      block15_new = 32'h00000000;
+      block15_we  = 0;
+      
       
       if (cs)
         begin
