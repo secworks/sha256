@@ -59,58 +59,33 @@ module sha256(
 
   parameter ADDR_STATUS      = 8'h01;
   parameter STATUS_READY_BIT = 0;
-  
-  parameter ADDR_KEYLEN      = 8'h08;
-  parameter KEYLEN_BIT       = 0;
-  parameter ADDR_ROUNDS      = 8'h09;
-  parameter ROUNDS_HIGH_BIT  = 4;
-  parameter ROUNDS_LOW_BIT   = 0;
+  parameter STATUS_VALID_BIT = 1;
                              
-  parameter ADDR_KEY0        = 8'h10;
-  parameter ADDR_KEY1        = 8'h11;
-  parameter ADDR_KEY2        = 8'h12;
-  parameter ADDR_KEY3        = 8'h13;
-  parameter ADDR_KEY4        = 8'h14;
-  parameter ADDR_KEY5        = 8'h15;
-  parameter ADDR_KEY6        = 8'h16;
-  parameter ADDR_KEY7        = 8'h17;
+  parameter ADDR_BLOCK0    = 8'h10;
+  parameter ADDR_BLOCK1    = 8'h11;
+  parameter ADDR_BLOCK2    = 8'h12;
+  parameter ADDR_BLOCK3    = 8'h13;
+  parameter ADDR_BLOCK4    = 8'h14;
+  parameter ADDR_BLOCK5    = 8'h15;
+  parameter ADDR_BLOCK6    = 8'h16;
+  parameter ADDR_BLOCK7    = 8'h17;
+  parameter ADDR_BLOCK8    = 8'h18;
+  parameter ADDR_BLOCK9    = 8'h19;
+  parameter ADDR_BLOCK10   = 8'h1a;
+  parameter ADDR_BLOCK11   = 8'h1b;
+  parameter ADDR_BLOCK12   = 8'h1c;
+  parameter ADDR_BLOCK13   = 8'h1d;
+  parameter ADDR_BLOCK14   = 8'h1e;
+  parameter ADDR_BLOCK15   = 8'h1f;
                              
-  parameter ADDR_IV0         = 8'h20;
-  parameter ADDR_IV1         = 8'h21;
-                             
-  parameter ADDR_DATA_IN0    = 8'h40;
-  parameter ADDR_DATA_IN1    = 8'h41;
-  parameter ADDR_DATA_IN2    = 8'h42;
-  parameter ADDR_DATA_IN3    = 8'h43;
-  parameter ADDR_DATA_IN4    = 8'h44;
-  parameter ADDR_DATA_IN5    = 8'h45;
-  parameter ADDR_DATA_IN6    = 8'h46;
-  parameter ADDR_DATA_IN7    = 8'h47;
-  parameter ADDR_DATA_IN8    = 8'h48;
-  parameter ADDR_DATA_IN9    = 8'h49;
-  parameter ADDR_DATA_IN10   = 8'h4a;
-  parameter ADDR_DATA_IN11   = 8'h4b;
-  parameter ADDR_DATA_IN12   = 8'h4c;
-  parameter ADDR_DATA_IN13   = 8'h4d;
-  parameter ADDR_DATA_IN14   = 8'h4e;
-  parameter ADDR_DATA_IN15   = 8'h4f;
-                             
-  parameter ADDR_DATA_OUT0   = 8'h80;
-  parameter ADDR_DATA_OUT1   = 8'h81;
-  parameter ADDR_DATA_OUT2   = 8'h82;
-  parameter ADDR_DATA_OUT3   = 8'h83;
-  parameter ADDR_DATA_OUT4   = 8'h84;
-  parameter ADDR_DATA_OUT5   = 8'h85;
-  parameter ADDR_DATA_OUT6   = 8'h86;
-  parameter ADDR_DATA_OUT7   = 8'h87;
-  parameter ADDR_DATA_OUT8   = 8'h88;
-  parameter ADDR_DATA_OUT9   = 8'h89;
-  parameter ADDR_DATA_OUT10  = 8'h8a;
-  parameter ADDR_DATA_OUT11  = 8'h8b;
-  parameter ADDR_DATA_OUT12  = 8'h8c;
-  parameter ADDR_DATA_OUT13  = 8'h8d;
-  parameter ADDR_DATA_OUT14  = 8'h8e;
-  parameter ADDR_DATA_OUT15  = 8'h8f;
+  parameter ADDR_DIGEST0   = 8'h20;
+  parameter ADDR_DIGEST1   = 8'h21;
+  parameter ADDR_DIGEST2   = 8'h22;
+  parameter ADDR_DIGEST3   = 8'h23;
+  parameter ADDR_DIGEST4   = 8'h24;
+  parameter ADDR_DIGEST5   = 8'h25;
+  parameter ADDR_DIGEST6   = 8'h26;
+  parameter ADDR_DIGEST7   = 8'h27;
 
   
   //----------------------------------------------------------------
@@ -370,6 +345,10 @@ module sha256(
   //----------------------------------------------------------------
   always @*
     begin : addr_decoder
+      init_new    = 0;
+      init_we     = 0;
+      next_new    = 0;
+      next_we     = 0;
       block0_new  = 32'h00000000;
       block0_we   = 0;
       block1_new  = 32'h00000000;
