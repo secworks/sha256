@@ -260,9 +260,9 @@ module tb_sha256_w_mem();
       while (i < 64)
         begin
           tb_addr = i[5 : 0];
-          $display("   W%02x = 0x%02x", tb_addr, tb_w);
-          #(2 * CLK_HALF_PERIOD);
+          $display("API: w%02x, internal w%02x = 0x%02x", tb_addr, dut.addr, dut.w_tmp);
           i = i + 1;
+          #(2 * CLK_HALF_PERIOD);
         end
     end
   endtask // read_w
