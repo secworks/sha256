@@ -100,6 +100,12 @@ module tb_sha256_core();
     begin
       $display("State of DUT");
       $display("------------");
+      $display("Control inputs and outputs:");
+      $display("init = 0x%01x, next = 0x%01x", 
+               dut.init, dut.next);
+      $display("ready = 0x%01x, valid = 0x%01x", 
+               dut.ready, dut.digest_valid);
+      $display("");
       
       $display("Control signals and counter:");
       $display("sha256_ctrl_reg = 0x%02x", dut.sha256_ctrl_reg);
@@ -209,15 +215,18 @@ module tb_sha256_core();
       reset_dut();
       dump_dut_state();
 
+      $display("*** Toggling init signal.");
       tb_init = 1;
-      #(4 * CLK_HALF_PERIOD);
-      tb_init = 1;
       dump_dut_state();
-      #(10 * CLK_HALF_PERIOD);
+      #(2 * CLK_HALF_PERIOD);
       dump_dut_state();
-      #(200 * CLK_HALF_PERIOD);
+      tb_init = 0;
+      #(2 * CLK_HALF_PERIOD);
       dump_dut_state();
-      
+      #(2 * CLK_HALF_PERIOD);
+      dump_dut_state();
+      #(2 * CLK_HALF_PERIOD);
+      dump_dut_state();
       
         
       // TC1: Single block message: "abc".
