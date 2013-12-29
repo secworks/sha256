@@ -177,6 +177,8 @@ module sha256_core(
   assign digest = {H0_reg, H1_reg, H2_reg, H3_reg,
                    H4_reg, H5_reg, H6_reg, H7_reg};
   
+  assign digest_valid = digest_valid_reg;
+  
   
   //----------------------------------------------------------------
   // reg_update
@@ -484,7 +486,7 @@ module sha256_core(
             state_update = 1;
             t_ctr_inc    = 1;
 
-            if (t_ctr_reg == 6'h3f)
+            if (t_ctr_reg == 63)
               begin
                 sha256_ctrl_new = CTRL_DONE;
                 sha256_ctrl_we  = 1;
