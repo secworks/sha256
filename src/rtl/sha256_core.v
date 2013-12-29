@@ -108,8 +108,8 @@ module sha256_core(
   reg [31 : 0] H7_new;
   reg          H_we;
   
-  reg [6 : 0] t_ctr_reg;
-  reg [6 : 0] t_ctr_new;
+  reg [5 : 0] t_ctr_reg;
+  reg [5 : 0] t_ctr_new;
   reg         t_ctr_we;
   reg         t_ctr_inc;
   reg         t_ctr_rst;
@@ -486,7 +486,7 @@ module sha256_core(
             state_update = 1;
             t_ctr_inc    = 1;
 
-            if (t_ctr_reg == 63)
+            if (t_ctr_reg == 6'h3f)
               begin
                 sha256_ctrl_new = CTRL_DONE;
                 sha256_ctrl_we  = 1;
