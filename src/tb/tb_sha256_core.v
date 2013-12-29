@@ -208,6 +208,17 @@ module tb_sha256_core();
       dump_dut_state();
       reset_dut();
       dump_dut_state();
+
+      tb_init = 1;
+      #(4 * CLK_HALF_PERIOD);
+      tb_init = 1;
+      dump_dut_state();
+      #(10 * CLK_HALF_PERIOD);
+      dump_dut_state();
+      #(200 * CLK_HALF_PERIOD);
+      dump_dut_state();
+      
+      
         
       // TC1: Single block message: "abc".
       tc1 = 512'h61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018;
