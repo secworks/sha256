@@ -67,7 +67,7 @@ help:
 	@echo "wmem:     Build the wmem simulation target."
 	@echo "sim-top:  Run top level simulation."
 	@echo "sim-core: Run core level simulation."
-	@echo "sim-core: Run wmem level simulation."
+	@echo "sim-wmem: Run wmem level simulation."
 	@echo "debug:    Print the internal varibles."
 	@echo "clean:    Delete all built files."
 

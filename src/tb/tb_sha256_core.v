@@ -121,12 +121,25 @@ module tb_sha256_core();
       $display("");
 
       $display("State update values:");
-      $display("w  = 0x%08x, k  = 0x%08x", dut.w, dut.K);
+      $display("w  = 0x%08x, k  = 0x%08x", dut.w_data, dut.k_data);
       $display("t1 = 0x%08x, t2 = 0x%08x", dut.t1, dut.t2);
       $display("");
     end
   endtask // dump_dut_state
   
+  
+  //----------------------------------------------------------------
+  // reset_dut
+  //----------------------------------------------------------------
+  task reset_dut();
+    begin
+      $display("*** Toggle reset.");
+      tb_reset_n = 0;
+      #(4 * CLK_HALF_PERIOD);
+      tb_reset_n = 1;
+    end
+  endtask // reset_dut
+
   
   //----------------------------------------------------------------
   //----------------------------------------------------------------
@@ -192,6 +205,8 @@ module tb_sha256_core();
       $display("   -- Testbench for sha256 core started --");
 
       init_sim();
+      dump_dut_state();
+      reset_dut();
       dump_dut_state();
         
       // TC1: Single block message: "abc".
