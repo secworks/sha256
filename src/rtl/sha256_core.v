@@ -65,10 +65,8 @@ module sha256_core(
   parameter H0_7 = 32'h5be0cd19;
 
   parameter CTRL_IDLE   = 0;
-  parameter CTRL_INIT   = 1;
-  parameter CTRL_NEXT   = 2;
-  parameter CTRL_ROUNDS = 3;
-  parameter CTRL_DONE   = 4;
+  parameter CTRL_ROUNDS = 1;
+  parameter CTRL_DONE   = 2;
   
   
   //----------------------------------------------------------------
@@ -120,8 +118,8 @@ module sha256_core(
   reg digest_valid_new;
   reg digest_valid_we;
   
-  reg [2 : 0] sha256_ctrl_reg;
-  reg [2 : 0] sha256_ctrl_new;
+  reg [1 : 0] sha256_ctrl_reg;
+  reg [1 : 0] sha256_ctrl_new;
   reg         sha256_ctrl_we;
 
   
@@ -440,6 +438,8 @@ module sha256_core(
       first_block      = 0;
       ready_flag       = 0;
 
+      w_init           = 0;
+      
       t_ctr_inc        = 0;
       t_ctr_rst        = 0;
       
@@ -457,54 +457,45 @@ module sha256_core(
             
             if (init)
               begin
-                digest_init     = 1;
-                state_init      = 1;
-                first_block     = 1;
-                
-                sha256_ctrl_new = CTRL_INIT;
-                sha256_ctrl_we  = 1;
+                digest_init      = 1;
+                w_init           = 1;
+                state_init       = 1;
+                first_block      = 1;
+                t_ctr_rst        = 1;
+                digest_valid_new = 0;
+                digest_valid_we  = 1;
+                sha256_ctrl_new  = CTRL_ROUNDS;
+                sha256_ctrl_we   = 1;
               end
 
             if (next)
               begin
-                state_init      = 1;
-                sha256_ctrl_new = CTRL_NEXT;
-                sha256_ctrl_we  = 1;
+                w_init           = 1;
+                state_init       = 1;
+                t_ctr_rst        = 1;
+                digest_valid_new = 0;
+                digest_valid_we  = 1;
+                sha256_ctrl_new  = CTRL_ROUNDS;
+                sha256_ctrl_we   = 1;
               end
-          end
-
-        
-        CTRL_INIT:
-          begin
-            digest_init      = 1;
-            state_init       = 1;
-            digest_valid_new = 0;
-            digest_valid_we  = 1;
-
-            sha256_ctrl_new  = CTRL_ROUNDS;
-            sha256_ctrl_we   = 1;
-          end
-
-        
-        CTRL_NEXT:
-          begin
-            sha256_ctrl_new = CTRL_ROUNDS;
-            sha256_ctrl_we  = 1;
           end
 
         
         CTRL_ROUNDS:
           begin
-            state_update    = 1;
+            state_update = 1;
+            t_ctr_inc    = 1;
 
-            sha256_ctrl_new = CTRL_DONE;
-            sha256_ctrl_we  = 1;
+            if (t_ctr_reg == 63)
+              begin
+                sha256_ctrl_new = CTRL_DONE;
+                sha256_ctrl_we  = 1;
+              end
           end
 
         
         CTRL_DONE:
           begin
-            ready_flag       = 1;
             digest_update    = 1;
             digest_valid_new = 1;
             digest_valid_we  = 1;
