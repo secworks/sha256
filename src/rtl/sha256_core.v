@@ -126,9 +126,6 @@ module sha256_core(
   //----------------------------------------------------------------
   // Wires.
   //----------------------------------------------------------------
-  reg [5 : 0]   K_addr;
-  wire [31 : 0] K;
-
   reg digest_init;
   reg digest_update;
 
@@ -142,18 +139,19 @@ module sha256_core(
   reg [31 : 0] t1;
   reg [31 : 0] t2;
 
-  reg [5 : 0]   w_addr;
+  wire [31 : 0] k_data;
+
   reg           w_init;
   wire          w_ready;
-  wire [31 : 0] w;
+  wire [31 : 0] w_data;
               
   
   //----------------------------------------------------------------
   // Module instantiantions.
   //----------------------------------------------------------------
   sha256_k_constants k_constants(
-                                 .addr(K_addr),
-                                 .K(K)
+                                 .addr(t_ctr_reg),
+                                 .K(k_data)
                                  );
 
 
@@ -164,10 +162,10 @@ module sha256_core(
                      .init(w_init),
 
                      .block(block),
-                     .addr(w_addr),
+                     .addr(t_ctr_reg),
 
                      .ready(w_ready),
-                     .w(w)
+                     .w(w_data)
                    );
 
   
@@ -311,7 +309,7 @@ module sha256_core(
 
       ch = (e_reg & f_reg) ^ ((!e_reg) & g_reg);
       
-      t1 = h_reg + sum1 + ch + w + K;
+      t1 = h_reg + sum1 + ch + w_data + k_data;
     end // t1_logic
 
 
