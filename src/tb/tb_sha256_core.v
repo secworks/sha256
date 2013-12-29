@@ -96,9 +96,48 @@ module tb_sha256_core();
 
   //----------------------------------------------------------------
   //----------------------------------------------------------------
-  task init_dut();
+  task dump_dut_state();
     begin
+      $display("State of DUT");
+      $display("------------");
+      
+      $display("Control signals and counter:");
+      $display("sha256_ctrl_reg = 0x%02x", dut.sha256_ctrl_reg);
+      $display("digest_init = 0x%01x, digest_update = 0x%01x", 
+               dut.digest_init, dut.digest_update);
+      $display("state_init = 0x%01x, state_update = 0x%01x", 
+               dut.state_init, dut.state_update);
+      $display("first_block = 0x%01x, ready_flag = 0x%01x, w_init = 0x%01x", 
+               dut.first_block, dut.ready_flag, dut.w_init);
+      $display("t_ctr_inc = 0x%01x, t_ctr_rst = 0x%01x, t_ctr_reg = 0x%02x", 
+               dut.t_ctr_inc, dut.t_ctr_rst, dut.t_ctr_reg);
+      $display("");
 
+      $display("State registers:");
+      $display("a_reg = 0x%08x, b_reg = 0x%08x, c_reg = 0x%08x, d_reg = 0x%08x", 
+               dut.a_reg, dut.b_reg, dut.c_reg, dut.d_reg);
+      $display("e_reg = 0x%08x, f_reg = 0x%08x, g_reg = 0x%08x, h_reg = 0x%08x", 
+               dut.e_reg, dut.f_reg, dut.g_reg, dut.h_reg);
+      $display("");
+
+      $display("State update values:");
+      $display("w  = 0x%08x, k  = 0x%08x", dut.w, dut.K);
+      $display("t1 = 0x%08x, t2 = 0x%08x", dut.t1, dut.t2);
+      $display("");
+    end
+  endtask // dump_dut_state
+  
+  
+  //----------------------------------------------------------------
+  //----------------------------------------------------------------
+  task init_sim();
+    begin
+      tb_clk = 0;
+      tb_reset_n = 1;
+
+      tb_init = 0;
+      tb_next = 0;
+      tb_block = 512'h00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
     end
   endtask // init_dut
 
@@ -109,9 +148,11 @@ module tb_sha256_core();
                          input [511 : 0] block,
                          input [255 : 0] expected);
    begin
-
-      $display("*** Single block test case %d: Done", tc_number);
-      $display("");
+     
+     init_sim();
+     
+     $display("*** Single block test case %d: Done", tc_number);
+     $display("");
    end
   endtask // single_block_test
 
@@ -150,8 +191,9 @@ module tb_sha256_core();
       
       $display("   -- Testbench for sha256 core started --");
 
-      init_dut();
-      
+      init_sim();
+      dump_dut_state();
+        
       // TC1: Single block message: "abc".
       tc1 = 512'h61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018;
       res1 = 256'hBA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD;
