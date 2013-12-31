@@ -101,7 +101,7 @@ module tb_sha256_core();
       $display("State of DUT");
       $display("------------");
       $display("Control inputs and outputs:");
-      $display("init = 0x%01x, next = 0x%01x", 
+      $display("init  = 0x%01x, next  = 0x%01x", 
                dut.init, dut.next);
       $display("ready = 0x%01x, valid = 0x%01x", 
                dut.ready, dut.digest_valid);
@@ -109,13 +109,13 @@ module tb_sha256_core();
       
       $display("Control signals and counter:");
       $display("sha256_ctrl_reg = 0x%02x", dut.sha256_ctrl_reg);
-      $display("digest_init = 0x%01x, digest_update = 0x%01x", 
+      $display("digest_init     = 0x%01x, digest_update = 0x%01x", 
                dut.digest_init, dut.digest_update);
-      $display("state_init = 0x%01x, state_update = 0x%01x", 
+      $display("state_init      = 0x%01x, state_update  = 0x%01x", 
                dut.state_init, dut.state_update);
-      $display("first_block = 0x%01x, ready_flag = 0x%01x, w_init = 0x%01x", 
+      $display("first_block     = 0x%01x, ready_flag    = 0x%01x, w_init    = 0x%01x", 
                dut.first_block, dut.ready_flag, dut.w_init);
-      $display("t_ctr_inc = 0x%01x, t_ctr_rst = 0x%01x, t_ctr_reg = 0x%02x", 
+      $display("t_ctr_inc       = 0x%01x, t_ctr_rst     = 0x%01x, t_ctr_reg = 0x%02x", 
                dut.t_ctr_inc, dut.t_ctr_rst, dut.t_ctr_reg);
       $display("");
 
@@ -132,8 +132,10 @@ module tb_sha256_core();
       $display("");
 
       $display("wmem data:");
-      $display("w_addr = 0x%02x, w_data  = 0x%08x", dut.w_mem.addr, dut.w_mem.w_tmp);
-      $display("w_ctr  = 0x%02x, w_state = 0x%01x", dut.w_mem.w_ctr_reg, dut.w_mem.sha256_w_mem_ctrl_reg);
+      $display("w_addr = 0x%02x,       w_data  = 0x%08x", dut.w_mem.addr, dut.w_mem.w_tmp);
+      $display("w_ctr  = 0x%02x,       w_state = 0x%01x", dut.w_mem.w_ctr_reg, dut.w_mem.sha256_w_mem_ctrl_reg);
+      $display("d0     = 0x%02x, d1      = 0x%01x", dut.w_mem.d0, dut.w_mem.d1);
+      $display("w_7    = 0x%02x, w_16    = 0x%01x", dut.w_mem.w_7, dut.w_mem.w_16);
       $display("");
     end
   endtask // dump_dut_state
@@ -221,6 +223,7 @@ module tb_sha256_core();
       dump_dut_state();
 
       $display("*** Toggling init signal.");
+      tb_block = 512'ha5a5a5a5a5a5a5a5a500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
       tb_init = 1;
       dump_dut_state();
       #(2 * CLK_HALF_PERIOD);
