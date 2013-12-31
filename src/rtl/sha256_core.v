@@ -241,6 +241,11 @@ module sha256_core(
             begin
               t_ctr_reg <= t_ctr_new;
             end
+
+          if (digest_valid_we)
+            begin
+              digest_valid_reg <= digest_valid_new;
+            end
           
           if (sha256_ctrl_we)
             begin
