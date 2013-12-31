@@ -100,11 +100,14 @@ module tb_sha256_core();
     begin
       $display("State of DUT");
       $display("------------");
-      $display("Control inputs and outputs:");
-      $display("init  = 0x%01x, next  = 0x%01x", 
+      $display("Inputs and outputs:");
+      $display("init   = 0x%01x, next  = 0x%01x", 
                dut.init, dut.next);
-      $display("ready = 0x%01x, valid = 0x%01x", 
+      $display("block  = 0x%0128x", dut.block);
+
+      $display("ready  = 0x%01x, valid = 0x%01x", 
                dut.ready, dut.digest_valid);
+      $display("digest = 0x%064x", dut.digest);
       $display("");
       
       $display("Control signals and counter:");
