@@ -53,6 +53,10 @@ module tb_sha256_core();
   //----------------------------------------------------------------
   // Register and Wire declarations.
   //----------------------------------------------------------------
+  reg [31 : 0] cycle_ctr;
+  reg [31 : 0] error_ctr;
+  reg [31 : 0] tc_ctr;
+
   reg            tb_clk;
   reg            tb_reset_n;
   reg            tb_init;
@@ -172,16 +176,71 @@ module tb_sha256_core();
 
   
   //----------------------------------------------------------------
+  // display_test_result()
+  //
+  // Display the accumulated test results.
+  //----------------------------------------------------------------
+  task display_test_result();
+    begin
+      if (error_ctr == 0)
+        begin
+          $display("*** All %02d test cases completed successfully", tc_ctr);
+        end
+      else
+        begin
+          $display("*** %02d test cases did not complete successfully.", error_ctr);
+        end
+    end
+  endtask // display_test_result
+  
+
+  //----------------------------------------------------------------
+  // wait_ready()
+  //
+  // Wait for the ready flag in the dut to be set.
+  //
+  // Note: It is the callers responsibility to call the function
+  // when the dut is actively processing and will in fact at some
+  // point set the flag.
+  //----------------------------------------------------------------
+  task wait_ready();
+    begin
+      while (!tb_ready)
+        begin
+          #(2 * CLK_HALF_PERIOD);
+        end
+    end
+  endtask // wait_ready
+
+  
+  //----------------------------------------------------------------
   //----------------------------------------------------------------
   task single_block_test(input [7 : 0] tc_number,
                          input [511 : 0] block,
                          input [255 : 0] expected);
    begin
+     tc_ctr = tc_ctr + 1;
      
-     init_sim();
-     
-     $display("*** Single block test case %d: Done", tc_number);
-     $display("");
+     tb_init = 1;
+     #(2 * CLK_HALF_PERIOD);
+     tb_init = 0;
+     wait_ready();
+
+      
+     if (tb_digest == expected)
+       begin
+         $display("*** TC %0d successful", tc_number);
+         $display("");
+       end 
+     else
+       begin
+         $display("*** ERROR: TC %0d not successful", tc_number);
+         $display("Expected: 0x%064x", expected);
+         $display("Got:      0x%064x", tb_digest);
+         $display("");
+         
+         error_ctr = error_ctr + 1;
+       end
    end
   endtask // single_block_test
 
@@ -224,191 +283,11 @@ module tb_sha256_core();
       dump_dut_state();
       reset_dut();
       dump_dut_state();
-
-      $display("*** Toggling init signal.");
-      tb_block = 512'ha5a5a5a5a5a5a5a5a500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
-      tb_init = 1;
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      tb_init = 0;
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      #(2 * CLK_HALF_PERIOD);
-      dump_dut_state();
-      
         
       // TC1: Single block message: "abc".
       tc1 = 512'h61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018;
       res1 = 256'hBA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD;
       single_block_test(1, tc1, res1);
-      
 
       // TC2: Double block message.
       // "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq"
@@ -419,7 +298,7 @@ module tb_sha256_core();
       res2_2 = 256'h248D6A61D20638B8E5C026930C3E6039A33CE45964FF2167F6ECEDD419DB06C1;
       double_block_test(2, tc2_1, res2_1, tc2_2, res2_2);
       
-      
+      display_test_result();
       $display("*** Simulation done.");
       $finish;
     end // sha256_core_test
