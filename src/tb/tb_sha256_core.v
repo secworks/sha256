@@ -220,7 +220,8 @@ module tb_sha256_core();
                          input [255 : 0] expected);
    begin
      tc_ctr = tc_ctr + 1;
-     
+
+     tb_block = block;
      tb_init = 1;
      #(2 * CLK_HALF_PERIOD);
      tb_init = 0;
@@ -234,7 +235,7 @@ module tb_sha256_core();
        end 
      else
        begin
-         $display("*** ERROR: TC %0d not successful", tc_number);
+         $display("*** ERROR: TC %0d NOT successful", tc_number);
          $display("Expected: 0x%064x", expected);
          $display("Got:      0x%064x", tb_digest);
          $display("");
@@ -252,10 +253,58 @@ module tb_sha256_core();
                          input [255 : 0] expected1,
                          input [511 : 0] block2,
                          input [255 : 0] expected2);
-   begin
 
-      $display("*** Double block test case %d: Done", tc_number);
-      $display("");
+     reg [255 : 0] db_digest1;
+     reg           db_error;
+   begin
+     db_error = 0;
+     tc_ctr = tc_ctr + 1;
+
+     tb_block = block1;
+     tb_init = 1;
+     #(2 * CLK_HALF_PERIOD);
+     tb_init = 0;
+     wait_ready();
+     db_digest1 = tb_digest;
+     
+     tb_block = block2;
+     tb_next = 1;
+     #(2 * CLK_HALF_PERIOD);
+     tb_next = 0;
+     wait_ready();
+      
+     if (db_digest1 == expected1)
+       begin
+         $display("*** TC %0d first block successful", tc_number);
+         $display("");
+       end 
+     else
+       begin
+         $display("*** ERROR: TC %0d first block NOT successful", tc_number);
+         $display("Expected: 0x%064x", expected1);
+         $display("Got:      0x%064x", db_digest1);
+         $display("");
+         db_error = 1;
+       end
+      
+     if (db_digest1 == expected1)
+       begin
+         $display("*** TC %0d second block successful", tc_number);
+         $display("");
+       end 
+     else
+       begin
+         $display("*** ERROR: TC %0d second block NOT successful", tc_number);
+         $display("Expected: 0x%064x", expected2);
+         $display("Got:      0x%064x", tb_digest);
+         $display("");
+         db_error = 1;
+       end
+
+     if (db_error)
+       begin
+         error_ctr = error_ctr + 1;
+       end
    end
   endtask // single_block_test
                          
