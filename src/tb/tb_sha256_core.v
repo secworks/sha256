@@ -45,7 +45,7 @@ module tb_sha256_core();
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
-  parameter DEBUG = 0;
+  parameter DEBUG = 1;
 
   parameter CLK_HALF_PERIOD = 2;
   
@@ -99,6 +99,22 @@ module tb_sha256_core();
     
 
   //----------------------------------------------------------------
+  // sys_monitor
+  //----------------------------------------------------------------
+  always
+    begin : sys_monitor
+      #(2 * CLK_HALF_PERIOD);
+      if (DEBUG)
+        begin
+          dump_dut_state();
+        end
+    end
+
+  
+  //----------------------------------------------------------------
+  // dump_dut_state()
+  //
+  // Dump the state of the dump when needed.
   //----------------------------------------------------------------
   task dump_dut_state();
     begin
@@ -219,6 +235,7 @@ module tb_sha256_core();
                          input [511 : 0] block,
                          input [255 : 0] expected);
    begin
+     $display("*** TC %0d single block test case started.", tc_number);
      tc_ctr = tc_ctr + 1;
 
      tb_block = block;
@@ -230,12 +247,12 @@ module tb_sha256_core();
       
      if (tb_digest == expected)
        begin
-         $display("*** TC %0d successful", tc_number);
+         $display("*** TC %0d successful.", tc_number);
          $display("");
        end 
      else
        begin
-         $display("*** ERROR: TC %0d NOT successful", tc_number);
+         $display("*** ERROR: TC %0d NOT successful.", tc_number);
          $display("Expected: 0x%064x", expected);
          $display("Got:      0x%064x", tb_digest);
          $display("");
@@ -257,21 +274,26 @@ module tb_sha256_core();
      reg [255 : 0] db_digest1;
      reg           db_error;
    begin
+     $display("*** TC %0d double block test case started.", tc_number);
      db_error = 0;
      tc_ctr = tc_ctr + 1;
 
+     $display("*** TC %0d first block started.", tc_number);
      tb_block = block1;
      tb_init = 1;
      #(2 * CLK_HALF_PERIOD);
      tb_init = 0;
      wait_ready();
      db_digest1 = tb_digest;
+     $display("*** TC %0d first block done.", tc_number);
      
+     $display("*** TC %0d second block started.", tc_number);
      tb_block = block2;
      tb_next = 1;
      #(2 * CLK_HALF_PERIOD);
      tb_next = 0;
      wait_ready();
+     $display("*** TC %0d second block done.", tc_number);
       
      if (db_digest1 == expected1)
        begin
