@@ -128,6 +128,10 @@ module tb_sha256_core();
       $display("ready  = 0x%01x, valid = 0x%01x", 
                dut.ready, dut.digest_valid);
       $display("digest = 0x%064x", dut.digest);
+      $display("H0_reg = 0x%08x, H1_reg = 0x%08x, H2_reg = 0x%08x, H3_reg = 0x%08x", 
+               dut.H0_reg, dut.H1_reg, dut.H2_reg, dut.H3_reg);
+      $display("H4_reg = 0x%08x, H5_reg = 0x%08x, H6_reg = 0x%08x, H7_reg = 0x%08x", 
+               dut.H4_reg, dut.H5_reg, dut.H6_reg, dut.H7_reg);
       $display("");
       
       $display("Control signals and counter:");
@@ -147,6 +151,11 @@ module tb_sha256_core();
                dut.a_reg, dut.b_reg, dut.c_reg, dut.d_reg);
       $display("e_reg = 0x%08x, f_reg = 0x%08x, g_reg = 0x%08x, h_reg = 0x%08x", 
                dut.e_reg, dut.f_reg, dut.g_reg, dut.h_reg);
+      $display("");
+      $display("a_new = 0x%08x, b_new = 0x%08x, c_new = 0x%08x, d_new = 0x%08x", 
+               dut.a_new, dut.b_new, dut.c_new, dut.d_new);
+      $display("e_new = 0x%08x, f_new = 0x%08x, g_new = 0x%08x, h_new = 0x%08x", 
+               dut.e_new, dut.f_new, dut.g_new, dut.h_new);
       $display("");
 
       $display("State update values:");
