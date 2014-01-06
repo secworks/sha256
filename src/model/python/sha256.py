@@ -132,7 +132,7 @@ class SHA256():
         print("a  = 0x%08x, b  = 0x%08x" % (self.a, self.b))
         print("c  = 0x%08x, d  = 0x%08x" % (self.c, self.d))
         print("e  = 0x%08x, f  = 0x%08x" % (self.e, self.f))
-        print("g  = 0x%08x, g  = 0x%08x" % (self.g, self.g))
+        print("g  = 0x%08x, h  = 0x%08x" % (self.g, self.h))
         print("")
 
 
