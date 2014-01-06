@@ -204,6 +204,17 @@ class SHA256():
     def _shr32(self, n, r):
         return (n >> r)
 
+
+def compare_digests(digest, expected):
+    if (digest != expected):
+        print("Error:")
+        print("Got:")
+        print(digest)
+        print("Expected:")
+        print(expected)
+    else:
+        print("Test case ok.")
+        
     
 #-------------------------------------------------------------------
 # main()
@@ -216,14 +227,21 @@ def main():
     print
 
     my_sha256 = SHA256(verbose=1);
-    my_block = [0x61626380, 0x00000000, 0x00000000, 0x00000000, 
-                0x00000000, 0x00000000, 0x00000000, 0x00000000,
-                0x00000000, 0x00000000, 0x00000000, 0x00000000,
-                0x00000000, 0x00000000, 0x00000000, 0x00000018]
 
+    # TC1: NIST testcase with message "abc"
+    TC1_block = [0x61626380, 0x00000000, 0x00000000, 0x00000000, 
+                 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+                 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+                 0x00000000, 0x00000000, 0x00000000, 0x00000018]
+    
+    TC1_expected = [0xBA7816BF, 0x8F01CFEA, 0x414140DE, 0x5DAE2223,
+                    0xB00361A3, 0x96177A9C, 0xB410FF61, 0xF20015AD]
+    
     my_sha256.init()
-    my_sha256.next(my_block)
+    my_sha256.next(TC1_block)
     my_digest = my_sha256.get_digest()
+    compare_digests(my_digest, TC1_expected)
+
     
 
 #-------------------------------------------------------------------
