@@ -156,13 +156,14 @@ class SHA256():
             if (i < 16):
                 self.W[i] = block[i]
             else:
-                self.w = (self._delta1(self.W[(i - 2)]) +
-                          self.W[(i - 7)] + 
-                          self._delta0(self.W[(i - 15)]) +
-                          self.W[(i - 16)]) & 0xffffffff
+                self.W[i] = (self._delta1(self.W[(i - 2)]) +
+                             self.W[(i - 7)] + 
+                             self._delta0(self.W[(i - 15)]) +
+                             self.W[(i - 16)]) & 0xffffffff
         if (self.verbose):
             print("W after schedule:")
-            print(self.W)
+            for i in range(64):
+                print("W[%02d] = 0x%08x" % (i, self.W[i]))
             print("")
 
 
