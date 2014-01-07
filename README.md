@@ -11,7 +11,7 @@ The hardware implementation is complemented by a functional model
 written in Python.
 
 ## Status ##
-_(2014-01-07)_
+**(2014-01-07)**
 The core and the wrapper is basically done but needs to be
 debugged. There are testbenches for the core, the wrapper as well as the
 message word scheduler memory.
