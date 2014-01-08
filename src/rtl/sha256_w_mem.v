@@ -320,7 +320,7 @@ module sha256_w_mem(
               w12_reg <= block[127 :  96];
               w13_reg <= block[95  :  64];
               w14_reg <= block[63  :  32];
-              w16_reg <= block[31  :   0];
+              w15_reg <= block[31  :   0];
             end
           
           if (w16_we)
