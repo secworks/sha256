@@ -65,7 +65,9 @@ class SHA256():
         self.f = 0
         self.g = 0
         self.h = 0
+        self.w = 0
         self.W = [0] * 64
+        self.k = 0
         self.K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
                   0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
                   0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3,
@@ -92,10 +94,15 @@ class SHA256():
     def next(self, block):
         self._W_schedule(block)
         self._copy_digest()
+        if self.verbose:
+            print("State after init:")
+            self._print_state(0)
+
         for i in range(64):
             self._sha256_round(i)
             if self.verbose:
                 self._print_state(i)
+
         self._update_digest()
 
 
