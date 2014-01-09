@@ -191,6 +191,9 @@ module tb_sha256_core();
   //----------------------------------------------------------------
   task init_sim();
     begin
+      error_ctr = 0;
+      tc_ctr = 0;
+      
       tb_clk = 0;
       tb_reset_n = 1;
 
