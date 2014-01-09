@@ -314,7 +314,7 @@ module sha256_core(
              {e_reg[10 : 0], e_reg[31 : 11]} ^ 
              {e_reg[24 : 0], e_reg[31 : 25]};
 
-      ch = (e_reg & f_reg) ^ ((!e_reg) & g_reg);
+      ch = (e_reg & f_reg) ^ ((~e_reg) & g_reg);
       
       t1 = h_reg + sum1 + ch + w_data + k_data;
     end // t1_logic
