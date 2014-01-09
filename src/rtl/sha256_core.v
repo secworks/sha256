@@ -207,7 +207,7 @@ module sha256_core(
           H6_reg           <= 32'h00000000;
           H7_reg           <= 32'h00000000;
           digest_valid_reg <= 0;
-          t_ctr_reg        <= 7'b0000000;
+          t_ctr_reg        <= 6'b000000;
           sha256_ctrl_reg  <= CTRL_IDLE;
         end
       else
@@ -422,7 +422,7 @@ module sha256_core(
 
       if (t_ctr_inc)
         begin
-          t_ctr_new = t_ctr_reg + 1;
+          t_ctr_new = t_ctr_reg + 1'b1;
           t_ctr_we  = 1;
         end
     end // t_ctr

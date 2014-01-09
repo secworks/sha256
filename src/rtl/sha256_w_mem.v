@@ -858,7 +858,7 @@ module sha256_w_mem(
     begin : w_7_logic
       reg [5 : 0] w_7_addr;
 
-      w_7_addr = w_ctr_reg - 7;
+      w_7_addr = w_ctr_reg - 6'h07;
 
       case (w_7_addr)
         9:
@@ -1058,6 +1058,10 @@ module sha256_w_mem(
           begin
             w_7 = w56_reg;
           end
+        default:
+          begin
+            w_7 = 32'h00000000;
+          end
       endcase // case (w_7_addr)
     end // w_7_logic
 
@@ -1069,7 +1073,7 @@ module sha256_w_mem(
     begin : w_16_logic
       reg [5 : 0] w_16_addr;
 
-      w_16_addr = w_ctr_reg - 16;
+      w_16_addr = w_ctr_reg - 6'h10;
 
       case (w_16_addr)
         0:
@@ -1268,6 +1272,10 @@ module sha256_w_mem(
           begin
             w_16 = w47_reg;
           end
+        default:
+          begin
+            w_16 = 32'h00000000;
+          end
       endcase // case (w_16_addr)
     end // w_16_logic
 
@@ -1280,7 +1288,7 @@ module sha256_w_mem(
       reg [31 : 0] w_15;
       reg [5 : 0]  w_15_addr;
 
-      w_15_addr = w_ctr_reg - 15;
+      w_15_addr = w_ctr_reg - 6'h0f;
 
       case (w_15_addr)
         1:
@@ -1479,12 +1487,15 @@ module sha256_w_mem(
           begin
             w_15 = w48_reg;
           end
+        default:
+          begin
+            w_15 = 32'h00000000;
+          end
       endcase // case (w_15_addr)
 
       d0 = {w_15[6  : 0], w_15[31 :  7]} ^ 
            {w_15[17 : 0], w_15[31 : 18]} ^ 
            {3'b000, w_15[31 : 3]};
-
     end // d0_logic
 
 
@@ -1496,7 +1507,7 @@ module sha256_w_mem(
       reg [31 : 0] w_2;
       reg [5 : 0]  w_2_addr;
 
-      w_2_addr = w_ctr_reg - 2;
+      w_2_addr = w_ctr_reg - 6'h02;
 
       case (w_2_addr)
         14:
@@ -1695,6 +1706,10 @@ module sha256_w_mem(
         61:
           begin
             w_2 = w61_reg;
+          end
+        default:
+          begin
+            w_2 = 32'h00000000;
           end
       endcase // case (w_2_addr)
 
