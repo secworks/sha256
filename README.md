@@ -11,19 +11,26 @@ The hardware implementation is complemented by a functional model
 written in Python.
 
 
+## Implementation ##
+Implementation results using the Altera Quartus 13 design tool.
+
+### Cyclone IV GX ###
+- 9037 LEs
+- 3349 registers
+- 71.5 MHz
+- 66 cycles latency
+
+
 ## Todo ##
  - Verify the top.
  - Cleanup of the code and documentation
- - Test implementation in FPGA.
- - Possible clock frequency optimization by pipelining the
-   state update functionality.
 
 
 ## Status ##
 **(2014-01-09)**
-The core is functionally correct for single and multiple block messages.
-
-The Python model is functionally correct.
+- The core is functionally correct for single and multiple block messages.
+- The Python model is functionally correct.
+- Test implementation in FPGA has been done.
 
 
 **(2014-01-07)**
