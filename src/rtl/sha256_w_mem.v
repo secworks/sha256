@@ -1981,6 +1981,9 @@ module sha256_w_mem(
               begin
                 w63_we = 1;
               end
+            default:
+              begin
+              end
           endcase // case (w_ctr_reg)
         end // if (w_update)
     end // w_schedule
@@ -2004,7 +2007,7 @@ module sha256_w_mem(
 
       if (w_ctr_inc)
         begin
-          w_ctr_new = w_ctr_reg + 1;
+          w_ctr_new = w_ctr_reg + 6'h01;
           w_ctr_we  = 1;
         end
     end // w_ctr
