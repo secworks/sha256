@@ -188,6 +188,9 @@ module tb_sha256_core();
   
   //----------------------------------------------------------------
   // init_sim()
+  //
+  // Initialize all counters and testbed functionality as well
+  // as setting the DUT inputs to defined values.
   //----------------------------------------------------------------
   task init_sim();
     begin
