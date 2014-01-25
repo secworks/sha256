@@ -134,52 +134,52 @@ module tb_sha256_w_mem();
       $display("W state:");
       
       $display("w0_reg  = %08x, w1_reg  = %08x, w2_reg  = %08x, w3_reg  = %08x", 
-               dut.w0_reg, dut.w1_reg, dut.w2_reg, dut.w3_reg);
+               dut.w_mem[00], dut.w_mem[01], dut.w_mem[02], dut.w_mem[03]);
 
       $display("w4_reg  = %08x, w5_reg  = %08x, w6_reg  = %08x, w7_reg  = %08x", 
-               dut.w4_reg, dut.w5_reg, dut.w6_reg, dut.w7_reg);
+               dut.w_mem[04], dut.w_mem[05], dut.w_mem[06], dut.w_mem[07]);
 
       $display("w8_reg  = %08x, w9_reg  = %08x, w10_reg = %08x, w11_reg = %08x", 
-               dut.w8_reg, dut.w9_reg, dut.w10_reg, dut.w11_reg);
+               dut.w_mem[08], dut.w_mem[09], dut.w_mem[10], dut.w_mem[11]);
 
       $display("w12_reg = %08x, w13_reg = %08x, w14_reg = %08x, w15_reg = %08x", 
-               dut.w12_reg, dut.w13_reg, dut.w14_reg, dut.w15_reg);
+               dut.w_mem[12], dut.w_mem[13], dut.w_mem[14], dut.w_mem[15]);
 
       $display("w16_reg = %08x, w17_reg = %08x, w18_reg = %08x, w19_reg = %08x", 
-               dut.w16_reg, dut.w17_reg, dut.w18_reg, dut.w19_reg);
+               dut.w_mem[16], dut.w_mem[17], dut.w_mem[18], dut.w_mem[19]);
 
       $display("w20_reg = %08x, w21_reg = %08x, w22_reg = %08x, w23_reg = %08x", 
-               dut.w20_reg, dut.w21_reg, dut.w22_reg, dut.w23_reg);
+               dut.w_mem[20], dut.w_mem[21], dut.w_mem[22], dut.w_mem[23]);
 
       $display("w24_reg = %08x, w25_reg = %08x, w26_reg = %08x, w27_reg = %08x", 
-               dut.w24_reg, dut.w25_reg, dut.w26_reg, dut.w27_reg);
+               dut.w_mem[24], dut.w_mem[25], dut.w_mem[26], dut.w_mem[27]);
 
       $display("w28_reg = %08x, w29_reg = %08x, w30_reg = %08x, w31_reg = %08x", 
-               dut.w28_reg, dut.w29_reg, dut.w30_reg, dut.w31_reg);
+               dut.w_mem[28], dut.w_mem[29], dut.w_mem[30], dut.w_mem[31]);
 
       $display("w32_reg = %08x, w33_reg = %08x, w34_reg = %08x, w35_reg = %08x", 
-               dut.w32_reg, dut.w33_reg, dut.w34_reg, dut.w35_reg);
+               dut.w_mem[32], dut.w_mem[33], dut.w_mem[34], dut.w_mem[35]);
 
       $display("w36_reg = %08x, w37_reg = %08x, w38_reg = %08x, w39_reg = %08x", 
-               dut.w36_reg, dut.w37_reg, dut.w38_reg, dut.w39_reg);
+               dut.w_mem[36], dut.w_mem[37], dut.w_mem[38], dut.w_mem[39]);
 
       $display("w40_reg = %08x, w41_reg = %08x, w42_reg = %08x, w43_reg = %08x", 
-               dut.w40_reg, dut.w41_reg, dut.w42_reg, dut.w43_reg);
+               dut.w_mem[40], dut.w_mem[41], dut.w_mem[42], dut.w_mem[43]);
 
       $display("w44_reg = %08x, w45_reg = %08x, w46_reg = %08x, w47_reg = %08x", 
-               dut.w44_reg, dut.w45_reg, dut.w46_reg, dut.w47_reg);
+               dut.w_mem[44], dut.w_mem[45], dut.w_mem[46], dut.w_mem[47]);
 
       $display("w48_reg = %08x, w49_reg = %08x, w50_reg = %08x, w51_reg = %08x", 
-               dut.w48_reg, dut.w49_reg, dut.w50_reg, dut.w51_reg);
+               dut.w_mem[48], dut.w_mem[49], dut.w_mem[50], dut.w_mem[51]);
 
       $display("w52_reg = %08x, w53_reg = %08x, w54_reg = %08x, w55_reg = %08x", 
-                dut.w52_reg, dut.w53_reg, dut.w54_reg, dut.w55_reg);
+                dut.w_mem[52], dut.w_mem[53], dut.w_mem[54], dut.w_mem[55]);
 
       $display("w56_reg = %08x, w57_reg = %08x, w58_reg = %08x, w59_reg = %08x", 
-               dut.w56_reg, dut.w57_reg, dut.w58_reg, dut.w59_reg);
+               dut.w_mem[56], dut.w_mem[57], dut.w_mem[58], dut.w_mem[59]);
 
       $display("w60_reg = %08x, w61_reg = %08x, w62_reg = %08x, w63_reg = %08x", 
-               dut.w60_reg, dut.w61_reg, dut.w62_reg, dut.w63_reg);
+               dut.w_mem[60], dut.w_mem[61], dut.w_mem[62], dut.w_mem[63]);
       
       $display("");
     end
@@ -225,70 +225,70 @@ module tb_sha256_w_mem();
   task dump_mem();
     begin
       $display("*** Dumping memory:");
-      $display("W[00] = 0x%08x", dut.w0_reg);
-      $display("W[01] = 0x%08x", dut.w1_reg);
-      $display("W[02] = 0x%08x", dut.w2_reg);
-      $display("W[03] = 0x%08x", dut.w3_reg);
-      $display("W[04] = 0x%08x", dut.w4_reg);
-      $display("W[05] = 0x%08x", dut.w5_reg);
-      $display("W[06] = 0x%08x", dut.w6_reg);
-      $display("W[07] = 0x%08x", dut.w7_reg);
-      $display("W[08] = 0x%08x", dut.w8_reg);
-      $display("W[09] = 0x%08x", dut.w9_reg);
-      $display("W[10] = 0x%08x", dut.w10_reg);
-      $display("W[11] = 0x%08x", dut.w11_reg);
-      $display("W[12] = 0x%08x", dut.w12_reg);
-      $display("W[13] = 0x%08x", dut.w13_reg);
-      $display("W[14] = 0x%08x", dut.w14_reg);
-      $display("W[15] = 0x%08x", dut.w15_reg);
-      $display("W[16] = 0x%08x", dut.w16_reg);
-      $display("W[17] = 0x%08x", dut.w17_reg);
-      $display("W[18] = 0x%08x", dut.w18_reg);
-      $display("W[19] = 0x%08x", dut.w19_reg);
-      $display("W[20] = 0x%08x", dut.w20_reg);
-      $display("W[21] = 0x%08x", dut.w21_reg);
-      $display("W[22] = 0x%08x", dut.w22_reg);
-      $display("W[23] = 0x%08x", dut.w23_reg);
-      $display("W[24] = 0x%08x", dut.w24_reg);
-      $display("W[25] = 0x%08x", dut.w25_reg);
-      $display("W[26] = 0x%08x", dut.w26_reg);
-      $display("W[27] = 0x%08x", dut.w27_reg);
-      $display("W[28] = 0x%08x", dut.w28_reg);
-      $display("W[29] = 0x%08x", dut.w29_reg);
-      $display("W[30] = 0x%08x", dut.w30_reg);
-      $display("W[31] = 0x%08x", dut.w31_reg);
-      $display("W[32] = 0x%08x", dut.w32_reg);
-      $display("W[33] = 0x%08x", dut.w33_reg);
-      $display("W[34] = 0x%08x", dut.w34_reg);
-      $display("W[35] = 0x%08x", dut.w35_reg);
-      $display("W[36] = 0x%08x", dut.w36_reg);
-      $display("W[37] = 0x%08x", dut.w37_reg);
-      $display("W[38] = 0x%08x", dut.w38_reg);
-      $display("W[39] = 0x%08x", dut.w39_reg);
-      $display("W[40] = 0x%08x", dut.w40_reg);
-      $display("W[41] = 0x%08x", dut.w41_reg);
-      $display("W[42] = 0x%08x", dut.w42_reg);
-      $display("W[43] = 0x%08x", dut.w43_reg);
-      $display("W[44] = 0x%08x", dut.w44_reg);
-      $display("W[45] = 0x%08x", dut.w45_reg);
-      $display("W[46] = 0x%08x", dut.w46_reg);
-      $display("W[47] = 0x%08x", dut.w47_reg);
-      $display("W[48] = 0x%08x", dut.w48_reg);
-      $display("W[49] = 0x%08x", dut.w49_reg);
-      $display("W[50] = 0x%08x", dut.w50_reg);
-      $display("W[51] = 0x%08x", dut.w51_reg);
-      $display("W[52] = 0x%08x", dut.w52_reg);
-      $display("W[53] = 0x%08x", dut.w53_reg);
-      $display("W[54] = 0x%08x", dut.w54_reg);
-      $display("W[55] = 0x%08x", dut.w55_reg);
-      $display("W[56] = 0x%08x", dut.w56_reg);
-      $display("W[57] = 0x%08x", dut.w57_reg);
-      $display("W[58] = 0x%08x", dut.w58_reg);
-      $display("W[59] = 0x%08x", dut.w59_reg);
-      $display("W[60] = 0x%08x", dut.w60_reg);
-      $display("W[61] = 0x%08x", dut.w61_reg);
-      $display("W[62] = 0x%08x", dut.w62_reg);
-      $display("W[63] = 0x%08x", dut.w63_reg);
+      $display("W[00] = 0x%08x", dut.w_mem[00]);
+      $display("W[01] = 0x%08x", dut.w_mem[01]);
+      $display("W[02] = 0x%08x", dut.w_mem[02]);
+      $display("W[03] = 0x%08x", dut.w_mem[03]);
+      $display("W[04] = 0x%08x", dut.w_mem[04]);
+      $display("W[05] = 0x%08x", dut.w_mem[05]);
+      $display("W[06] = 0x%08x", dut.w_mem[06]);
+      $display("W[07] = 0x%08x", dut.w_mem[07]);
+      $display("W[08] = 0x%08x", dut.w_mem[08]);
+      $display("W[09] = 0x%08x", dut.w_mem[09]);
+      $display("W[10] = 0x%08x", dut.w_mem[10]);
+      $display("W[11] = 0x%08x", dut.w_mem[11]);
+      $display("W[12] = 0x%08x", dut.w_mem[12]);
+      $display("W[13] = 0x%08x", dut.w_mem[13]);
+      $display("W[14] = 0x%08x", dut.w_mem[14]);
+      $display("W[15] = 0x%08x", dut.w_mem[15]);
+      $display("W[16] = 0x%08x", dut.w_mem[16]);
+      $display("W[17] = 0x%08x", dut.w_mem[17]);
+      $display("W[18] = 0x%08x", dut.w_mem[18]);
+      $display("W[19] = 0x%08x", dut.w_mem[19]);
+      $display("W[20] = 0x%08x", dut.w_mem[20]);
+      $display("W[21] = 0x%08x", dut.w_mem[21]);
+      $display("W[22] = 0x%08x", dut.w_mem[22]);
+      $display("W[23] = 0x%08x", dut.w_mem[23]);
+      $display("W[24] = 0x%08x", dut.w_mem[24]);
+      $display("W[25] = 0x%08x", dut.w_mem[25]);
+      $display("W[26] = 0x%08x", dut.w_mem[26]);
+      $display("W[27] = 0x%08x", dut.w_mem[27]);
+      $display("W[28] = 0x%08x", dut.w_mem[28]);
+      $display("W[29] = 0x%08x", dut.w_mem[29]);
+      $display("W[30] = 0x%08x", dut.w_mem[30]);
+      $display("W[31] = 0x%08x", dut.w_mem[31]);
+      $display("W[32] = 0x%08x", dut.w_mem[32]);
+      $display("W[33] = 0x%08x", dut.w_mem[33]);
+      $display("W[34] = 0x%08x", dut.w_mem[34]);
+      $display("W[35] = 0x%08x", dut.w_mem[35]);
+      $display("W[36] = 0x%08x", dut.w_mem[36]);
+      $display("W[37] = 0x%08x", dut.w_mem[37]);
+      $display("W[38] = 0x%08x", dut.w_mem[38]);
+      $display("W[39] = 0x%08x", dut.w_mem[39]);
+      $display("W[40] = 0x%08x", dut.w_mem[40]);
+      $display("W[41] = 0x%08x", dut.w_mem[41]);
+      $display("W[42] = 0x%08x", dut.w_mem[42]);
+      $display("W[43] = 0x%08x", dut.w_mem[43]);
+      $display("W[44] = 0x%08x", dut.w_mem[44]);
+      $display("W[45] = 0x%08x", dut.w_mem[45]);
+      $display("W[46] = 0x%08x", dut.w_mem[46]);
+      $display("W[47] = 0x%08x", dut.w_mem[47]);
+      $display("W[48] = 0x%08x", dut.w_mem[48]);
+      $display("W[49] = 0x%08x", dut.w_mem[49]);
+      $display("W[50] = 0x%08x", dut.w_mem[50]);
+      $display("W[51] = 0x%08x", dut.w_mem[51]);
+      $display("W[52] = 0x%08x", dut.w_mem[52]);
+      $display("W[53] = 0x%08x", dut.w_mem[53]);
+      $display("W[54] = 0x%08x", dut.w_mem[54]);
+      $display("W[55] = 0x%08x", dut.w_mem[55]);
+      $display("W[56] = 0x%08x", dut.w_mem[56]);
+      $display("W[57] = 0x%08x", dut.w_mem[57]);
+      $display("W[58] = 0x%08x", dut.w_mem[58]);
+      $display("W[59] = 0x%08x", dut.w_mem[59]);
+      $display("W[60] = 0x%08x", dut.w_mem[00]);
+      $display("W[61] = 0x%08x", dut.w_mem[61]);
+      $display("W[62] = 0x%08x", dut.w_mem[62]);
+      $display("W[63] = 0x%08x", dut.w_mem[63]);
       $display("");
     end
   endtask // dump_mem
