@@ -27,6 +27,14 @@ Implementation results using the Altera Quartus 13 design tool.
 
 
 ## Status ##
+**(2014-01-25)**
+Changed the W memory to an array based implementation. The resulting
+core is 10% larger and 2 MHz slower. But the code is much more compact
+and should be easy to optimize down to the previous results. The
+original register based implementation is available in the file
+sha256_w_mem_regs.v
+
+
 **(2014-01-09)**
 - The core is functionally correct for single and multiple block messages.
 - The Python model is functionally correct.
