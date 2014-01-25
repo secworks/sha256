@@ -62,6 +62,7 @@ module sha256_w_mem(
   //----------------------------------------------------------------
   reg [32 : 0] w_mem [0 : 63];
   reg w_mem_we;
+  reg w0_w15_we;
   
   reg [5 : 0] w_ctr_reg;
   reg [5 : 0] w_ctr_new;
@@ -117,24 +118,24 @@ module sha256_w_mem(
       else
         begin
 
-          if (w0_15_we)
+          if (w0_w15_we)
             begin
               w_mem[00] <= block[511 : 480];
               w_mem[01] <= block[479 : 448];
-              w_mem[03] <= block[447 : 416];
-              w_mem[04] <= block[415 : 384];
-              w_mem[05] <= block[383 : 352];
-              w_mem[06] <= block[351 : 320];
-              w_mem[07] <= block[319 : 288];
-              w_mem[08] <= block[287 : 256];
-              w_mem[09] <= block[255 : 224];
-              w_mem[10] <= block[223 : 192];
-              w_mem[11] <= block[191 : 160];
-              w_mem[12] <= block[159 : 128];
-              w_mem[13] <= block[127 :  96];
-              w_mem[14] <= block[95  :  64];
-              w_mem[15] <= block[63  :  32];
-              w15_regry <= block[31  :   0];
+              w_mem[02] <= block[447 : 416];
+              w_mem[03] <= block[415 : 384];
+              w_mem[04] <= block[383 : 352];
+              w_mem[05] <= block[351 : 320];
+              w_mem[06] <= block[319 : 288];
+              w_mem[07] <= block[287 : 256];
+              w_mem[08] <= block[255 : 224];
+              w_mem[09] <= block[223 : 192];
+              w_mem[10] <= block[191 : 160];
+              w_mem[11] <= block[159 : 128];
+              w_mem[12] <= block[127 :  96];
+              w_mem[13] <= block[95  :  64];
+              w_mem[14] <= block[63  :  32];
+              w_mem[15] <= block[31  :   0];
             end
 
           if (w_mem_we)
@@ -230,7 +231,7 @@ module sha256_w_mem(
   //----------------------------------------------------------------
   always @*
     begin : w_schedule
-      w0_15_we = 0;
+      w0_w15_we = 0;
       w_mem_we = 0;
       w_addr = 0;
       
@@ -238,14 +239,13 @@ module sha256_w_mem(
       
       if (w_init)
         begin
-          w0_15_we = 1;
+          w0_w15_we = 1;
         end
 
       if (w_update)
         begin
           w_mem_we = 1;
           w_addr = w_ctr_reg;
-        end
         end // if (w_update)
     end // w_schedule
 
