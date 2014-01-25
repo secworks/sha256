@@ -60,7 +60,7 @@ module sha256_w_mem(
   //----------------------------------------------------------------
   // Registers including update variables and write enable.
   //----------------------------------------------------------------
-  reg [32 : 0] w_mem [0 : 63];
+  reg [31 : 0] w_mem [0 : 63];
   reg w_mem_we;
   reg w0_w15_we;
   
