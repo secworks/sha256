@@ -15,9 +15,9 @@ written in Python.
 Implementation results using the Altera Quartus 13 design tool.
 
 ### Cyclone IV GX ###
-- 9037 LEs
+- 9689 LEs
 - 3349 registers
-- 71.5 MHz
+- 69.1 MHz
 - 66 cycles latency
 
 
@@ -35,10 +35,16 @@ original register based implementation is available in the file
 sha256_w_mem_regs.v
 
 
+
 **(2014-01-09)**
 - The core is functionally correct for single and multiple block messages.
 - The Python model is functionally correct.
-- Test implementation in FPGA has been done.
+- Test implementation in FPGA has been done. The results in Cyclone IV GX:
+  - 9037 LEs
+  - 3349 registers
+  - 71.5 MHz
+  - 66 cycles latency
+
 
 
 **(2014-01-07)**
