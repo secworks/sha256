@@ -53,6 +53,8 @@ module sha256_w_mem(
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
+  parameter SHA256_ROUNDS = 63;
+
   parameter CTRL_IDLE   = 0;
   parameter CTRL_UPDATE = 1;
   
@@ -310,7 +312,7 @@ module sha256_w_mem(
             w_update  = 1;
             w_ctr_inc = 1;
 
-            if (w_ctr_reg == 6'h3f)
+            if (w_ctr_reg == SHA256_ROUNDS)
               begin
                 sha256_w_mem_ctrl_new = CTRL_IDLE;
                 sha256_w_mem_ctrl_we  = 1;
