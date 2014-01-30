@@ -64,6 +64,8 @@ module sha256_core(
   parameter H0_6 = 32'h1f83d9ab;
   parameter H0_7 = 32'h5be0cd19;
 
+  parameter SHA256_ROUNDS = 63;
+  
   parameter CTRL_IDLE   = 0;
   parameter CTRL_ROUNDS = 1;
   parameter CTRL_DONE   = 2;
@@ -491,7 +493,7 @@ module sha256_core(
             state_update = 1;
             t_ctr_inc    = 1;
 
-            if (t_ctr_reg == 63)
+            if (t_ctr_reg == SHA256_ROUNDS)
               begin
                 sha256_ctrl_new = CTRL_DONE;
                 sha256_ctrl_we  = 1;
