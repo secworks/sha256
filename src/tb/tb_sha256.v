@@ -139,6 +139,10 @@ module tb_sha256();
                dut.block12_reg, dut.block13_reg, dut.block14_reg, dut.block15_reg);
       $display("");
       
+      $display("Digest:");
+      $display("digest = 0x%064x", dut.digest_reg);
+      $display("");
+      
     end
   endtask // dump_dut_state
   
