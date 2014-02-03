@@ -116,7 +116,17 @@ module tb_sha256();
       $display("Inputs and outputs:");
       $display("cs = 0x%01x, write_read = 0x%01x", 
                dut.cs, dut.write_read);
+      $display("address = 0x%02x", dut.address);
+      $display("data_in = 0x%08x, data_out = 0x%08x", 
+               dut.data_in, dut.data_out);
       $display("");
+
+      $display("Control and status:");
+      $display("ctrl = 0x%02x, status = 0x%02x", 
+               {dut.next_reg, dut.init_reg}, 
+               {dut.digest_valid_reg, dut.ready_reg});
+      $display("");
+      
       
     end
   endtask // dump_dut_state
