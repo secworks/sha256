@@ -111,6 +111,8 @@ module tb_sha256();
   //----------------------------------------------------------------
   task dump_dut_state();
     begin
+      
+      
     end
   endtask // dump_dut_state
   
@@ -136,16 +138,16 @@ module tb_sha256();
   //----------------------------------------------------------------
   task init_sim();
     begin
-      // cycle_ctr = 32'h00000000;
-      // error_ctr = 32'h00000000;
-      // tc_ctr = 32'h00000000;
+      cycle_ctr = 32'h00000000;
+      error_ctr = 32'h00000000;
+      tc_ctr = 32'h00000000;
       
-      // tb_clk = 0;
-      // tb_reset_n = 0;
-      // tb_cs = 0;
-      // tb_write_read = 0;
-      // tb_address = 6'h00;
-      // tb_data_in = 32'h00000000;
+      tb_clk = 0;
+      tb_reset_n = 0;
+      tb_cs = 0;
+      tb_write_read = 0;
+      tb_address = 6'h00;
+      tb_data_in = 32'h00000000;
     end
   endtask // init_dut
 
@@ -209,4 +211,3 @@ endmodule // tb_sha256
 //======================================================================
 // EOF tb_sha256.v
 //======================================================================
-
