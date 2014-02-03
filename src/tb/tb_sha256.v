@@ -96,6 +96,9 @@ module tb_sha256();
 
   //----------------------------------------------------------------
   // sys_monitor
+  //
+  // Generates a cycle counter and displays information about
+  // the dut as needed.
   //----------------------------------------------------------------
   always
     begin : sys_monitor
@@ -149,6 +152,8 @@ module tb_sha256();
   
   //----------------------------------------------------------------
   // reset_dut()
+  //
+  // Toggles reset to force the DUT into a well defined state.
   //----------------------------------------------------------------
   task reset_dut();
     begin
