@@ -127,6 +127,17 @@ module tb_sha256();
                {dut.digest_valid_reg, dut.ready_reg});
       $display("");
       
+      $display("Message block:");
+      $display("block0  = 0x%08x, block1  = 0x%08x, block2  = 0x%08x,  block3  = 0x%08x",
+               dut.block0_reg, dut.block0_reg, dut.block0_reg, dut.block0_reg);
+      $display("block4  = 0x%08x, block5  = 0x%08x, block6  = 0x%08x,  block7  = 0x%08x",
+               dut.block4_reg, dut.block5_reg, dut.block6_reg, dut.block7_reg);
+
+      $display("block8  = 0x%08x, block9  = 0x%08x, block10 = 0x%08x,  block11 = 0x%08x",
+               dut.block8_reg, dut.block9_reg, dut.block10_reg, dut.block11_reg);
+      $display("block12 = 0x%08x, block13 = 0x%08x, block14 = 0x%08x,  block15 = 0x%08x",
+               dut.block12_reg, dut.block13_reg, dut.block14_reg, dut.block15_reg);
+      $display("");
       
     end
   endtask // dump_dut_state
