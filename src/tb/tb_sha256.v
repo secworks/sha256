@@ -111,7 +111,12 @@ module tb_sha256();
   //----------------------------------------------------------------
   task dump_dut_state();
     begin
-      
+      $display("State of DUT");
+      $display("------------");
+      $display("Inputs and outputs:");
+      $display("cs = 0x%01x, write_read = 0x%01x", 
+               dut.cs, dut.write_read);
+      $display("");
       
     end
   endtask // dump_dut_state
@@ -202,6 +207,9 @@ module tb_sha256();
       $display("   -- Testbench for sha256 started --");
 
       init_sim();
+      reset_dut();
+      dump_dut_state();
+      
       display_test_result();
       $display("*** Simulation done. ***");
       $finish;
