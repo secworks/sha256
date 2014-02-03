@@ -5,6 +5,7 @@
 // Testbench for the SHA-256 core.
 //
 //
+// Author: Joachim Strombergson
 // Copyright (c) 2013, Secworks Sweden AB
 // All rights reserved.
 // 
@@ -40,6 +41,10 @@
 //------------------------------------------------------------------
 `timescale 1ns/10ps
 
+
+//------------------------------------------------------------------
+// Test module.
+//------------------------------------------------------------------
 module tb_sha256_core();
   
   //----------------------------------------------------------------
@@ -67,7 +72,6 @@ module tb_sha256_core();
   wire           tb_digest_valid;
   
   
-  
   //----------------------------------------------------------------
   // Device Under Test.
   //----------------------------------------------------------------
@@ -90,19 +94,24 @@ module tb_sha256_core();
   //----------------------------------------------------------------
   // clk_gen
   //
-  // Clock generator process. 
+  // Always running clock generator process.
   //----------------------------------------------------------------
   always 
     begin : clk_gen
-      #CLK_HALF_PERIOD tb_clk = !tb_clk;
+      #CLK_HALF_PERIOD;
+      tb_clk = !tb_clk;
     end // clk_gen
     
 
   //----------------------------------------------------------------
-  // sys_monitor
+  // sys_monitor()
+  //
+  // An always running process that creates a cycle counter and
+  // conditionally displays information about the DUT.
   //----------------------------------------------------------------
   always
     begin : sys_monitor
+      cycle_ctr = cycle_ctr + 1;
       #(2 * CLK_HALF_PERIOD);
       if (DEBUG)
         begin
@@ -175,6 +184,8 @@ module tb_sha256_core();
   
   //----------------------------------------------------------------
   // reset_dut()
+  //
+  // Toggle reset to put the DUT into a well known state.
   //----------------------------------------------------------------
   task reset_dut();
     begin
@@ -194,6 +205,7 @@ module tb_sha256_core();
   //----------------------------------------------------------------
   task init_sim();
     begin
+      cycle_ctr = 0;
       error_ctr = 0;
       tc_ctr = 0;
       
@@ -246,8 +258,11 @@ module tb_sha256_core();
 
   
   //----------------------------------------------------------------
+  // single_block_test()
+  //
+  // Run a test case spanning a single data block.
   //----------------------------------------------------------------
-  task single_block_test(input [7 : 0] tc_number,
+  task single_block_test(input [7 : 0]   tc_number,
                          input [511 : 0] block,
                          input [255 : 0] expected);
    begin
@@ -280,8 +295,12 @@ module tb_sha256_core();
 
   
   //----------------------------------------------------------------
+  // double_block_test()
+  //
+  // Run a test case spanning two data blocks. We check both
+  // intermediate and final digest.
   //----------------------------------------------------------------
-  task double_block_test(input [7 : 0] tc_number,
+  task double_block_test(input [7 : 0]   tc_number,
                          input [511 : 0] block1,
                          input [255 : 0] expected1,
                          input [511 : 0] block2,
