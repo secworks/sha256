@@ -5,6 +5,7 @@
 // Testbench for the SHA-256 top level wrapper.
 //
 //
+// Author: Joachim Strombergson
 // Copyright (c) 2013, Secworks Sweden AB
 // All rights reserved.
 // 
