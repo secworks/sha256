@@ -113,16 +113,18 @@ module tb_wb_sha256();
   // Device Under Test.
   //----------------------------------------------------------------
   wb_sha256 dut(
-                .clk(tb_clk),
-                .reset_n(tb_reset_n),
+                .CLK_I(tb_clk),
+                .RST_I(tb_reset_n),
                 
-                .cs(tb_cs),
-                .write_read(tb_write_read),
+                .SEL_I(tb_cs),
+                .WE_I(tb_write_read),
+                .STB_I(tb_stb),
+                .CYC_I(tb_cyc),
+                .ACK_O(tb_ack),
                 
-                
-                .address(tb_address),
-                .data_in(tb_data_in),
-                .data_out(tb_data_out)
+                .ADR_I(tb_address),
+                .DAT_I(tb_data_in),              
+                .DAT_O(tb_data_out)
                );
   
 

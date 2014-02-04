@@ -35,24 +35,25 @@
 //
 //======================================================================
 
-module sha256(
-              // Clock and reset.
-              input wire           CLK_I,
-              input wire           RST_I,
+module wb_sha256(
+                 // Clock and reset.
+                 input wire           CLK_I,
+                 input wire           RST_I,
+                 
+                 // Control and status.
+                 input wire           SEL_I,
+                 input wire           WE_I,
+                 input wire           STB_I,
+                 input wire           CYC_I,
+                 output wire [31 : 0] ACK_O,
               
-              // Control and status.
-              input wire           SEL_I,
-              input wire           WE_I,
-              input wire           STB_I,
-              input wire           CYC_I,
-              output wire [31 : 0] ACK_O,
-              
-              // Address and data.
-              input wire  [7 : 0]  ADR_I,
-              input wire  [31 : 0] DAT_I,              
-              output wire [31 : 0] DAT_O
-             );
+                 // Address and data.
+                 input wire  [7 : 0]  ADR_I,
+                 input wire  [31 : 0] DAT_I,              
+                 output wire [31 : 0] DAT_O
+                );
 
+  
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
@@ -589,8 +590,8 @@ module sha256(
             end
         end
     end // addr_decoder
-endmodule // sha256
+endmodule // wb_sha256
 
 //======================================================================
-// EOF sha256.v
+// EOF wb_sha256.v
 //======================================================================
