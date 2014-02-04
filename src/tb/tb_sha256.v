@@ -56,8 +56,8 @@ module tb_sha256();
 
   // The address map.
   parameter ADDR_CTRL        = 8'h00;
-  parameter CTRL_INIT_BIT    = 0;
-  parameter CTRL_NEXT_BIT    = 1;
+  parameter CTRL_INIT_VALUE  = 8'h01;
+  parameter CTRL_NEXT_VALUE  = 8'h02;
 
   parameter ADDR_STATUS      = 8'h01;
   parameter STATUS_READY_BIT = 0;
@@ -240,11 +240,12 @@ module tb_sha256();
     begin
       if (error_ctr == 0)
         begin
-          $display("*** All %02d test cases completed successfully", tc_ctr);
+          $display("*** All %02d test cases completed successfully.", tc_ctr);
         end
       else
         begin
-          $display("*** %02d test cases did not complete successfully.", error_ctr);
+          $display("*** %02d test cases completed.", tc_ctr);
+          $display("*** %02d errors detected during testing.", error_ctr);
         end
     end
   endtask // display_test_result
@@ -389,7 +390,7 @@ module tb_sha256();
       $display("*** TC%01d - Single block test started.", tc_ctr); 
      
       write_block(block);
-      write_word(ADDR_CTRL, 8'h01);
+      write_word(ADDR_CTRL, CTRL_INIT_VALUE);
       write_word(ADDR_CTRL, 8'h00);
       wait_ready();
       read_digest();
@@ -409,6 +410,65 @@ module tb_sha256();
       tc_ctr = tc_ctr + 1;
     end
   endtask // single_block_test
+    
+  
+  //----------------------------------------------------------------
+  // double_block_test()
+  //
+  //
+  // Perform test of a double block digest. Note that we check
+  // the digests for both the first and final block.
+  //----------------------------------------------------------------
+  task double_block_test([511 : 0] block0,
+                         [255 : 0] expected0,
+                         [511 : 0] block1,
+                         [255 : 0] expected1
+                        );
+    begin
+      $display("*** TC%01d - Double block test started.", tc_ctr); 
+
+      // First block
+      write_block(block0);
+      write_word(ADDR_CTRL, CTRL_INIT_VALUE);
+      write_word(ADDR_CTRL, 8'h00);
+      wait_ready();
+      read_digest();
+
+      if (digest_data == expected0)
+        begin
+          $display("TC%01d first block: OK.", tc_ctr);
+        end
+      else
+        begin
+          $display("TC%01d: ERROR in first digest", tc_ctr);
+          $display("TC%01d: Expected: 0x%064x", tc_ctr, expected0);
+          $display("TC%01d: Got:      0x%064x", tc_ctr, digest_data);
+          error_ctr = error_ctr + 1;
+        end
+
+      // Final block
+      write_block(block1);
+      write_word(ADDR_CTRL, CTRL_NEXT_VALUE);
+      write_word(ADDR_CTRL, 8'h00);
+      wait_ready();
+      read_digest();
+      
+      if (digest_data == expected1)
+        begin
+          $display("TC%01d final block: OK.", tc_ctr);
+        end
+      else
+        begin
+          $display("TC%01d: ERROR in final digest", tc_ctr);
+          $display("TC%01d: Expected: 0x%064x", tc_ctr, expected1);
+          $display("TC%01d: Got:      0x%064x", tc_ctr, digest_data);
+          error_ctr = error_ctr + 1;
+        end
+
+      $display("*** TC%01d - Double block test done.", tc_ctr); 
+      tc_ctr = tc_ctr + 1;
+    end
+  endtask // double_block_test
 
     
   //----------------------------------------------------------------
@@ -422,6 +482,11 @@ module tb_sha256();
     begin : sha256_test
       reg [511 : 0] tc0;
       reg [255 : 0] res0;
+
+      reg [511 : 0] tc1_0;
+      reg [255 : 0] res1_0;
+      reg [511 : 0] tc1_1;
+      reg [255 : 0] res1_1;
       
       $display("   -- Testbench for sha256 started --");
 
@@ -438,7 +503,12 @@ module tb_sha256();
       res0 = 256'hBA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD;
       single_block_test(tc0, res0);
 
-
+      tc1_0 = 512'h6162636462636465636465666465666765666768666768696768696A68696A6B696A6B6C6A6B6C6D6B6C6D6E6C6D6E6F6D6E6F706E6F70718000000000000000;
+      res1_0 = 256'h85E655D6417A17953363376A624CDE5C76E09589CAC5F811CC4B32C1F20E533A;
+      tc1_1 = 512'h000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001C0;
+      res1_1 = 256'h248D6A61D20638B8E5C026930C3E6039A33CE45964FF2167F6ECEDD419DB06C1;
+      double_block_test(tc1_0, res1_0, tc1_1, res1_1);
+      
       display_test_result();
       
       $display("   -- Testbench for sha256 done. --");
