@@ -45,10 +45,17 @@ CORE_TB_SRC=../src/tb/tb_sha256_core.v
 TOP_SRC=../src/rtl/sha256.v $(CORE_SRC)
 TOP_TB_SRC=../src/tb/tb_sha256.v
 
+WB_SRC=../src/rtl/wb_sha256.v $(CORE_SRC)
+EB_TB_SRC=../src/tb/tb_wb_sha256.v
+
 CC=iverilog
 
 
-all: top core wmem
+all: wb top core wmem
+
+
+wb:  $(WB_TB_SRC) $(WB_SRC)
+	$(CC) -o wb.sim $(WB_TB_SRC) $(WB_SRC)
 
 
 top: $(TOP_TB_SRC) $(TOP_SRC)
@@ -61,6 +68,10 @@ core: $(CORE_TB_SRC) $(CORE_SRC)
 
 wmem: $(WMEM_SRC) $(WMEM_TB_SRC)
 	$(CC) -o wmem.sim $(WMEM_SRC) $(WMEM_TB_SRC)
+
+
+sim-wb: wb.sim
+	./wb.sim
 
 
 sim-top: top.sim
@@ -89,9 +100,11 @@ help:
 	@echo "Supported targets:"
 	@echo "------------------"
 	@echo "all:      Build all simulation targets."
+	@echo "wb:       Build the Wishbone simulation target."
 	@echo "top:      Build the top simulation target."
 	@echo "core:     Build the core simulation target."
 	@echo "wmem:     Build the wmem simulation target."
+	@echo "sim-wb:   Run top Wishbone simulation."
 	@echo "sim-top:  Run top level simulation."
 	@echo "sim-core: Run core level simulation."
 	@echo "sim-wmem: Run wmem level simulation."
