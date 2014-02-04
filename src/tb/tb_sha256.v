@@ -137,7 +137,7 @@ module tb_sha256();
       
       $display("Message block:");
       $display("block0  = 0x%08x, block1  = 0x%08x, block2  = 0x%08x,  block3  = 0x%08x",
-               dut.block0_reg, dut.block0_reg, dut.block0_reg, dut.block0_reg);
+               dut.block0_reg, dut.block1_reg, dut.block2_reg, dut.block3_reg);
       $display("block4  = 0x%08x, block5  = 0x%08x, block6  = 0x%08x,  block7  = 0x%08x",
                dut.block4_reg, dut.block5_reg, dut.block6_reg, dut.block7_reg);
 
