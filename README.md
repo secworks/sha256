@@ -29,16 +29,16 @@ Implementation results using the Altera Quartus 13 design tool.
 
 ## Status ##
 **(2014-02-04)**
-Completed testbench for top level wrapper. The top level interface can
+- Completed testbench for top level wrapper. The top level interface can
 control, check status of the SHA-256. Single as well as multiple block
 processing is being tested and works.
 
-The initial version of a Wishbone wrapper and associated testbench has
+- The initial version of a Wishbone wrapper and associated testbench has
 been added.
 
 
 **(2014-01-25)**
-Changed the W memory to an array based implementation. The resulting
+- Changed the W memory to an array based implementation. The resulting
 core is 10% larger and 2 MHz slower. But the code is much more compact
 and should be easy to optimize down to the previous results. The
 original register based implementation is available in the file
@@ -58,11 +58,11 @@ sha256_w_mem_regs.v
 
 
 **(2014-01-07)**
-The core and the wrapper is basically done but needs to be
+- The core and the wrapper is basically done but needs to be
 debugged. There are testbenches for the core, the wrapper as well as the
 message word scheduler memory.
 
-The Python model is almost verified.
+- The Python model is almost verified.
 
 
 
