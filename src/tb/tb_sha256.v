@@ -53,7 +53,42 @@ module tb_sha256();
   parameter DEBUG = 1;
 
   parameter CLK_HALF_PERIOD = 2;
-  
+
+  // The address map.
+  parameter ADDR_CTRL        = 8'h00;
+  parameter CTRL_INIT_BIT    = 0;
+  parameter CTRL_NEXT_BIT    = 1;
+
+  parameter ADDR_STATUS      = 8'h01;
+  parameter STATUS_READY_BIT = 0;
+  parameter STATUS_VALID_BIT = 1;
+                             
+  parameter ADDR_BLOCK0    = 8'h10;
+  parameter ADDR_BLOCK1    = 8'h11;
+  parameter ADDR_BLOCK2    = 8'h12;
+  parameter ADDR_BLOCK3    = 8'h13;
+  parameter ADDR_BLOCK4    = 8'h14;
+  parameter ADDR_BLOCK5    = 8'h15;
+  parameter ADDR_BLOCK6    = 8'h16;
+  parameter ADDR_BLOCK7    = 8'h17;
+  parameter ADDR_BLOCK8    = 8'h18;
+  parameter ADDR_BLOCK9    = 8'h19;
+  parameter ADDR_BLOCK10   = 8'h1a;
+  parameter ADDR_BLOCK11   = 8'h1b;
+  parameter ADDR_BLOCK12   = 8'h1c;
+  parameter ADDR_BLOCK13   = 8'h1d;
+  parameter ADDR_BLOCK14   = 8'h1e;
+  parameter ADDR_BLOCK15   = 8'h1f;
+                             
+  parameter ADDR_DIGEST0   = 8'h20;
+  parameter ADDR_DIGEST1   = 8'h21;
+  parameter ADDR_DIGEST2   = 8'h22;
+  parameter ADDR_DIGEST3   = 8'h23;
+  parameter ADDR_DIGEST4   = 8'h24;
+  parameter ADDR_DIGEST5   = 8'h25;
+  parameter ADDR_DIGEST6   = 8'h26;
+  parameter ADDR_DIGEST7   = 8'h27;
+
   
   //----------------------------------------------------------------
   // Register and Wire declarations.
@@ -260,6 +295,33 @@ module tb_sha256();
         end
     end
   endtask // read_word
+
+
+  //----------------------------------------------------------------
+  // write_block()
+  //
+  // Write the given block to the dut.
+  //----------------------------------------------------------------
+  task write_block(input [511 : 0] block);
+    begin
+      write_word(ADDR_BLOCK0,  block[511 : 480]);
+      write_word(ADDR_BLOCK1,  block[479 : 448]);
+      write_word(ADDR_BLOCK2,  block[447 : 416]);
+      write_word(ADDR_BLOCK3,  block[415 : 384]);
+      write_word(ADDR_BLOCK4,  block[383 : 352]);
+      write_word(ADDR_BLOCK5,  block[351 : 320]);
+      write_word(ADDR_BLOCK6,  block[319 : 288]);
+      write_word(ADDR_BLOCK7,  block[287 : 256]);
+      write_word(ADDR_BLOCK8,  block[255 : 224]);
+      write_word(ADDR_BLOCK9,  block[223 : 192]);
+      write_word(ADDR_BLOCK10, block[191 : 160]);
+      write_word(ADDR_BLOCK11, block[159 : 128]);
+      write_word(ADDR_BLOCK12, block[127 :  96]);
+      write_word(ADDR_BLOCK13, block[95  :  64]);
+      write_word(ADDR_BLOCK14, block[63  :  32]);
+      write_word(ADDR_BLOCK15, block[31  :   0]);
+    end
+  endtask // write_block
   
   
   //----------------------------------------------------------------
@@ -279,7 +341,7 @@ module tb_sha256();
       //   end
     end
   endtask // wait_ready
-                         
+
     
   //----------------------------------------------------------------
   // sha256_test
@@ -300,6 +362,9 @@ module tb_sha256();
       dump_dut_state();
 
       read_word(8'h10);
+      dump_dut_state();
+
+      write_block(512'hff001122334455667788990123456789abcdefa55aa55aa55adeadbeefdeadead001122334455667788990123456789abcdefa55aa55aa55adeadbeefdeadead);
       dump_dut_state();
       
       display_test_result();
