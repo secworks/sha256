@@ -184,6 +184,7 @@ module sha256(
   
   //----------------------------------------------------------------
   // reg_update
+  //
   // Update functionality for all registers in the core.
   // All registers are positive edge triggered with synchronous
   // active low reset. All registers have write enable.
@@ -315,28 +316,30 @@ module sha256(
 
 
   //----------------------------------------------------------------
-  // Address decoder logic.
+  // addr_decoder
+  //
+  // IF cs is enabled will either try to write to or read
+  // from the internal registers.
   //----------------------------------------------------------------
   always @*
     begin : addr_decoder
-      ctrl_we     = 0;
-      block0_we   = 0;
-      block1_we   = 0;
-      block2_we   = 0;
-      block3_we   = 0;
-      block4_we   = 0;
-      block5_we   = 0;
-      block6_we   = 0;
-      block7_we   = 0;
-      block8_we   = 0;
-      block9_we   = 0;
-      block10_we  = 0;
-      block11_we  = 0;
-      block12_we  = 0;
-      block13_we  = 0;
-      block14_we  = 0;
-      block15_we  = 0;
-
+      ctrl_we      = 0;
+      block0_we    = 0;
+      block1_we    = 0;
+      block2_we    = 0;
+      block3_we    = 0;
+      block4_we    = 0;
+      block5_we    = 0;
+      block6_we    = 0;
+      block7_we    = 0;
+      block8_we    = 0;
+      block9_we    = 0;
+      block10_we   = 0;
+      block11_we   = 0;
+      block12_we   = 0;
+      block13_we   = 0;
+      block14_we   = 0;
+      block15_we   = 0;
       tmp_data_out = 32'h00000000;
       
       if (cs)
