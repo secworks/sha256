@@ -248,6 +248,28 @@ module tb_sha256();
     end
   endtask // display_test_result
   
+  
+  //----------------------------------------------------------------
+  // wait_ready()
+  //
+  // Wait for the ready flag in the dut to be set.
+  // (Actually we wait for either ready or valid to be set.)
+  //
+  // Note: It is the callers responsibility to call the function
+  // when the dut is actively processing and will in fact at some
+  // point set the flag.
+  //----------------------------------------------------------------
+  task wait_ready();
+    begin
+      read_data = 0;
+      
+      while (read_data == 0)
+        begin
+          read_word(ADDR_STATUS);
+        end
+    end
+  endtask // wait_ready
+  
 
   //----------------------------------------------------------------
   // write_word()
@@ -322,25 +344,24 @@ module tb_sha256();
       write_word(ADDR_BLOCK15, block[31  :   0]);
     end
   endtask // write_block
-  
-  
+
+
   //----------------------------------------------------------------
-  // wait_ready()
+  // single_block_test()
   //
-  // Wait for the ready flag in the dut to be set.
   //
-  // Note: It is the callers responsibility to call the function
-  // when the dut is actively processing and will in fact at some
-  // point set the flag.
+  // Perform test of a single block digest.
   //----------------------------------------------------------------
-  task wait_ready();
+  task single_block_test([511 : 0] block,
+                         [255 : 0] expected);
     begin
-      // while (!tb_ready)
-      //   begin
-      //     #(2 * CLK_HALF_PERIOD);
-      //   end
+      write_block(block);
+      write_word(ADDR_CTRL, 8'h01);
+      write_word(ADDR_CTRL, 8'h00);
+      wait_ready();
+      dump_dut_state();
     end
-  endtask // wait_ready
+  endtask // single_block_test
 
     
   //----------------------------------------------------------------
@@ -352,20 +373,25 @@ module tb_sha256();
   //----------------------------------------------------------------
   initial
     begin : sha256_test
+      reg [511 : 0] tc1;
+      reg [255 : 0] res1;
+      
       $display("   -- Testbench for sha256 started --");
 
       init_sim();
       reset_dut();
       dump_dut_state();
 
-      write_word(8'h10, 32'hdeadbeef);
+      write_word(ADDR_BLOCK0, 32'hdeadbeef);
       dump_dut_state();
 
-      read_word(8'h10);
+      read_word(ADDR_BLOCK0);
       dump_dut_state();
 
-      write_block(512'hff001122334455667788990123456789abcdefa55aa55aa55adeadbeefdeadead001122334455667788990123456789abcdefa55aa55aa55adeadbeefdeadead);
-      dump_dut_state();
+      tc1 = 512'h61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018;
+      res1 = 256'hBA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD;
+
+      single_block_test(tc1, res1);
       
       display_test_result();
       $display("*** Simulation done. ***");
