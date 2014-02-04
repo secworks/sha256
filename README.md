@@ -27,6 +27,15 @@ Implementation results using the Altera Quartus 13 design tool.
 
 
 ## Status ##
+**(2014-02-04)**
+Completed testbench for top level wrapper. The top level interface can
+control, check status of the SHA-256. Single as well as multiple block
+processing is being tested and works.
+
+The initial version of a Wishbone wrapper and associated testbench has
+been added.
+
+
 **(2014-01-25)**
 Changed the W memory to an array based implementation. The resulting
 core is 10% larger and 2 MHz slower. But the code is much more compact
