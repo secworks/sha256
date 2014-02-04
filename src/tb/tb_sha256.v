@@ -219,7 +219,19 @@ module tb_sha256();
   task write_word(input [7 : 0]  address,
                   input [31 : 0] word);
     begin
-      // TODO: Add functionality to write data to the DUT.
+      if (DEBUG)
+        begin
+          $display("*** Writing 0x%08x to 0x%02x.", word, address);
+          $display("");
+        end
+         
+      tb_address = address;
+      tb_data_in = word;
+      tb_cs = 1;
+      tb_write_read = 1;
+      #(2 * CLK_HALF_PERIOD);
+      tb_cs = 0;
+      tb_write_read = 0;
     end
   endtask // write_word
   
@@ -256,6 +268,9 @@ module tb_sha256();
 
       init_sim();
       reset_dut();
+      dump_dut_state();
+
+      write_word(8'h10, 32'hdeadbeef);
       dump_dut_state();
       
       display_test_result();
