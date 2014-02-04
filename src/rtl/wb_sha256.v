@@ -40,13 +40,16 @@ module sha256(
               input wire           CLK_I,
               input wire           RST_I,
               
-              // Control.
+              // Control and status.
               input wire           SEL_I,
               input wire           WE_I,
+              input wire           STB_I,
+              input wire           CYC_I,
+              output wire [31 : 0] ACK_O,
               
-              // Data ports.
+              // Address and data.
               input wire  [7 : 0]  ADR_I,
-              input wire  [31 : 0] DAT_I,
+              input wire  [31 : 0] DAT_I,              
               output wire [31 : 0] DAT_O
              );
 
@@ -162,6 +165,8 @@ module sha256(
 
   assign DAT_O = tmp_data_out;
 
+  assign ACK_O = 0;
+  
              
   //----------------------------------------------------------------
   // core instantiation.
