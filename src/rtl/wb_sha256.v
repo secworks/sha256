@@ -1,11 +1,11 @@
 //======================================================================
 //
-// sha256.v
-// --------
-// Top level wrapper for the SHA-256 hash function providing
-// a simple memory like interface with 32 bit data access.
+// wb_sha256.v
+// -----------
+// Wisbone compliant top level wrapper for the SHA-256 hash function.
 //
 //
+// Author: Joachim Strombergson
 // Copyright (c) 2013  Secworks Sweden AB
 // 
 // Redistribution and use in source and binary forms, with or 
@@ -37,17 +37,17 @@
 
 module sha256(
               // Clock and reset.
-              input wire           clk,
-              input wire           reset_n,
+              input wire           CLK_I,
+              input wire           RST_I,
               
               // Control.
-              input wire           cs,
-              input wire           write_read,
+              input wire           SEL_I,
+              input wire           WE_I,
               
               // Data ports.
-              input wire  [7 : 0]  address,
-              input wire  [31 : 0] data_in,
-              output wire [31 : 0] data_out
+              input wire  [7 : 0]  ADR_I,
+              input wire  [31 : 0] DAT_I,
+              output wire [31 : 0] DAT_O
              );
 
   //----------------------------------------------------------------
@@ -160,15 +160,15 @@ module sha256(
                        block8_reg, block9_reg, block10_reg, block11_reg,
                        block12_reg, block13_reg, block14_reg, block15_reg};
 
-  assign data_out = tmp_data_out;
+  assign DAT_O = tmp_data_out;
 
              
   //----------------------------------------------------------------
   // core instantiation.
   //----------------------------------------------------------------
   sha256_core core(
-                   .clk(clk),
-                   .reset_n(reset_n),
+                   .clk(CLK_I),
+                   .reset_n(RST_I),
                    
                    .init(core_init),
                    .next(core_next),
@@ -189,9 +189,9 @@ module sha256(
   // All registers are positive edge triggered with synchronous
   // active low reset. All registers have write enable.
   //----------------------------------------------------------------
-  always @ (posedge clk)
+  always @ (posedge CLK_I)
     begin
-      if (!reset_n)
+      if (!RST_I)
         begin
           init_reg         <= 0;
           next_reg         <= 0;
@@ -222,8 +222,8 @@ module sha256(
 
           if (ctrl_we)
             begin
-              init_reg <= data_in[CTRL_INIT_BIT];
-              next_reg <= data_in[CTRL_NEXT_BIT];
+              init_reg <= DAT_I[CTRL_INIT_BIT];
+              next_reg <= DAT_I[CTRL_NEXT_BIT];
             end
           
           if (core_digest_valid)
@@ -233,82 +233,82 @@ module sha256(
 
           if (block0_we)
             begin
-              block0_reg <= data_in;
+              block0_reg <= DAT_I;
             end
 
           if (block1_we)
             begin
-              block1_reg <= data_in;
+              block1_reg <= DAT_I;
             end
 
           if (block2_we)
             begin
-              block2_reg <= data_in;
+              block2_reg <= DAT_I;
             end
 
           if (block3_we)
             begin
-              block3_reg <= data_in;
+              block3_reg <= DAT_I;
             end
 
           if (block4_we)
             begin
-              block4_reg <= data_in;
+              block4_reg <= DAT_I;
             end
 
           if (block5_we)
             begin
-              block5_reg <= data_in;
+              block5_reg <= DAT_I;
             end
 
           if (block6_we)
             begin
-              block6_reg <= data_in;
+              block6_reg <= DAT_I;
             end
 
           if (block7_we)
             begin
-              block7_reg <= data_in;
+              block7_reg <= DAT_I;
             end
 
           if (block8_we)
             begin
-              block8_reg <= data_in;
+              block8_reg <= DAT_I;
             end
 
           if (block9_we)
             begin
-              block9_reg <= data_in;
+              block9_reg <= DAT_I;
             end
 
           if (block10_we)
             begin
-              block10_reg <= data_in;
+              block10_reg <= DAT_I;
             end
 
           if (block11_we)
             begin
-              block11_reg <= data_in;
+              block11_reg <= DAT_I;
             end
 
           if (block12_we)
             begin
-              block12_reg <= data_in;
+              block12_reg <= DAT_I;
             end
 
           if (block13_we)
             begin
-              block13_reg <= data_in;
+              block13_reg <= DAT_I;
             end
 
           if (block14_we)
             begin
-              block14_reg <= data_in;
+              block14_reg <= DAT_I;
             end
 
           if (block15_we)
             begin
-              block15_reg <= data_in;
+              block15_reg <= DAT_I;
             end
           
         end
@@ -318,7 +318,7 @@ module sha256(
   //----------------------------------------------------------------
   // addr_decoder
   //
-  // IF cs is enabled will either try to write to or read
+  // IF SEL_I is enabled will either try to write to or read
   // from the internal registers.
   //----------------------------------------------------------------
   always @*
@@ -342,11 +342,11 @@ module sha256(
       block15_we   = 0;
       tmp_data_out = 32'h00000000;
       
-      if (cs)
+      if (SEL_I)
         begin
-          if (write_read)
+          if (WE_I)
             begin
-              case (address)
+              case (ADR_I)
                 // Write operations.
                 ADDR_CTRL:
                   begin
@@ -438,12 +438,12 @@ module sha256(
                     // Empty since default assignemnts are handled
                     // outside of the if-mux construct.
                   end
-              endcase // case (address)
-            end // if (write_read)
+              endcase // case (ADR_I)
+            end // if (WE_I)
 
           else
             begin
-              case (address)
+              case (ADR_I)
                 // Read operations.
                 ADDR_CTRL:
                   begin
@@ -580,7 +580,7 @@ module sha256(
                     // Empty since default assignemnts are handled
                     // outside of the if-mux construct.                  
                   end
-              endcase // case (address)
+              endcase // case (ADR_I)
             end
         end
     end // addr_decoder
