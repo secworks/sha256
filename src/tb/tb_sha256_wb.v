@@ -1,8 +1,8 @@
 //======================================================================
 //
-// tb_sha256.v
-// -----------
-// Testbench for the SHA-256 top level wrapper.
+// tb_wb_sha256.v
+// --------------
+// Testbench for the SHA-256 top level Wishbone wrapper.
 //
 //
 // Author: Joachim Strombergson
@@ -45,7 +45,7 @@
 //------------------------------------------------------------------
 // Test module.
 //------------------------------------------------------------------
-module tb_sha256();
+module tb_wb_sha256();
   
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
@@ -112,18 +112,18 @@ module tb_sha256();
   //----------------------------------------------------------------
   // Device Under Test.
   //----------------------------------------------------------------
-  sha256 dut(
-             .clk(tb_clk),
-             .reset_n(tb_reset_n),
-             
-             .cs(tb_cs),
-             .write_read(tb_write_read),
-             
-             
-             .address(tb_address),
-             .data_in(tb_data_in),
-             .data_out(tb_data_out)
-            );
+  wb_sha256 dut(
+                .clk(tb_clk),
+                .reset_n(tb_reset_n),
+                
+                .cs(tb_cs),
+                .write_read(tb_write_read),
+                
+                
+                .address(tb_address),
+                .data_in(tb_data_in),
+                .data_out(tb_data_out)
+               );
   
 
   //----------------------------------------------------------------
@@ -472,14 +472,14 @@ module tb_sha256();
 
     
   //----------------------------------------------------------------
-  // sha256_test
+  // wb_sha256_test
   // The main test functionality. 
   //
   // Test cases taken from:
   // http://csrc.nist.gov/groups/ST/toolkit/documents/Examples/SHA256.pdf
   //----------------------------------------------------------------
   initial
-    begin : sha256_test
+    begin : wb_sha256_test
       reg [511 : 0] tc0;
       reg [255 : 0] res0;
 
@@ -513,9 +513,9 @@ module tb_sha256();
       
       $display("   -- Testbench for sha256 done. --");
       $finish;
-    end // sha256_test
-endmodule // tb_sha256
+    end // wb_sha256_test
+endmodule // tb_wb_sha256
 
 //======================================================================
-// EOF tb_sha256.v
+// EOF tb_wb_sha256.v
 //======================================================================
