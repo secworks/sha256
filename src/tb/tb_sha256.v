@@ -50,7 +50,7 @@ module tb_sha256();
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
-  parameter DEBUG = 1;
+  parameter DEBUG = 0;
 
   parameter CLK_HALF_PERIOD = 2;
 
@@ -105,7 +105,8 @@ module tb_sha256();
   reg [31 : 0]  tb_data_in;
   wire [31 : 0] tb_data_out;
 
-  reg [31 : 0] read_data;
+  reg [31 : 0]  read_data;
+  reg [255 : 0] digest_data;
   
   
   //----------------------------------------------------------------
@@ -294,29 +295,6 @@ module tb_sha256();
       tb_write_read = 0;
     end
   endtask // write_word
-  
-
-  //----------------------------------------------------------------
-  // read_word()
-  //
-  // Read a data word from the given address in the DUT.
-  //----------------------------------------------------------------
-  task read_word(input [7 : 0]  address);
-    begin
-      tb_address = address;
-      tb_cs = 1;
-      tb_write_read = 0;
-      #(2 * CLK_HALF_PERIOD);
-      read_data = tb_data_out;
-      tb_cs = 0;
-
-      if (DEBUG)
-        begin
-          $display("*** Reading 0x%08x from 0x%02x.", read_data, address);
-          $display("");
-        end
-    end
-  endtask // read_word
 
 
   //----------------------------------------------------------------
@@ -344,8 +322,61 @@ module tb_sha256();
       write_word(ADDR_BLOCK15, block[31  :   0]);
     end
   endtask // write_block
+  
+
+  //----------------------------------------------------------------
+  // read_word()
+  //
+  // Read a data word from the given address in the DUT.
+  // the word read will be available in the global variable
+  // read_data.
+  //----------------------------------------------------------------
+  task read_word(input [7 : 0]  address);
+    begin
+      tb_address = address;
+      tb_cs = 1;
+      tb_write_read = 0;
+      #(2 * CLK_HALF_PERIOD);
+      read_data = tb_data_out;
+      tb_cs = 0;
+
+      if (DEBUG)
+        begin
+          $display("*** Reading 0x%08x from 0x%02x.", read_data, address);
+          $display("");
+        end
+    end
+  endtask // read_word
 
 
+  //----------------------------------------------------------------
+  // read_digest()
+  //
+  // Read the digest in the dut. The resulting digest will be
+  // available in the global variable digest_data.
+  //----------------------------------------------------------------
+  task read_digest();
+    begin
+      read_word(ADDR_DIGEST0);
+      digest_data[255 : 224] = read_data;
+      read_word(ADDR_DIGEST1);
+      digest_data[223 : 192] = read_data;
+      read_word(ADDR_DIGEST2);
+      digest_data[191 : 160] = read_data;
+      read_word(ADDR_DIGEST3);
+      digest_data[159 : 128] = read_data;
+      read_word(ADDR_DIGEST4);
+      digest_data[127 :  96] = read_data;
+      read_word(ADDR_DIGEST5);
+      digest_data[95  :  64] = read_data;
+      read_word(ADDR_DIGEST6);
+      digest_data[63  :  32] = read_data;
+      read_word(ADDR_DIGEST7);
+      digest_data[31  :   0] = read_data;
+    end
+  endtask // read_digest
+    
+  
   //----------------------------------------------------------------
   // single_block_test()
   //
@@ -355,11 +386,27 @@ module tb_sha256();
   task single_block_test([511 : 0] block,
                          [255 : 0] expected);
     begin
+      $display("*** TC%01d - Single block test started.", tc_ctr); 
+     
       write_block(block);
       write_word(ADDR_CTRL, 8'h01);
       write_word(ADDR_CTRL, 8'h00);
       wait_ready();
-      dump_dut_state();
+      read_digest();
+
+      if (digest_data == expected)
+        begin
+          $display("TC%01d: OK.", tc_ctr);
+        end
+      else
+        begin
+          $display("TC%01d: ERROR.", tc_ctr);
+          $display("TC%01d: Expected: 0x%064x", tc_ctr, expected);
+          $display("TC%01d: Got:      0x%064x", tc_ctr, digest_data);
+          error_ctr = error_ctr + 1;
+        end
+      $display("*** TC%01d - Single block test done.", tc_ctr); 
+      tc_ctr = tc_ctr + 1;
     end
   endtask // single_block_test
 
@@ -373,28 +420,28 @@ module tb_sha256();
   //----------------------------------------------------------------
   initial
     begin : sha256_test
-      reg [511 : 0] tc1;
-      reg [255 : 0] res1;
+      reg [511 : 0] tc0;
+      reg [255 : 0] res0;
       
       $display("   -- Testbench for sha256 started --");
 
       init_sim();
       reset_dut();
-      dump_dut_state();
 
-      write_word(ADDR_BLOCK0, 32'hdeadbeef);
-      dump_dut_state();
+      // dump_dut_state();
+      // write_word(ADDR_BLOCK0, 32'hdeadbeef);
+      // dump_dut_state();
+      // read_word(ADDR_BLOCK0);
+      // dump_dut_state();
 
-      read_word(ADDR_BLOCK0);
-      dump_dut_state();
+      tc0 = 512'h61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018;
+      res0 = 256'hBA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD;
+      single_block_test(tc0, res0);
 
-      tc1 = 512'h61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018;
-      res1 = 256'hBA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD;
 
-      single_block_test(tc1, res1);
-      
       display_test_result();
-      $display("*** Simulation done. ***");
+      
+      $display("   -- Testbench for sha256 done. --");
       $finish;
     end // sha256_test
 endmodule // tb_sha256
