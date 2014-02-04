@@ -22,8 +22,9 @@ Implementation results using the Altera Quartus 13 design tool.
 
 
 ## Todo ##
- - Verify the top.
- - Cleanup of the code and documentation
+- Add an alternative top and testbench with Wishbone interface.
+- Cleanup of the code.
+- Complete documentation.
 
 
 ## Status ##
