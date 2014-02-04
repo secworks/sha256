@@ -69,6 +69,8 @@ module tb_sha256();
   reg [7 : 0]   tb_address;
   reg [31 : 0]  tb_data_in;
   wire [31 : 0] tb_data_out;
+
+  reg [31 : 0] read_data;
   
   
   //----------------------------------------------------------------
@@ -127,6 +129,7 @@ module tb_sha256();
       $display("address = 0x%02x", dut.address);
       $display("data_in = 0x%08x, data_out = 0x%08x", 
                dut.data_in, dut.data_out);
+      $display("tmp_data_out = 0x%08x", dut.tmp_data_out);
       $display("");
 
       $display("Control and status:");
@@ -235,6 +238,29 @@ module tb_sha256();
     end
   endtask // write_word
   
+
+  //----------------------------------------------------------------
+  // read_word()
+  //
+  // Read a data word from the given address in the DUT.
+  //----------------------------------------------------------------
+  task read_word(input [7 : 0]  address);
+    begin
+      tb_address = address;
+      tb_cs = 1;
+      tb_write_read = 0;
+      #(2 * CLK_HALF_PERIOD);
+      read_data = tb_data_out;
+      tb_cs = 0;
+
+      if (DEBUG)
+        begin
+          $display("*** Reading 0x%08x from 0x%02x.", read_data, address);
+          $display("");
+        end
+    end
+  endtask // read_word
+  
   
   //----------------------------------------------------------------
   // wait_ready()
@@ -271,6 +297,9 @@ module tb_sha256();
       dump_dut_state();
 
       write_word(8'h10, 32'hdeadbeef);
+      dump_dut_state();
+
+      read_word(8'h10);
       dump_dut_state();
       
       display_test_result();
