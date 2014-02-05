@@ -162,11 +162,11 @@ module tb_wb_sha256();
       $display("State of DUT");
       $display("------------");
       $display("Inputs and outputs:");
-      $display("cs = 0x%01x, write_read = 0x%01x", 
-               dut.cs, dut.write_read);
-      $display("address = 0x%02x", dut.address);
-      $display("data_in = 0x%08x, data_out = 0x%08x", 
-               dut.data_in, dut.data_out);
+      $display("SEL_I = 0x%01x, WE_I = 0x%01x", 
+               dut.SEL_I, dut.WE_I);
+      $display("ADR_I = 0x%02x", dut.ADR_I);
+      $display("DAT_I = 0x%08x, DAT_O = 0x%08x", 
+               dut.DAT_I, dut.DAT_O);
       $display("tmp_data_out = 0x%08x", dut.tmp_data_out);
       $display("");
 
@@ -490,7 +490,7 @@ module tb_wb_sha256();
       reg [511 : 0] tc1_1;
       reg [255 : 0] res1_1;
       
-      $display("   -- Testbench for sha256 started --");
+      $display("   -- Testbench for wb_sha256 started --");
 
       init_sim();
       reset_dut();
@@ -513,7 +513,7 @@ module tb_wb_sha256();
       
       display_test_result();
       
-      $display("   -- Testbench for sha256 done. --");
+      $display("   -- Testbench for wb_sha256 done. --");
       $finish;
     end // wb_sha256_test
 endmodule // tb_wb_sha256
