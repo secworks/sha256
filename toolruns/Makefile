@@ -46,7 +46,7 @@ TOP_SRC=../src/rtl/sha256.v $(CORE_SRC)
 TOP_TB_SRC=../src/tb/tb_sha256.v
 
 WB_SRC=../src/rtl/wb_sha256.v $(CORE_SRC)
-EB_TB_SRC=../src/tb/tb_wb_sha256.v
+WB_TB_SRC=../src/tb/tb_wb_sha256.v
 
 CC=iverilog
 
