@@ -45,7 +45,7 @@ module wb_sha256(
                  input wire           WE_I,
                  input wire           STB_I,
                  input wire           CYC_I,
-                 output wire [31 : 0] ACK_O,
+                 output wire          ACK_O,
               
                  // Address and data.
                  input wire  [7 : 0]  ADR_I,
