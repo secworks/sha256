@@ -60,7 +60,9 @@ module tb_wb_sha256();
 
   parameter ADDR_CTRL        = 8'h08;
   parameter CTRL_INIT_BIT    = 0;
+  parameter CTRL_INIT_VALUE  = 8'h01;
   parameter CTRL_NEXT_BIT    = 1;
+  parameter CTRL_NEXT_VALUE  = 8'h02;
 
   parameter ADDR_STATUS      = 8'h09;
   parameter STATUS_READY_BIT = 0;
