@@ -57,11 +57,14 @@ module wb_sha256(
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
-  parameter ADDR_CTRL        = 8'h00;
+  parameter CORE_NAME        = 8'h00;
+  parameter CORE_VERSION     = 8'h01;
+
+  parameter ADDR_CTRL        = 8'h08;
   parameter CTRL_INIT_BIT    = 0;
   parameter CTRL_NEXT_BIT    = 1;
 
-  parameter ADDR_STATUS      = 8'h01;
+  parameter ADDR_STATUS      = 8'h09;
   parameter STATUS_READY_BIT = 0;
   parameter STATUS_VALID_BIT = 1;
                              
