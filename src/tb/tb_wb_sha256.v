@@ -55,44 +55,46 @@ module tb_wb_sha256();
   parameter CLK_HALF_PERIOD = 2;
 
   // The address map.
-  parameter CORE_NAME        = 8'h00;
-  parameter CORE_VERSION     = 8'h01;
+  parameter ADDR_CORE_NAME     = 8'h00;
+  parameter CORE_NAME_VALUE    = "SHA2";
+  parameter ADDR_CORE_VERSION  = 8'h01;
+  parameter CORE_VERSION_VALUE = "v0.1";
 
-  parameter ADDR_CTRL        = 8'h08;
-  parameter CTRL_INIT_BIT    = 0;
-  parameter CTRL_INIT_VALUE  = 8'h01;
-  parameter CTRL_NEXT_BIT    = 1;
-  parameter CTRL_NEXT_VALUE  = 8'h02;
+  parameter ADDR_CTRL          = 8'h08;
+  parameter CTRL_INIT_BIT      = 0;
+  parameter CTRL_INIT_VALUE    = 8'h01;
+  parameter CTRL_NEXT_BIT      = 1;
+  parameter CTRL_NEXT_VALUE    = 8'h02;
 
-  parameter ADDR_STATUS      = 8'h09;
-  parameter STATUS_READY_BIT = 0;
-  parameter STATUS_VALID_BIT = 1;
+  parameter ADDR_STATUS        = 8'h09;
+  parameter STATUS_READY_BIT   = 0;
+  parameter STATUS_VALID_BIT   = 1;
                              
-  parameter ADDR_BLOCK0      = 8'h10;
-  parameter ADDR_BLOCK1      = 8'h11;
-  parameter ADDR_BLOCK2      = 8'h12;
-  parameter ADDR_BLOCK3      = 8'h13;
-  parameter ADDR_BLOCK4      = 8'h14;
-  parameter ADDR_BLOCK5      = 8'h15;
-  parameter ADDR_BLOCK6      = 8'h16;
-  parameter ADDR_BLOCK7      = 8'h17;
-  parameter ADDR_BLOCK8      = 8'h18;
-  parameter ADDR_BLOCK9      = 8'h19;
-  parameter ADDR_BLOCK10     = 8'h1a;
-  parameter ADDR_BLOCK11     = 8'h1b;
-  parameter ADDR_BLOCK12     = 8'h1c;
-  parameter ADDR_BLOCK13     = 8'h1d;
-  parameter ADDR_BLOCK14     = 8'h1e;
-  parameter ADDR_BLOCK15     = 8'h1f;
+  parameter ADDR_BLOCK0        = 8'h10;
+  parameter ADDR_BLOCK1        = 8'h11;
+  parameter ADDR_BLOCK2        = 8'h12;
+  parameter ADDR_BLOCK3        = 8'h13;
+  parameter ADDR_BLOCK4        = 8'h14;
+  parameter ADDR_BLOCK5        = 8'h15;
+  parameter ADDR_BLOCK6        = 8'h16;
+  parameter ADDR_BLOCK7        = 8'h17;
+  parameter ADDR_BLOCK8        = 8'h18;
+  parameter ADDR_BLOCK9        = 8'h19;
+  parameter ADDR_BLOCK10       = 8'h1a;
+  parameter ADDR_BLOCK11       = 8'h1b;
+  parameter ADDR_BLOCK12       = 8'h1c;
+  parameter ADDR_BLOCK13       = 8'h1d;
+  parameter ADDR_BLOCK14       = 8'h1e;
+  parameter ADDR_BLOCK15       = 8'h1f;
                              
-  parameter ADDR_DIGEST0     = 8'h20;
-  parameter ADDR_DIGEST1     = 8'h21;
-  parameter ADDR_DIGEST2     = 8'h22;
-  parameter ADDR_DIGEST3     = 8'h23;
-  parameter ADDR_DIGEST4     = 8'h24;
-  parameter ADDR_DIGEST5     = 8'h25;
-  parameter ADDR_DIGEST6     = 8'h26;
-  parameter ADDR_DIGEST7     = 8'h27;
+  parameter ADDR_DIGEST0       = 8'h20;
+  parameter ADDR_DIGEST1       = 8'h21;
+  parameter ADDR_DIGEST2       = 8'h22;
+  parameter ADDR_DIGEST3       = 8'h23;
+  parameter ADDR_DIGEST4       = 8'h24;
+  parameter ADDR_DIGEST5       = 8'h25;
+  parameter ADDR_DIGEST6       = 8'h26;
+  parameter ADDR_DIGEST7       = 8'h27;
 
   
   //----------------------------------------------------------------
@@ -126,6 +128,7 @@ module tb_wb_sha256();
                 .STB_I(tb_stb),
                 .CYC_I(tb_cyc),
                 .ACK_O(tb_ack),
+                .ERR_O(tb_err),
                 
                 .ADR_I(tb_address),
                 .DAT_I(tb_data_in),              
