@@ -41,10 +41,8 @@ module wb_sha256(
                  input wire           RST_I,
                  
                  // Control and status.
-                 input wire           SEL_I,
-                 input wire           WE_I,
                  input wire           STB_I,
-                 input wire           CYC_I,
+                 input wire           WE_I,
                  output wire          ACK_O,
                  output wire          ERR_O,
               
@@ -158,6 +156,10 @@ module wb_sha256(
   wire           core_digest_valid;
 
   reg [31 : 0]   tmp_data_out;
+  reg            tmp_ACK_O;
+  reg            tmp_ERR_O;
+
+  wire reset_n;
   
   
   //----------------------------------------------------------------
@@ -174,15 +176,18 @@ module wb_sha256(
 
   assign DAT_O = tmp_data_out;
 
-  assign ACK_O = 0;
-  
+  assign ACK_O = tmp_ACK_O;
+  assign ERR_O = tmp_ERR_O;
+
+  assign reset_n = ~RST_I;
+    
              
   //----------------------------------------------------------------
   // core instantiation.
   //----------------------------------------------------------------
   sha256_core core(
                    .clk(CLK_I),
-                   .reset_n(RST_I),
+                   .reset_n(reset_n),
                    
                    .init(core_init),
                    .next(core_next),
@@ -205,7 +210,7 @@ module wb_sha256(
   //----------------------------------------------------------------
   always @ (posedge CLK_I)
     begin
-      if (!RST_I)
+      if (!reset_n)
         begin
           init_reg         <= 0;
           next_reg         <= 0;
@@ -355,8 +360,10 @@ module wb_sha256(
       block14_we   = 0;
       block15_we   = 0;
       tmp_data_out = 32'h00000000;
+      tmp_ERR_O    = 0;
+      tmp_ACK_O    = 0;
       
-      if (SEL_I)
+      if (STB_I)
         begin
           if (WE_I)
             begin
@@ -365,92 +372,108 @@ module wb_sha256(
                 ADDR_CTRL:
                   begin
                     ctrl_we = 1;
+                    tmp_ACK_O = 1;
                   end
                 
                 ADDR_BLOCK0:
                   begin
                     block0_we = 1;
+                    tmp_ACK_O = 1;
                    end
 
                 ADDR_BLOCK1:
                   begin
                     block1_we = 1;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK2:
                   begin
                     block2_we = 1;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK3:
                   begin
                     block3_we = 1;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK4:
                   begin
                     block4_we = 1;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK5:
                   begin
                     block5_we = 1;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK6:
                   begin
                     block6_we = 1;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK7:
                   begin
                     block7_we = 1;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK8:
                   begin
                     block8_we = 1;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK9:
                   begin
                     block9_we = 1;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK10:
                   begin
                     block10_we = 1;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK11:
                   begin
                     block11_we = 1;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK12:
                   begin
                     block12_we = 1;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK13:
                   begin
                     block13_we = 1;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK14:
                   begin
                     block14_we = 1;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK15:
                   begin
                     block15_we = 1;
+                    tmp_ACK_O = 1;
                   end
                 
                 default:
                   begin
-                    // Empty since default assignemnts are handled
-                    // outside of the if-mux construct.
+                    tmp_ERR_O = 1;
                   end
               endcase // case (ADR_I)
             end // if (WE_I)
@@ -462,147 +485,174 @@ module wb_sha256(
                 ADDR_CORE_NAME:
                   begin
                     tmp_data_out = CORE_NAME_VALUE;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_CORE_VERSION:
                   begin
                     tmp_data_out = CORE_VERSION_VALUE;
+                    tmp_ACK_O = 1;
                   end
                 
                 ADDR_CTRL:
                   begin
                     tmp_data_out = {28'h0000000, 2'b00, next_reg, init_reg};
+                    tmp_ACK_O = 1;
                   end
                 
                 ADDR_STATUS:
                   begin
                     tmp_data_out = {28'h0000000, 2'b00, digest_valid_reg, ready_reg};
+                    tmp_ACK_O = 1;
                   end
                 
                 ADDR_BLOCK0:
                   begin
                     tmp_data_out = block0_reg;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK1:
                   begin
                     tmp_data_out = block1_reg;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK2:
                   begin
                     tmp_data_out = block2_reg;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK3:
                   begin
                     tmp_data_out = block3_reg;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK4:
                   begin
                     tmp_data_out = block4_reg;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK5:
                   begin
                     tmp_data_out = block5_reg;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK6:
                   begin
                     tmp_data_out = block6_reg;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK7:
                   begin
                     tmp_data_out = block7_reg;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK8:
                   begin
                     tmp_data_out = block8_reg;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK9:
                   begin
                     tmp_data_out = block9_reg;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK10:
                   begin
                     tmp_data_out = block10_reg;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK11:
                   begin
                     tmp_data_out = block11_reg;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK12:
                   begin
                     tmp_data_out = block12_reg;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK13:
                   begin
                     tmp_data_out = block13_reg;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK14:
                   begin
                     tmp_data_out = block14_reg;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_BLOCK15:
                   begin
                     tmp_data_out = block15_reg;
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_DIGEST0:
                   begin
                     tmp_data_out = digest_reg[255 : 224];
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_DIGEST1:
                   begin
                     tmp_data_out = digest_reg[223 : 192];
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_DIGEST2:
                   begin
                     tmp_data_out = digest_reg[191 : 160];
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_DIGEST3:
                   begin
                     tmp_data_out = digest_reg[159 : 128];
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_DIGEST4:
                   begin
                     tmp_data_out = digest_reg[127 :  96];
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_DIGEST5:
                   begin
                     tmp_data_out = digest_reg[95  :  64];
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_DIGEST6:
                   begin
                     tmp_data_out = digest_reg[63  :  32];
+                    tmp_ACK_O = 1;
                   end
 
                 ADDR_DIGEST7:
                   begin
                     tmp_data_out = digest_reg[31  :   0];
+                    tmp_ACK_O = 1;
                   end
                 
                 default:
                   begin
-                    // Empty since default assignemnts are handled
-                    // outside of the if-mux construct.                  
+                    tmp_ERR_O = 1;
                   end
               endcase // case (ADR_I)
             end

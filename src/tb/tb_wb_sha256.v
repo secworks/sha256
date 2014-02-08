@@ -105,7 +105,7 @@ module tb_wb_sha256();
   reg [31 : 0] tc_ctr;
 
   reg           tb_clk;
-  reg           tb_reset_n;
+  reg           tb_reset;
   reg           tb_cs;
   reg           tb_write_read;
   reg [7 : 0]   tb_address;
@@ -121,12 +121,10 @@ module tb_wb_sha256();
   //----------------------------------------------------------------
   wb_sha256 dut(
                 .CLK_I(tb_clk),
-                .RST_I(tb_reset_n),
+                .RST_I(tb_reset),
                 
-                .SEL_I(tb_cs),
+                .STB_I(tb_cs),
                 .WE_I(tb_write_read),
-                .STB_I(tb_stb),
-                .CYC_I(tb_cyc),
                 .ACK_O(tb_ack),
                 .ERR_O(tb_err),
                 
@@ -170,8 +168,8 @@ module tb_wb_sha256();
       $display("State of DUT");
       $display("------------");
       $display("Inputs and outputs:");
-      $display("SEL_I = 0x%01x, WE_I = 0x%01x", 
-               dut.SEL_I, dut.WE_I);
+      $display("STB_I = 0x%01x, WE_I = 0x%01x", 
+               dut.STB_I, dut.WE_I);
       $display("ADR_I = 0x%02x", dut.ADR_I);
       $display("DAT_I = 0x%08x, DAT_O = 0x%08x", 
                dut.DAT_I, dut.DAT_O);
@@ -212,9 +210,9 @@ module tb_wb_sha256();
   task reset_dut();
     begin
       $display("*** Toggle reset.");
-      tb_reset_n = 0;
+      tb_reset = 1;
       #(4 * CLK_HALF_PERIOD);
-      tb_reset_n = 1;
+      tb_reset = 0;
     end
   endtask // reset_dut
 
@@ -232,7 +230,7 @@ module tb_wb_sha256();
       tc_ctr = 32'h00000000;
       
       tb_clk = 0;
-      tb_reset_n = 0;
+      tb_reset = 0;
       tb_cs = 0;
       tb_write_read = 0;
       tb_address = 6'h00;
