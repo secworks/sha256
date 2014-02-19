@@ -55,10 +55,9 @@ module tb_wb_sha256();
   parameter CLK_HALF_PERIOD = 2;
 
   // The address map.
-  parameter ADDR_CORE_NAME     = 8'h00;
-  parameter CORE_NAME_VALUE    = "SHA2";
-  parameter ADDR_CORE_VERSION  = 8'h01;
-  parameter CORE_VERSION_VALUE = "v0.1";
+  parameter ADDR_NAME0         = 8'h00;
+  parameter ADDR_NAME1         = 8'h01;
+  parameter ADDR_VERSION       = 8'h02;
 
   parameter ADDR_CTRL          = 8'h08;
   parameter CTRL_INIT_BIT      = 0;
@@ -357,7 +356,34 @@ module tb_wb_sha256();
     end
   endtask // read_word
 
+  
+  //----------------------------------------------------------------
+  // check_name_version()
+  //
+  // Read the name and version from the DUT.
+  //----------------------------------------------------------------
+  task check_name_version();
+    reg [31 : 0] name0;
+    reg [31 : 0] name1;
+    reg [31 : 0] version;
+    begin
 
+      read_word(ADDR_NAME0);
+      name0 = read_data;
+      read_word(ADDR_NAME1);
+      name1 = read_data;
+      read_word(ADDR_VERSION);
+      version = read_data;
+
+      $display("DUT name: %c%c%c%c%c%c%c%c",
+               name0[31 : 24], name0[23 : 16], name0[15 : 8], name0[7 : 0],
+               name1[31 : 24], name1[23 : 16], name1[15 : 8], name1[7 : 0]);
+      $display("DUT version: %c%c%c%c",
+               version[31 : 24], version[23 : 16], version[15 : 8], version[7 : 0]);
+    end
+  endtask // check_name_version
+
+  
   //----------------------------------------------------------------
   // read_digest()
   //
@@ -500,7 +526,8 @@ module tb_wb_sha256();
 
       init_sim();
       reset_dut();
-
+      check_name_version();
+      
       // dump_dut_state();
       // write_word(ADDR_BLOCK0, 32'hdeadbeef);
       // dump_dut_state();
