@@ -485,19 +485,19 @@ module wb_sha256(
             begin
               case (ADR_I)
                 // Read operations.
-                ADDR_CORE_NAME0:
+                ADDR_NAME0:
                   begin
                     tmp_data_out = CORE_NAME0;
                     tmp_ACK_O = 1;
                   end
                 
-                ADDR_CORE_NAME1:
+                ADDR_NAME1:
                   begin
                     tmp_data_out = CORE_NAME1;
                     tmp_ACK_O = 1;
                   end
 
-                ADDR_CORE_VERSION:
+                ADDR_VERSION:
                   begin
                     tmp_data_out = CORE_VERSION;
                     tmp_ACK_O = 1;
