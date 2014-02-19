@@ -15,19 +15,29 @@ written in Python.
 Implementation results using the Altera Quartus 13 design tool.
 
 ### Cyclone IV GX ###
-- 9689 LEs
+- 9587 LEs
 - 3349 registers
-- 69.1 MHz
+- 73 MHz
 - 66 cycles latency
 
 
 ## Todo ##
-- Add an alternative top and testbench with Wishbone interface.
 - Cleanup of the code.
 - Complete documentation.
 
 
 ## Status ##
+**(2014-02-19)**
+- Added name and version constants to the top level wrapper. Also added
+  an api error signal that flags read or write attempts to addresses
+  that does not support these operations. Writing to the version
+  constant for example."
+
+- There is also an experimental Wishbone wrapper (wb_sha256.v) as an
+  alternative to the standard top. There is also a testbench for the
+  Wisbone top.
+  
+
 **(2014-02-04)**
 - Completed testbench for top level wrapper. The top level interface can
 control, check status of the SHA-256. Single as well as multiple block
