@@ -55,11 +55,15 @@ module tb_sha256();
   parameter CLK_HALF_PERIOD = 2;
 
   // The address map.
-  parameter ADDR_CTRL        = 8'h00;
+  parameter ADDR_NAME0       = 8'h00;
+  parameter ADDR_NAME1       = 8'h01;
+  parameter ADDR_VERSION     = 8'h02;
+
+  parameter ADDR_CTRL        = 8'h08;
   parameter CTRL_INIT_VALUE  = 8'h01;
   parameter CTRL_NEXT_VALUE  = 8'h02;
 
-  parameter ADDR_STATUS      = 8'h01;
+  parameter ADDR_STATUS      = 8'h09;
   parameter STATUS_READY_BIT = 0;
   parameter STATUS_VALID_BIT = 1;
                              
@@ -104,6 +108,7 @@ module tb_sha256();
   reg [7 : 0]   tb_address;
   reg [31 : 0]  tb_data_in;
   wire [31 : 0] tb_data_out;
+  wire          tb_error;
 
   reg [31 : 0]  read_data;
   reg [255 : 0] digest_data;
@@ -122,7 +127,8 @@ module tb_sha256();
              
              .address(tb_address),
              .data_in(tb_data_in),
-             .data_out(tb_data_out)
+             .data_out(tb_data_out),
+             .error(tb_error)
             );
   
 
@@ -182,7 +188,7 @@ module tb_sha256();
 
       $display("block8  = 0x%08x, block9  = 0x%08x, block10 = 0x%08x,  block11 = 0x%08x",
                dut.block8_reg, dut.block9_reg, dut.block10_reg, dut.block11_reg);
-      $display("block12 = 0x%08x, block13 = 0x%08x, block14 = 0x%08x,  block15 = 0x%08x",
+     $display("block12 = 0x%08x, block13 = 0x%08x, block14 = 0x%08x,  block15 = 0x%08x",
                dut.block12_reg, dut.block13_reg, dut.block14_reg, dut.block15_reg);
       $display("");
       
@@ -349,6 +355,33 @@ module tb_sha256();
     end
   endtask // read_word
 
+  
+  //----------------------------------------------------------------
+  // check_name_version()
+  //
+  // Read the name and version from the DUT.
+  //----------------------------------------------------------------
+  task check_name_version();
+    reg [31 : 0] name0;
+    reg [31 : 0] name1;
+    reg [31 : 0] version;
+    begin
+
+      read_word(ADDR_NAME0);
+      name0 = read_data;
+      read_word(ADDR_NAME1);
+      name1 = read_data;
+      read_word(ADDR_VERSION);
+      version = read_data;
+
+      $display("DUT name: %c%c%c%c%c%c%c%c",
+               name0[31 : 24], name0[23 : 16], name0[15 : 8], name0[7 : 0],
+               name1[31 : 24], name1[23 : 16], name1[15 : 8], name1[7 : 0]);
+      $display("DUT version: %c%c%c%c",
+               version[31 : 24], version[23 : 16], version[15 : 8], version[7 : 0]);
+    end
+  endtask // check_name_version
+  
 
   //----------------------------------------------------------------
   // read_digest()
@@ -492,6 +525,7 @@ module tb_sha256();
 
       init_sim();
       reset_dut();
+      check_name_version();
 
       // dump_dut_state();
       // write_word(ADDR_BLOCK0, 32'hdeadbeef);
