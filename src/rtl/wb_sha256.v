@@ -56,10 +56,9 @@ module wb_sha256(
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
-  parameter ADDR_CORE_NAME     = 8'h00;
-  parameter CORE_NAME_VALUE    = "SHA2";
-  parameter ADDR_CORE_VERSION  = 8'h01;
-  parameter CORE_VERSION_VALUE = "v0.1";
+  parameter ADDR_NAME0       = 8'h00;
+  parameter ADDR_NAME1       = 8'h01;
+  parameter ADDR_VERSION     = 8'h02;
 
   parameter ADDR_CTRL          = 8'h08;
   parameter CTRL_INIT_BIT      = 0;
@@ -96,6 +95,10 @@ module wb_sha256(
   parameter ADDR_DIGEST5       = 8'h25;
   parameter ADDR_DIGEST6       = 8'h26;
   parameter ADDR_DIGEST7       = 8'h27;
+
+  parameter CORE_NAME0   = 32'h73686132; // "sha2"
+  parameter CORE_NAME1   = 32'h2d323536; // "-256"
+  parameter CORE_VERSION = 32'h302e3830; // "0.80"
 
   
   //----------------------------------------------------------------
@@ -482,15 +485,21 @@ module wb_sha256(
             begin
               case (ADR_I)
                 // Read operations.
-                ADDR_CORE_NAME:
+                ADDR_CORE_NAME0:
                   begin
-                    tmp_data_out = CORE_NAME_VALUE;
+                    tmp_data_out = CORE_NAME0;
+                    tmp_ACK_O = 1;
+                  end
+                
+                ADDR_CORE_NAME1:
+                  begin
+                    tmp_data_out = CORE_NAME1;
                     tmp_ACK_O = 1;
                   end
 
                 ADDR_CORE_VERSION:
                   begin
-                    tmp_data_out = CORE_VERSION_VALUE;
+                    tmp_data_out = CORE_VERSION;
                     tmp_ACK_O = 1;
                   end
                 
