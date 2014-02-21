@@ -27,6 +27,26 @@ Implementation results using the Altera Quartus 13 design tool.
 
 
 ## Status ##
+**(2014-02-21)***
+
+Reworked the W-memory into a sliding window solution that only
+requires 16 32-bit words. The difference in size is quite
+impressive. The old results was:
+
+- 9587 LEs
+- 3349 registers
+- 73 MHz
+
+The new results are:
+
+- 3765 LEs
+- 1813 registers
+- 76 MHz
+
+That is a 2.5x reduction in size, 1.8x less regs and slightly higher
+clock frequency.
+
+
 **(2014-02-19)**
 - Added name and version constants to the top level wrapper. Also added
   an api error signal that flags read or write attempts to addresses
