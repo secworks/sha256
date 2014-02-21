@@ -144,7 +144,7 @@ module sha256_core(
   wire [31 : 0] k_data;
 
   reg           w_init;
-  wire          w_ready;
+  reg           w_next;
   wire [31 : 0] w_data;
               
   
@@ -161,12 +161,10 @@ module sha256_core(
                      .clk(clk),
                      .reset_n(reset_n),
 
-                     .init(w_init),
-
                      .block(block),
-                     .addr(t_ctr_reg),
 
-                     .ready(w_ready),
+                     .init(w_init),
+                     .next(w_next),
                      .w(w_data)
                    );
 
@@ -446,6 +444,7 @@ module sha256_core(
       ready_flag       = 0;
 
       w_init           = 0;
+      w_next           = 0;
       
       t_ctr_inc        = 0;
       t_ctr_rst        = 0;
@@ -490,6 +489,7 @@ module sha256_core(
         
         CTRL_ROUNDS:
           begin
+            w_next       = 1;
             state_update = 1;
             t_ctr_inc    = 1;
 

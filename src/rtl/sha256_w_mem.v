@@ -2,11 +2,8 @@
 //
 // sha256_w_mem_regs.v
 // -------------------
-// The W memory. This includes functionality to expand the block
-// into 64 words. This is the old version based on separate registers.
-// This version is saved as a loose module to be used if the
-// synthesis tool is unable to do proper mapping of the array
-// based implementation.
+// The W memory. This version uses 16 32-bit registers as a sliding
+// window to generate the 64 words.
 //
 //
 // Copyright (c) 2013 Secworks Sweden AB
@@ -242,7 +239,6 @@ module sha256_w_mem(
     begin : sha256_w_mem_fsm
       w_ctr_rst = 0;
       w_ctr_inc = 0;
-      w_update  = 0;
       
       sha256_w_mem_ctrl_new = CTRL_IDLE;
       sha256_w_mem_ctrl_we  = 0;
@@ -262,7 +258,6 @@ module sha256_w_mem(
           begin
             if (next)
               begin
-                w_update  = 1;
                 w_ctr_inc = 1;
               end
             
