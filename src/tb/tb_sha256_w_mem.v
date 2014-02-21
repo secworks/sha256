@@ -45,7 +45,7 @@ module tb_sha256_w_mem();
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
-  parameter DEBUG          = 0;
+  parameter DEBUG          = 1;
   parameter DISPLAY_CYCLES = 0;
 
   parameter CLK_HALF_PERIOD = 2;
@@ -63,9 +63,8 @@ module tb_sha256_w_mem();
   reg            tb_reset_n;
 
   reg           tb_init;
+  reg           tb_next;
   reg [511 : 0] tb_block;
-  reg [5 : 0]   tb_addr;
-  wire          tb_ready;
   wire [31 : 0] tb_w;
 
   reg [63 : 0] cycle_ctr;
@@ -80,12 +79,11 @@ module tb_sha256_w_mem();
                    .clk(tb_clk),
                    .reset_n(tb_reset_n),
                    
-                   .init(tb_init),
-                   
                    .block(tb_block),
-                   .addr(tb_addr),
                    
-                   .ready(tb_ready),
+                   .init(tb_init),
+                   .next(tb_next),
+
                    .w(tb_w)
                   );
   
@@ -120,6 +118,8 @@ module tb_sha256_w_mem();
         begin
           $display("dut ctrl_state = %02x:", dut.sha256_w_mem_ctrl_reg);
           $display("dut w_ctr      = %02x:", dut.w_ctr_reg);
+          $display("dut w_tmp      = %02x:", dut.w_tmp);
+          dump_w_state();
         end
     end // dut_monitor
       
@@ -145,42 +145,7 @@ module tb_sha256_w_mem();
       $display("w12_reg = %08x, w13_reg = %08x, w14_reg = %08x, w15_reg = %08x", 
                dut.w_mem[12], dut.w_mem[13], dut.w_mem[14], dut.w_mem[15]);
 
-      $display("w16_reg = %08x, w17_reg = %08x, w18_reg = %08x, w19_reg = %08x", 
-               dut.w_mem[16], dut.w_mem[17], dut.w_mem[18], dut.w_mem[19]);
-
-      $display("w20_reg = %08x, w21_reg = %08x, w22_reg = %08x, w23_reg = %08x", 
-               dut.w_mem[20], dut.w_mem[21], dut.w_mem[22], dut.w_mem[23]);
-
-      $display("w24_reg = %08x, w25_reg = %08x, w26_reg = %08x, w27_reg = %08x", 
-               dut.w_mem[24], dut.w_mem[25], dut.w_mem[26], dut.w_mem[27]);
-
-      $display("w28_reg = %08x, w29_reg = %08x, w30_reg = %08x, w31_reg = %08x", 
-               dut.w_mem[28], dut.w_mem[29], dut.w_mem[30], dut.w_mem[31]);
-
-      $display("w32_reg = %08x, w33_reg = %08x, w34_reg = %08x, w35_reg = %08x", 
-               dut.w_mem[32], dut.w_mem[33], dut.w_mem[34], dut.w_mem[35]);
-
-      $display("w36_reg = %08x, w37_reg = %08x, w38_reg = %08x, w39_reg = %08x", 
-               dut.w_mem[36], dut.w_mem[37], dut.w_mem[38], dut.w_mem[39]);
-
-      $display("w40_reg = %08x, w41_reg = %08x, w42_reg = %08x, w43_reg = %08x", 
-               dut.w_mem[40], dut.w_mem[41], dut.w_mem[42], dut.w_mem[43]);
-
-      $display("w44_reg = %08x, w45_reg = %08x, w46_reg = %08x, w47_reg = %08x", 
-               dut.w_mem[44], dut.w_mem[45], dut.w_mem[46], dut.w_mem[47]);
-
-      $display("w48_reg = %08x, w49_reg = %08x, w50_reg = %08x, w51_reg = %08x", 
-               dut.w_mem[48], dut.w_mem[49], dut.w_mem[50], dut.w_mem[51]);
-
-      $display("w52_reg = %08x, w53_reg = %08x, w54_reg = %08x, w55_reg = %08x", 
-                dut.w_mem[52], dut.w_mem[53], dut.w_mem[54], dut.w_mem[55]);
-
-      $display("w56_reg = %08x, w57_reg = %08x, w58_reg = %08x, w59_reg = %08x", 
-               dut.w_mem[56], dut.w_mem[57], dut.w_mem[58], dut.w_mem[59]);
-
-      $display("w60_reg = %08x, w61_reg = %08x, w62_reg = %08x, w63_reg = %08x", 
-               dut.w_mem[60], dut.w_mem[61], dut.w_mem[62], dut.w_mem[63]);
-      
+      $display("w_new = %08x", dut.w_new);
       $display("");
     end
   endtask // dump_state
@@ -211,87 +176,8 @@ module tb_sha256_w_mem();
       
       tb_init = 0;
       tb_block = 512'h00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
-      tb_addr = 0;
     end
   endtask // reset_dut
-
-  
-  //----------------------------------------------------------------
-  // dump_mem()
-  //
-  // Dump the contents of the memory by directly reading from
-  // the registers in the dut, not via the read port.
-  //----------------------------------------------------------------
-  task dump_mem();
-    begin
-      $display("*** Dumping memory:");
-      $display("W[00] = 0x%08x", dut.w_mem[00]);
-      $display("W[01] = 0x%08x", dut.w_mem[01]);
-      $display("W[02] = 0x%08x", dut.w_mem[02]);
-      $display("W[03] = 0x%08x", dut.w_mem[03]);
-      $display("W[04] = 0x%08x", dut.w_mem[04]);
-      $display("W[05] = 0x%08x", dut.w_mem[05]);
-      $display("W[06] = 0x%08x", dut.w_mem[06]);
-      $display("W[07] = 0x%08x", dut.w_mem[07]);
-      $display("W[08] = 0x%08x", dut.w_mem[08]);
-      $display("W[09] = 0x%08x", dut.w_mem[09]);
-      $display("W[10] = 0x%08x", dut.w_mem[10]);
-      $display("W[11] = 0x%08x", dut.w_mem[11]);
-      $display("W[12] = 0x%08x", dut.w_mem[12]);
-      $display("W[13] = 0x%08x", dut.w_mem[13]);
-      $display("W[14] = 0x%08x", dut.w_mem[14]);
-      $display("W[15] = 0x%08x", dut.w_mem[15]);
-      $display("W[16] = 0x%08x", dut.w_mem[16]);
-      $display("W[17] = 0x%08x", dut.w_mem[17]);
-      $display("W[18] = 0x%08x", dut.w_mem[18]);
-      $display("W[19] = 0x%08x", dut.w_mem[19]);
-      $display("W[20] = 0x%08x", dut.w_mem[20]);
-      $display("W[21] = 0x%08x", dut.w_mem[21]);
-      $display("W[22] = 0x%08x", dut.w_mem[22]);
-      $display("W[23] = 0x%08x", dut.w_mem[23]);
-      $display("W[24] = 0x%08x", dut.w_mem[24]);
-      $display("W[25] = 0x%08x", dut.w_mem[25]);
-      $display("W[26] = 0x%08x", dut.w_mem[26]);
-      $display("W[27] = 0x%08x", dut.w_mem[27]);
-      $display("W[28] = 0x%08x", dut.w_mem[28]);
-      $display("W[29] = 0x%08x", dut.w_mem[29]);
-      $display("W[30] = 0x%08x", dut.w_mem[30]);
-      $display("W[31] = 0x%08x", dut.w_mem[31]);
-      $display("W[32] = 0x%08x", dut.w_mem[32]);
-      $display("W[33] = 0x%08x", dut.w_mem[33]);
-      $display("W[34] = 0x%08x", dut.w_mem[34]);
-      $display("W[35] = 0x%08x", dut.w_mem[35]);
-      $display("W[36] = 0x%08x", dut.w_mem[36]);
-      $display("W[37] = 0x%08x", dut.w_mem[37]);
-      $display("W[38] = 0x%08x", dut.w_mem[38]);
-      $display("W[39] = 0x%08x", dut.w_mem[39]);
-      $display("W[40] = 0x%08x", dut.w_mem[40]);
-      $display("W[41] = 0x%08x", dut.w_mem[41]);
-      $display("W[42] = 0x%08x", dut.w_mem[42]);
-      $display("W[43] = 0x%08x", dut.w_mem[43]);
-      $display("W[44] = 0x%08x", dut.w_mem[44]);
-      $display("W[45] = 0x%08x", dut.w_mem[45]);
-      $display("W[46] = 0x%08x", dut.w_mem[46]);
-      $display("W[47] = 0x%08x", dut.w_mem[47]);
-      $display("W[48] = 0x%08x", dut.w_mem[48]);
-      $display("W[49] = 0x%08x", dut.w_mem[49]);
-      $display("W[50] = 0x%08x", dut.w_mem[50]);
-      $display("W[51] = 0x%08x", dut.w_mem[51]);
-      $display("W[52] = 0x%08x", dut.w_mem[52]);
-      $display("W[53] = 0x%08x", dut.w_mem[53]);
-      $display("W[54] = 0x%08x", dut.w_mem[54]);
-      $display("W[55] = 0x%08x", dut.w_mem[55]);
-      $display("W[56] = 0x%08x", dut.w_mem[56]);
-      $display("W[57] = 0x%08x", dut.w_mem[57]);
-      $display("W[58] = 0x%08x", dut.w_mem[58]);
-      $display("W[59] = 0x%08x", dut.w_mem[59]);
-      $display("W[60] = 0x%08x", dut.w_mem[00]);
-      $display("W[61] = 0x%08x", dut.w_mem[61]);
-      $display("W[62] = 0x%08x", dut.w_mem[62]);
-      $display("W[63] = 0x%08x", dut.w_mem[63]);
-      $display("");
-    end
-  endtask // dump_mem
   
   
   //----------------------------------------------------------------
@@ -309,41 +195,10 @@ module tb_sha256_w_mem();
       tb_init = 0;
       dump_w_state();
 
-      #(25 * CLK_HALF_PERIOD);
-      dump_w_state();
-      
-      #(25 * CLK_HALF_PERIOD);
-      dump_w_state();
-      
-      #(25 * CLK_HALF_PERIOD);
-      dump_w_state();
-      
-      #(25 * CLK_HALF_PERIOD);
-      dump_w_state();
+      tb_next = 1;
+      #(150 * CLK_HALF_PERIOD);
     end
   endtask // test_w_schedule
-  
-
-  //----------------------------------------------------------------
-  // test_read_w/(
-  //
-  // Test that we can read data from all W registers.
-  // Note: Currently not a self checking test case.
-  //----------------------------------------------------------------
-  task test_read_w();
-    reg [6 : 0] i;
-    begin
-      $display("*** Test of W read operations. --");
-      i = 0;
-      while (i < 64)
-        begin
-          tb_addr = i[5 : 0];
-          $display("API: w%02x, internal w%02x = 0x%02x", tb_addr, dut.addr, dut.w_tmp);
-          i = i + 1;
-          #(2 * CLK_HALF_PERIOD);
-        end
-    end
-  endtask // read_w
   
     
   //----------------------------------------------------------------
@@ -353,15 +208,8 @@ module tb_sha256_w_mem();
     begin : w_mem_test
       $display("   -- Testbench for sha256 w memory started --");
       init_sim();
-
-      dump_mem();
       reset_dut();
-      dump_mem();
-      
       test_w_schedule();
-      dump_mem();
-
-      test_read_w();
 
       $display("*** Simulation done.");
       $finish;
