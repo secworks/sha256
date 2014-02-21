@@ -15,9 +15,9 @@ written in Python.
 Implementation results using the Altera Quartus 13 design tool.
 
 ### Cyclone IV GX ###
-- 9587 LEs
-- 3349 registers
-- 73 MHz
+- 3765 LEs
+- 1813 registers
+- 76 MHz
 - 66 cycles latency
 
 
