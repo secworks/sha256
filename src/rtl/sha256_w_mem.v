@@ -67,7 +67,7 @@ module sha256_w_mem(
   reg [5 : 0] w_ctr_new;
   reg         w_ctr_we;
   reg         w_ctr_inc;
-  reg         w_ctr_set;
+  reg         w_ctr_rst;
   
   reg [1 : 0]  sha256_w_mem_ctrl_reg;
   reg [1 : 0]  sha256_w_mem_ctrl_new;
@@ -220,9 +220,9 @@ module sha256_w_mem(
       w_ctr_new = 0;
       w_ctr_we  = 0;
       
-      if (w_ctr_set)
+      if (w_ctr_rst)
         begin
-          w_ctr_new = 6'h10;
+          w_ctr_new = 6'h00;
           w_ctr_we  = 1;
         end
 
@@ -240,7 +240,7 @@ module sha256_w_mem(
   //----------------------------------------------------------------
   always @*
     begin : sha256_w_mem_fsm
-      w_ctr_set = 0;
+      w_ctr_rst = 0;
       w_ctr_inc = 0;
       w_update  = 0;
       
@@ -252,7 +252,7 @@ module sha256_w_mem(
           begin
             if (init)
               begin
-                w_ctr_set             = 1;
+                w_ctr_rst             = 1;
                 sha256_w_mem_ctrl_new = CTRL_UPDATE;
                 sha256_w_mem_ctrl_we  = 1;
               end
