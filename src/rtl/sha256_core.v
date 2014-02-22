@@ -406,6 +406,7 @@ module sha256_core(
   
   //----------------------------------------------------------------
   // t_ctr
+  //
   // Update logic for the round counter, a monotonically 
   // increasing counter with reset.
   //----------------------------------------------------------------
@@ -430,6 +431,7 @@ module sha256_core(
   
   //----------------------------------------------------------------
   // sha256_ctrl_fsm
+  //
   // Logic for the state machine controlling the core behaviour.
   //----------------------------------------------------------------
   always @*
