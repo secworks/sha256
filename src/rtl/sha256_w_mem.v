@@ -59,6 +59,23 @@ module sha256_w_mem(
   // Registers including update variables and write enable.
   //----------------------------------------------------------------
   reg [31 : 0] w_mem [0 : 15];
+  reg [31 : 0] w_mem00_new;
+  reg [31 : 0] w_mem01_new;
+  reg [31 : 0] w_mem02_new;
+  reg [31 : 0] w_mem03_new;
+  reg [31 : 0] w_mem04_new;
+  reg [31 : 0] w_mem05_new;
+  reg [31 : 0] w_mem06_new;
+  reg [31 : 0] w_mem07_new;
+  reg [31 : 0] w_mem08_new;
+  reg [31 : 0] w_mem09_new;
+  reg [31 : 0] w_mem10_new;
+  reg [31 : 0] w_mem11_new;
+  reg [31 : 0] w_mem12_new;
+  reg [31 : 0] w_mem13_new;
+  reg [31 : 0] w_mem14_new;
+  reg [31 : 0] w_mem15_new;
+  reg          w_mem_we;
   
   reg [5 : 0] w_ctr_reg;
   reg [5 : 0] w_ctr_new;
@@ -95,48 +112,45 @@ module sha256_w_mem(
     begin : reg_update
       if (!reset_n)
         begin
+          w_mem[00]             <= 32'h00000000;
+          w_mem[01]             <= 32'h00000000;
+          w_mem[02]             <= 32'h00000000;
+          w_mem[03]             <= 32'h00000000;
+          w_mem[04]             <= 32'h00000000;
+          w_mem[05]             <= 32'h00000000;
+          w_mem[06]             <= 32'h00000000;
+          w_mem[07]             <= 32'h00000000;
+          w_mem[08]             <= 32'h00000000;
+          w_mem[09]             <= 32'h00000000;
+          w_mem[10]             <= 32'h00000000;
+          w_mem[11]             <= 32'h00000000;
+          w_mem[12]             <= 32'h00000000;
+          w_mem[13]             <= 32'h00000000;
+          w_mem[14]             <= 32'h00000000;
+          w_mem[15]             <= 32'h00000000;
           w_ctr_reg             <= 6'h00;
           sha256_w_mem_ctrl_reg <= CTRL_IDLE;
         end
       else
         begin
-          if (init)
+          if (w_mem_we)
             begin
-              w_mem[00] <= block[511 : 480];
-              w_mem[01] <= block[479 : 448];
-              w_mem[02] <= block[447 : 416];
-              w_mem[03] <= block[415 : 384];
-              w_mem[04] <= block[383 : 352];
-              w_mem[05] <= block[351 : 320];
-              w_mem[06] <= block[319 : 288];
-              w_mem[07] <= block[287 : 256];
-              w_mem[08] <= block[255 : 224];
-              w_mem[09] <= block[223 : 192];
-              w_mem[10] <= block[191 : 160];
-              w_mem[11] <= block[159 : 128];
-              w_mem[12] <= block[127 :  96];
-              w_mem[13] <= block[95  :  64];
-              w_mem[14] <= block[63  :  32];
-              w_mem[15] <= block[31  :   0];
-            end
-          else if (mem_update)
-            begin
-              w_mem[00] <= w_mem[01];
-              w_mem[01] <= w_mem[02];
-              w_mem[02] <= w_mem[03];
-              w_mem[03] <= w_mem[04];
-              w_mem[04] <= w_mem[05];
-              w_mem[05] <= w_mem[06];
-              w_mem[06] <= w_mem[07];
-              w_mem[07] <= w_mem[08];
-              w_mem[08] <= w_mem[09];
-              w_mem[09] <= w_mem[10];
-              w_mem[10] <= w_mem[11];
-              w_mem[11] <= w_mem[12];
-              w_mem[12] <= w_mem[13];
-              w_mem[13] <= w_mem[14];
-              w_mem[14] <= w_mem[15];
-              w_mem[15] <= w_new;
+              w_mem[00] <= w_mem00_new;
+              w_mem[01] <= w_mem01_new;
+              w_mem[02] <= w_mem02_new;
+              w_mem[03] <= w_mem03_new;
+              w_mem[04] <= w_mem04_new;
+              w_mem[05] <= w_mem05_new;
+              w_mem[06] <= w_mem06_new;
+              w_mem[07] <= w_mem07_new;
+              w_mem[08] <= w_mem08_new;
+              w_mem[09] <= w_mem09_new;
+              w_mem[10] <= w_mem10_new;
+              w_mem[11] <= w_mem11_new;
+              w_mem[12] <= w_mem12_new;
+              w_mem[13] <= w_mem13_new;
+              w_mem[14] <= w_mem14_new;
+              w_mem[15] <= w_mem15_new;
             end
           
           if (w_ctr_we)
@@ -153,24 +167,22 @@ module sha256_w_mem(
 
   
   //----------------------------------------------------------------
-  // external_addr_mux
+  // select_w
   //
   // Mux for the external read operation. This is where we exract
   // the W variable.
   //----------------------------------------------------------------
   always @*
-    begin : external_addr_mux
+    begin : select_w
       if (w_ctr_reg < 16)
         begin
-          w_tmp      = w_mem[w_ctr_reg[3 : 0]];
-          mem_update = 0;
+          w_tmp = w_mem[w_ctr_reg[3 : 0]];
         end
       else
         begin
-          w_tmp      = w_new;
-          mem_update = 1;
+          w_tmp = w_new;
         end
-    end // external_addr_mux
+    end // select_w
   
 
   //----------------------------------------------------------------
@@ -180,7 +192,7 @@ module sha256_w_mem(
   // the sliding window of the memory.
   //----------------------------------------------------------------
   always @*
-    begin : w_new_logic
+    begin : w_mem_update_logic
       reg [31 : 0] w_0;
       reg [31 : 0] w_1;
       reg [31 : 0] w_9;
@@ -188,6 +200,24 @@ module sha256_w_mem(
       reg [31 : 0] d0;
       reg [31 : 0] d1;
 
+      w_mem00_new = 32'h00000000;
+      w_mem01_new = 32'h00000000;
+      w_mem02_new = 32'h00000000;
+      w_mem03_new = 32'h00000000;
+      w_mem04_new = 32'h00000000;
+      w_mem05_new = 32'h00000000;
+      w_mem06_new = 32'h00000000;
+      w_mem07_new = 32'h00000000;
+      w_mem08_new = 32'h00000000;
+      w_mem09_new = 32'h00000000;
+      w_mem10_new = 32'h00000000;
+      w_mem11_new = 32'h00000000;
+      w_mem12_new = 32'h00000000;
+      w_mem13_new = 32'h00000000;
+      w_mem14_new = 32'h00000000;
+      w_mem15_new = 32'h00000000;
+      w_mem_we    = 0;
+      
       w_0  = w_mem[0];
       w_1  = w_mem[1];
       w_9  = w_mem[9];
@@ -202,7 +232,46 @@ module sha256_w_mem(
            {10'b0000000000, w_14[31 : 10]};
       
       w_new = d1 + w_9 + d0 + w_0;
-    end // w_new_logic
+      
+      if (init)
+        begin
+          w_mem[00] = block[511 : 480];
+          w_mem[01] = block[479 : 448];
+          w_mem[02] = block[447 : 416];
+          w_mem[03] = block[415 : 384];
+          w_mem[04] = block[383 : 352];
+          w_mem[05] = block[351 : 320];
+          w_mem[06] = block[319 : 288];
+          w_mem[07] = block[287 : 256];
+          w_mem[08] = block[255 : 224];
+          w_mem[09] = block[223 : 192];
+          w_mem[10] = block[191 : 160];
+          w_mem[11] = block[159 : 128];
+          w_mem[12] = block[127 :  96];
+          w_mem[13] = block[95  :  64];
+          w_mem[14] = block[63  :  32];
+          w_mem[15] = block[31  :   0];
+        end
+      else if (w_ctr_reg > 15)
+        begin
+          w_mem[00] = w_mem[01];
+          w_mem[01] = w_mem[02];
+          w_mem[02] = w_mem[03];
+          w_mem[03] = w_mem[04];
+          w_mem[04] = w_mem[05];
+          w_mem[05] = w_mem[06];
+          w_mem[06] = w_mem[07];
+          w_mem[07] = w_mem[08];
+          w_mem[08] = w_mem[09];
+          w_mem[09] = w_mem[10];
+          w_mem[10] = w_mem[11];
+          w_mem[11] = w_mem[12];
+          w_mem[12] = w_mem[13];
+          w_mem[13] = w_mem[14];
+          w_mem[14] = w_mem[15];
+          w_mem[15] = w_new;
+        end
+    end // w_mem_update_logic
   
   
   //----------------------------------------------------------------
