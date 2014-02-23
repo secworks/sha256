@@ -234,41 +234,43 @@ module sha256_w_mem(
       
       if (init)
         begin
-          w_mem[00] = block[511 : 480];
-          w_mem[01] = block[479 : 448];
-          w_mem[02] = block[447 : 416];
-          w_mem[03] = block[415 : 384];
-          w_mem[04] = block[383 : 352];
-          w_mem[05] = block[351 : 320];
-          w_mem[06] = block[319 : 288];
-          w_mem[07] = block[287 : 256];
-          w_mem[08] = block[255 : 224];
-          w_mem[09] = block[223 : 192];
-          w_mem[10] = block[191 : 160];
-          w_mem[11] = block[159 : 128];
-          w_mem[12] = block[127 :  96];
-          w_mem[13] = block[95  :  64];
-          w_mem[14] = block[63  :  32];
-          w_mem[15] = block[31  :   0];
+          w_mem00_new = block[511 : 480];
+          w_mem01_new = block[479 : 448];
+          w_mem02_new = block[447 : 416];
+          w_mem03_new = block[415 : 384];
+          w_mem04_new = block[383 : 352];
+          w_mem05_new = block[351 : 320];
+          w_mem06_new = block[319 : 288];
+          w_mem07_new = block[287 : 256];
+          w_mem08_new = block[255 : 224];
+          w_mem09_new = block[223 : 192];
+          w_mem10_new = block[191 : 160];
+          w_mem11_new = block[159 : 128];
+          w_mem12_new = block[127 :  96];
+          w_mem13_new = block[95  :  64];
+          w_mem14_new = block[63  :  32];
+          w_mem15_new = block[31  :   0];
+          w_mem_we    = 1;
         end
       else if (w_ctr_reg > 15)
         begin
-          w_mem[00] = w_mem[01];
-          w_mem[01] = w_mem[02];
-          w_mem[02] = w_mem[03];
-          w_mem[03] = w_mem[04];
-          w_mem[04] = w_mem[05];
-          w_mem[05] = w_mem[06];
-          w_mem[06] = w_mem[07];
-          w_mem[07] = w_mem[08];
-          w_mem[08] = w_mem[09];
-          w_mem[09] = w_mem[10];
-          w_mem[10] = w_mem[11];
-          w_mem[11] = w_mem[12];
-          w_mem[12] = w_mem[13];
-          w_mem[13] = w_mem[14];
-          w_mem[14] = w_mem[15];
-          w_mem[15] = w_new;
+          w_mem00_new = w_mem[01];
+          w_mem01_new = w_mem[02];
+          w_mem02_new = w_mem[03];
+          w_mem03_new = w_mem[04];
+          w_mem04_new = w_mem[05];
+          w_mem05_new = w_mem[06];
+          w_mem06_new = w_mem[07];
+          w_mem07_new = w_mem[08];
+          w_mem08_new = w_mem[09];
+          w_mem09_new = w_mem[10];
+          w_mem10_new = w_mem[11];
+          w_mem11_new = w_mem[12];
+          w_mem12_new = w_mem[13];
+          w_mem13_new = w_mem[14];
+          w_mem14_new = w_mem[15];
+          w_mem15_new = w_new;
+          w_mem_we    = 1;
         end
     end // w_mem_update_logic
   
