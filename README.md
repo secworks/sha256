@@ -14,20 +14,44 @@ written in Python.
 ## Implementation ##
 Implementation results using the Altera Quartus 13 design tool.
 
-### Cyclone IV GX ###
-- 3765 LEs
+### Altera Cyclone FPGAs ###
+Implementation results using Altera Quartus-II 13.1.
+
+*** Cyclone IV E ***
+- EP4CE6F17C6
+- 3882 LEs
+- 1813 registers
+- 74 MHz
+- 66 cycles latency
+
+*** Cyclone IV GX ***
+- EP4CGX22CF19C6
+- 3773 LEs
 - 1813 registers
 - 76 MHz
 - 66 cycles latency
 
+*** Cyclone V ***
+- 5CGXFC7C7F23C8
+- 1469 ALMs
+- 1813 registers
+- 79 MHz
+- 66 cycles latency
 
-## Todo ##
+
+## TODO ##
 - Cleanup of the code.
 - Complete documentation.
 
 
 ## Status ##
-**(2014-02-21)***
+***(2013-02-23)***
+
+Cleanup, more results etc. Move all wmem update logic to a separate
+process for a cleaner code.
+
+
+***(2014-02-21)***
 
 Reworked the W-memory into a sliding window solution that only
 requires 16 32-bit words. The difference in size is quite
@@ -47,7 +71,7 @@ That is a 2.5x reduction in size, 1.8x less regs and slightly higher
 clock frequency.
 
 
-**(2014-02-19)**
+***(2014-02-19)***
 - Added name and version constants to the top level wrapper. Also added
   an api error signal that flags read or write attempts to addresses
   that does not support these operations. Writing to the version
@@ -58,7 +82,7 @@ clock frequency.
   Wisbone top.
   
 
-**(2014-02-04)**
+***(2014-02-04)***
 - Completed testbench for top level wrapper. The top level interface can
 control, check status of the SHA-256. Single as well as multiple block
 processing is being tested and works.
@@ -67,7 +91,7 @@ processing is being tested and works.
 been added.
 
 
-**(2014-01-25)**
+***(2014-01-25)***
 - Changed the W memory to an array based implementation. The resulting
 core is 10% larger and 2 MHz slower. But the code is much more compact
 and should be easy to optimize down to the previous results. The
@@ -75,8 +99,7 @@ original register based implementation is available in the file
 sha256_w_mem_regs.v
 
 
-
-**(2014-01-09)**
+***(2014-01-09)***
 - The core is functionally correct for single and multiple block messages.
 - The Python model is functionally correct.
 - Test implementation in FPGA has been done. The results in Cyclone IV GX:
@@ -87,7 +110,7 @@ sha256_w_mem_regs.v
 
 
 
-**(2014-01-07)**
+***(2014-01-07)***
 - The core and the wrapper is basically done but needs to be
 debugged. There are testbenches for the core, the wrapper as well as the
 message word scheduler memory.
