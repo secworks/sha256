@@ -10,6 +10,8 @@ there is no sharing of operations such as adders.
 The hardware implementation is complemented by a functional model
 written in Python.
 
+The core is basically done and ready for use. (I think.)
+
 
 ## Implementation ##
 Implementation results using the Altera Quartus 13 design tool.
