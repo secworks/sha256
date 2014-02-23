@@ -17,21 +17,21 @@ Implementation results using the Altera Quartus 13 design tool.
 ### Altera Cyclone FPGAs ###
 Implementation results using Altera Quartus-II 13.1.
 
-*** Cyclone IV E ***
+***Cyclone IV E***
 - EP4CE6F17C6
 - 3882 LEs
 - 1813 registers
 - 74 MHz
 - 66 cycles latency
 
-*** Cyclone IV GX ***
+***Cyclone IV GX***
 - EP4CGX22CF19C6
 - 3773 LEs
 - 1813 registers
 - 76 MHz
 - 66 cycles latency
 
-*** Cyclone V ***
+***Cyclone V***
 - 5CGXFC7C7F23C8
 - 1469 ALMs
 - 1813 registers
