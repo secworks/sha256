@@ -27,7 +27,7 @@ The actual core consists of the following files:
 - sha256_w_mem.v - W message block memort and expansion logic.
 - sha256_k_constants.v - K constants ROM memory.
 
-The top level entity is calles sha256_core.
+The top level entity is called sha256_core.
 
 Unless you want to provide your own interface you also need to select
 one top level wrapper. There are two wrappers provided:
@@ -43,7 +43,6 @@ processing the previous block.
 
 
 ## FPGA-results ##
-Implementation results using the Altera Quartus 13 design tool.
 
 ### Altera Cyclone FPGAs ###
 Implementation results using Altera Quartus-II 13.1.
