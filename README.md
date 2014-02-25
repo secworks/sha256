@@ -80,7 +80,7 @@ Implementation results using Altera Quartus-II 13.1.
 ## Status ##
 ***(2013-02-25)***
 
-Upated README with some more information about the design.
+Updated README with some more information about the design.
 
 
 ***(2013-02-23)***
