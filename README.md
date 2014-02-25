@@ -1,8 +1,8 @@
 # sha256 #
 Hardware implementation of the SHA-256 cryptographic hash function. The
 implementation is written in Verilog 2001 compliant code. The
-implementation includes a core and a wrapper that provides a 32-bit
-interface for simple integration.
+implementation includes a core and wrappers that provides interfaces for
+simple integration.
 
 This is a low area implementation that iterates over the rounds but
 there is no sharing of operations such as adders.
@@ -14,7 +14,7 @@ The core is basically done and ready for use. (I think.)
 
 
 ## Implementation details ##
-The sha256 is divided into the following sections.
+The sha256 design is divided into the following sections.
 - src/rtl - RTL source files
 - src/tb  - Testbenches for the RTL files
 - src/model/python - Functional model written in python
@@ -27,12 +27,14 @@ The actual core consists of the following files:
 - sha256_w_mem.v - W message block memort and expansion logic.
 - sha256_k_constants.v - K constants ROM memory.
 
-The top level entity is called sha256_core.
+The top level entity is called sha256_core. This entity has wide
+interfaces (512 bit block input, 256 bit digest). In order to make it
+usable you probably want to wrap the core with a bus interface.
 
-Unless you want to provide your own interface you also need to select
-one top level wrapper. There are two wrappers provided:
+Unless you want to provide your own interface you therefore also need to
+select one top level wrapper. There are two wrappers provided:
 - sha256.v - A wrapper with a 32-bit memory like interface.
-- wb_sha256.v - A wrapper that implement a [Wishbone](http://opencores.org/opencores,wishbone) interface.
+- wb_sha256.v - A wrapper that implements a [Wishbone](http://opencores.org/opencores,wishbone) interface.
 
 ***Do not include both wrappers in the same project.***
 
