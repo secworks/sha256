@@ -13,7 +13,36 @@ written in Python.
 The core is basically done and ready for use. (I think.)
 
 
-## Implementation ##
+## Implementation details ##
+The sha256 is divided into the following sections.
+- src/rtl - RTL source files
+- src/tb  - Testbenches for the RTL files
+- src/model/python - Functional model written in python
+- doc - documentation (currently not done.)
+- toolruns - Where tools are supposed to be run. Includes a Makefile for
+building and simulating the design using [Icarus Verilog](http://iverilog.icarus.com/)
+
+The actual core consists of the following files:
+- sha256_core.v - The core itself with wide interfaces.
+- sha256_w_mem.v - W message block memort and expansion logic.
+- sha256_k_constants.v - K constants ROM memory.
+
+The top level entity is calles sha256_core.
+
+Unless you want to provide your own interface you also need to select
+one top level wrapper. There are two wrappers provided:
+- sha256.v - A wrapper with a 32-bit memory like interface.
+- wb_sha256.v - A wrapper that implement a [Wishbone](http://opencores.org/opencores,wishbone) interface.
+
+***Do not include both wrappers in the same project.***
+
+The core (sha256_core) will sample all data inputs when given the init
+or next signal. the wrappers provided contains additional data
+registers. This allows you to load a new block while the core is
+processing the previous block.
+
+
+## FPGA-results ##
 Implementation results using the Altera Quartus 13 design tool.
 
 ### Altera Cyclone FPGAs ###
@@ -44,9 +73,15 @@ Implementation results using Altera Quartus-II 13.1.
 ## TODO ##
 - Cleanup of the code.
 - Complete documentation.
+- Debug of the Wishbone interface.
 
 
 ## Status ##
+***(2013-02-25)***
+
+Upated README with some more information about the design.
+
+
 ***(2013-02-23)***
 
 Cleanup, more results etc. Move all wmem update logic to a separate
