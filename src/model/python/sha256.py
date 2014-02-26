@@ -69,7 +69,7 @@ class SHA256():
         self.g = 0
         self.h = 0
         self.w = 0
-        self.W = [0] * 64
+        self.W = [0] * 16
         self.k = 0
         self.K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
                   0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
