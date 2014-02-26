@@ -145,7 +145,7 @@ class SHA256():
 
     def _sha256_round(self, round):
         self.k = self.K[round]
-        self.w = self.W[round]
+        self.w = self._next_w(round)
         self.t1 = self._T1(self.e, self.f, self.g, self.h, self.k, self.w)
         self.t2 = self._T2(self.a, self.b, self.c)
         self.h = self.g
@@ -158,20 +158,24 @@ class SHA256():
         self.a = (self.t1 + self.t2) & 0xffffffff
 
 
+    def _next_w(self, round):
+        if (round < 16):
+            return self.W[round]
+
+        else:
+            tmp_w = (self._delta1(self.W[14]) +
+                     self.W[9] + 
+                     self._delta0(self.W[1]) +
+                     self.W[0]) & 0xffffffff
+            for i in range(15):
+                self.W[i] = self.W[(i+1)]
+            self.W[15] = tmp_w
+            return tmp_w
+
+
     def _W_schedule(self, block):
-        for i in range(64):
-            if (i < 16):
-                self.W[i] = block[i]
-            else:
-                self.W[i] = (self._delta1(self.W[(i - 2)]) +
-                             self.W[(i - 7)] + 
-                             self._delta0(self.W[(i - 15)]) +
-                             self.W[(i - 16)]) & 0xffffffff
-        if (self.verbose):
-            print("W after schedule:")
-            for i in range(64):
-                print("W[%02d] = 0x%08x" % (i, self.W[i]))
-            print("")
+        for i in range(16):
+            self.W[i] = block[i]
 
 
     def _Ch(self, x, y, z):
