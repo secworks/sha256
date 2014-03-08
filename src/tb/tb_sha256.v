@@ -104,10 +104,10 @@ module tb_sha256();
   reg           tb_clk;
   reg           tb_reset_n;
   reg           tb_cs;
-  reg           tb_write_read;
+  reg           tb_we;
   reg [7 : 0]   tb_address;
-  reg [31 : 0]  tb_data_in;
-  wire [31 : 0] tb_data_out;
+  reg [31 : 0]  tb_write_data;
+  wire [31 : 0] tb_read_data;
   wire          tb_error;
 
   reg [31 : 0]  read_data;
@@ -122,12 +122,12 @@ module tb_sha256();
              .reset_n(tb_reset_n),
              
              .cs(tb_cs),
-             .write_read(tb_write_read),
+             .we(tb_we),
              
              
              .address(tb_address),
-             .data_in(tb_data_in),
-             .data_out(tb_data_out),
+             .write_data(tb_write_data),
+             .read_data(tb_read_data),
              .error(tb_error)
             );
   
@@ -166,12 +166,12 @@ module tb_sha256();
       $display("State of DUT");
       $display("------------");
       $display("Inputs and outputs:");
-      $display("cs = 0x%01x, write_read = 0x%01x", 
-               dut.cs, dut.write_read);
+      $display("cs = 0x%01x, we = 0x%01x", 
+               dut.cs, dut.we);
       $display("address = 0x%02x", dut.address);
-      $display("data_in = 0x%08x, data_out = 0x%08x", 
-               dut.data_in, dut.data_out);
-      $display("tmp_data_out = 0x%08x", dut.tmp_data_out);
+      $display("write_data = 0x%08x, read_data = 0x%08x", 
+               dut.write_data, dut.read_data);
+      $display("tmp_read_data = 0x%08x", dut.tmp_read_data);
       $display("");
 
       $display("Control and status:");
@@ -230,9 +230,9 @@ module tb_sha256();
       tb_clk = 0;
       tb_reset_n = 0;
       tb_cs = 0;
-      tb_write_read = 0;
+      tb_we = 0;
       tb_address = 6'h00;
-      tb_data_in = 32'h00000000;
+      tb_write_data = 32'h00000000;
     end
   endtask // init_dut
 
@@ -294,12 +294,12 @@ module tb_sha256();
         end
          
       tb_address = address;
-      tb_data_in = word;
+      tb_write_data = word;
       tb_cs = 1;
-      tb_write_read = 1;
+      tb_we = 1;
       #(2 * CLK_HALF_PERIOD);
       tb_cs = 0;
-      tb_write_read = 0;
+      tb_we = 0;
     end
   endtask // write_word
 
@@ -342,9 +342,9 @@ module tb_sha256();
     begin
       tb_address = address;
       tb_cs = 1;
-      tb_write_read = 0;
+      tb_we = 0;
       #(2 * CLK_HALF_PERIOD);
-      read_data = tb_data_out;
+      read_data = tb_read_data;
       tb_cs = 0;
 
       if (DEBUG)
