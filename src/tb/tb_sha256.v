@@ -417,8 +417,8 @@ module tb_sha256();
   //
   // Perform test of a single block digest.
   //----------------------------------------------------------------
-  task single_block_test([511 : 0] block,
-                         [255 : 0] expected);
+  task single_block_test(input [511 : 0] block,
+                         input [255 : 0] expected);
     begin
       $display("*** TC%01d - Single block test started.", tc_ctr); 
      
@@ -452,10 +452,10 @@ module tb_sha256();
   // Perform test of a double block digest. Note that we check
   // the digests for both the first and final block.
   //----------------------------------------------------------------
-  task double_block_test([511 : 0] block0,
-                         [255 : 0] expected0,
-                         [511 : 0] block1,
-                         [255 : 0] expected1
+  task double_block_test(input [511 : 0] block0,
+                         input [255 : 0] expected0,
+                         input [511 : 0] block1,
+                         input [255 : 0] expected1
                         );
     begin
       $display("*** TC%01d - Double block test started.", tc_ctr); 
