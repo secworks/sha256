@@ -424,7 +424,7 @@ module tb_sha256();
      
       write_block(block);
       write_word(ADDR_CTRL, CTRL_INIT_VALUE);
-      write_word(ADDR_CTRL, 8'h00);
+      #(2 * CLK_HALF_PERIOD);
       wait_ready();
       read_digest();
 
@@ -463,7 +463,7 @@ module tb_sha256();
       // First block
       write_block(block0);
       write_word(ADDR_CTRL, CTRL_INIT_VALUE);
-      write_word(ADDR_CTRL, 8'h00);
+      #(2 * CLK_HALF_PERIOD);
       wait_ready();
       read_digest();
 
@@ -482,7 +482,7 @@ module tb_sha256();
       // Final block
       write_block(block1);
       write_word(ADDR_CTRL, CTRL_NEXT_VALUE);
-      write_word(ADDR_CTRL, 8'h00);
+      #(2 * CLK_HALF_PERIOD);
       wait_ready();
       read_digest();
       
