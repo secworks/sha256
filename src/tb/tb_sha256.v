@@ -53,6 +53,7 @@ module tb_sha256();
   parameter DEBUG = 0;
 
   parameter CLK_HALF_PERIOD = 2;
+  parameter CLK_PERIOD = 2 * CLK_HALF_PERIOD;
 
   // The address map.
   parameter ADDR_NAME0       = 8'h00;
@@ -297,7 +298,7 @@ module tb_sha256();
       tb_write_data = word;
       tb_cs = 1;
       tb_we = 1;
-      #(2 * CLK_HALF_PERIOD);
+      #(CLK_PERIOD);
       tb_cs = 0;
       tb_we = 0;
     end
@@ -343,7 +344,7 @@ module tb_sha256();
       tb_address = address;
       tb_cs = 1;
       tb_we = 0;
-      #(2 * CLK_HALF_PERIOD);
+      #(CLK_PERIOD);
       read_data = tb_read_data;
       tb_cs = 0;
 
@@ -424,7 +425,7 @@ module tb_sha256();
      
       write_block(block);
       write_word(ADDR_CTRL, CTRL_INIT_VALUE);
-      #(2 * CLK_HALF_PERIOD);
+      #(CLK_PERIOD);
       wait_ready();
       read_digest();
 
@@ -463,7 +464,7 @@ module tb_sha256();
       // First block
       write_block(block0);
       write_word(ADDR_CTRL, CTRL_INIT_VALUE);
-      #(2 * CLK_HALF_PERIOD);
+      #(CLK_PERIOD);
       wait_ready();
       read_digest();
 
@@ -482,7 +483,7 @@ module tb_sha256();
       // Final block
       write_block(block1);
       write_word(ADDR_CTRL, CTRL_NEXT_VALUE);
-      #(2 * CLK_HALF_PERIOD);
+      #(CLK_PERIOD);
       wait_ready();
       read_digest();
       

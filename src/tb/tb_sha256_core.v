@@ -53,6 +53,7 @@ module tb_sha256_core();
   parameter DEBUG = 0;
 
   parameter CLK_HALF_PERIOD = 2;
+  parameter CLK_PERIOD = 2 * CLK_HALF_PERIOD;
   
   
   //----------------------------------------------------------------
@@ -244,7 +245,7 @@ module tb_sha256_core();
     begin
       while (!tb_ready)
         begin
-          #(2 * CLK_HALF_PERIOD);
+          #(CLK_PERIOD);
         end
     end
   endtask // wait_ready
@@ -264,7 +265,7 @@ module tb_sha256_core();
 
      tb_block = block;
      tb_init = 1;
-     #(2 * CLK_HALF_PERIOD);
+     #(CLK_PERIOD);
      wait_ready();
 
       
@@ -308,7 +309,7 @@ module tb_sha256_core();
      $display("*** TC %0d first block started.", tc_number);
      tb_block = block1;
      tb_init = 1;
-     #(2 * CLK_HALF_PERIOD);
+     #(CLK_PERIOD);
      wait_ready();
      db_digest1 = tb_digest;
      $display("*** TC %0d first block done.", tc_number);
@@ -316,7 +317,7 @@ module tb_sha256_core();
      $display("*** TC %0d second block started.", tc_number);
      tb_block = block2;
      tb_next = 1;
-     #(2 * CLK_HALF_PERIOD);
+     #(CLK_PERIOD);
      wait_ready();
      $display("*** TC %0d second block done.", tc_number);
       
