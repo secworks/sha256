@@ -5,7 +5,8 @@
 // The table K with constants in the SHA-256 hash function.
 //
 //
-// Copyright (c) 2013 Secworks Sweden AB
+// Author: Joachim Strombergson
+// Copyright (c) 2013, Secworks Sweden AB
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or 

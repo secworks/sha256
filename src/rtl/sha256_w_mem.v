@@ -6,7 +6,8 @@
 // window to generate the 64 words.
 //
 //
-// Copyright (c) 2013 Secworks Sweden AB
+// Author: Joachim Strombergson
+// Copyright (c) 2013, Secworks Sweden AB
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or 

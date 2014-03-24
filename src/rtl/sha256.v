@@ -6,7 +6,9 @@
 // a simple memory like interface with 32 bit data access.
 //
 //
-// Copyright (c) 2013  Secworks Sweden AB
+// Author: Joachim Strombergson
+// Copyright (c) 2013, 201, Secworks Sweden AB
+// All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or 
 // without modification, are permitted provided that the following 
