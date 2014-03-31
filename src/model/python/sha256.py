@@ -241,9 +241,10 @@ def main():
     print("---------------------------------")
     print
 
-    my_sha256 = SHA256(verbose=1);
+    my_sha256 = SHA256(verbose=0);
 
     # TC1: NIST testcase with message "abc"
+    print("TC1: Single block message test specified by NIST.")
     TC1_block = [0x61626380, 0x00000000, 0x00000000, 0x00000000, 
                  0x00000000, 0x00000000, 0x00000000, 0x00000000,
                  0x00000000, 0x00000000, 0x00000000, 0x00000000,
@@ -256,7 +257,55 @@ def main():
     my_sha256.next(TC1_block)
     my_digest = my_sha256.get_digest()
     compare_digests(my_digest, TC1_expected)
+    print("")
 
+
+    # TC2: NIST testcase with double block message."
+    print("TC2: Double block message test specified by NIST.")
+    TC2_1_block = [0x61626364, 0x62636465, 0x63646566, 0x64656667,
+                   0x65666768, 0x66676869, 0x6768696A, 0x68696A6B,
+                   0x696A6B6C, 0x6A6B6C6D, 0x6B6C6D6E, 0x6C6D6E6F,
+                   0x6D6E6F70, 0x6E6F7071, 0x80000000, 0x00000000]
+
+
+    TC2_2_block = [0x00000000, 0x00000000, 0x00000000, 0x00000000,
+                   0x00000000, 0x00000000, 0x00000000, 0x00000000,
+                   0x00000000, 0x00000000, 0x00000000, 0x00000000,
+                   0x00000000, 0x00000000, 0x00000000, 0x000001C0]
+
+    TC2_1_expected = [0x85E655D6, 0x417A1795, 0x3363376A, 0x624CDE5C,
+                      0x76E09589, 0xCAC5F811, 0xCC4B32C1, 0xF20E533A]
+
+    TC2_2_expected = [0x248D6A61, 0xD20638B8, 0xE5C02693, 0x0C3E6039,
+                      0xA33CE459, 0x64FF2167, 0xF6ECEDD4, 0x19DB06C1]
+
+    my_sha256.init()
+    my_sha256.next(TC2_1_block)
+    my_digest = my_sha256.get_digest()
+    compare_digests(my_digest, TC2_1_expected)
+
+    my_sha256.next(TC2_2_block)
+    my_digest = my_sha256.get_digest()
+    compare_digests(my_digest, TC2_2_expected)
+    print("")
+
+
+    # TC3: Huge message with n blocks
+    n = 10000
+    print("TC3: Huge message with %d blocks test case." % n)
+    TC3_block = [0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
+                 0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
+                 0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
+                 0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f]
+
+    TC3_expected = [0xf407ff0d, 0xb9dce2f6, 0x9b9759a9, 0xd3cdc805,
+                    0xf250086d, 0x73bbefd5, 0xa972e0f7, 0x61a9c13e]
+
+    my_sha256.init()
+    for i in range(n):
+        my_sha256.next(TC3_block)
+    my_digest = my_sha256.get_digest()
+    compare_digests(my_digest, TC3_expected)
     
 
 #-------------------------------------------------------------------
