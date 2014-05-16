@@ -243,9 +243,9 @@ def compare_digests(digest, expected):
     if (digest != expected):
         print("Error:")
         print("Got:")
-        print(digest)
+        print_digest(digest)
         print("Expected:")
-        print(expected)
+        print_digest(expected)
     else:
         print("Test case ok.")
         
@@ -310,15 +310,15 @@ def main():
 
 
     # TC3: Huge message with n blocks
-    n = 10
+    n = 100
     print("TC3: Huge message with %d blocks test case." % n)
     TC3_block = [0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
                  0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
                  0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
                  0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f]
 
-    TC3_expected = [0xf407ff0d, 0xb9dce2f6, 0x9b9759a9, 0xd3cdc805,
-                    0xf250086d, 0x73bbefd5, 0xa972e0f7, 0x61a9c13e]
+    TC3_expected = [0x881e9d79, 0xba8b92b1, 0xbb72c103, 0x617e5580,
+                    0x31fb69ce, 0xd954e335, 0xb5e702c3, 0xc04b1379]
 
     my_sha256.init()
     for i in range(n):
