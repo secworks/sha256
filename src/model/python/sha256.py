@@ -310,15 +310,15 @@ def main():
 
 
     # TC3: Huge message with n blocks
-    n = 100
+    n = 1000
     print("TC3: Huge message with %d blocks test case." % n)
     TC3_block = [0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
                  0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
                  0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
                  0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f]
 
-    TC3_expected = [0x881e9d79, 0xba8b92b1, 0xbb72c103, 0x617e5580,
-                    0x31fb69ce, 0xd954e335, 0xb5e702c3, 0xc04b1379]
+    TC3_expected = [0x7638f3bc, 0x500dd1a6, 0x586dd4d0, 0x1a1551af,
+                    0xd821d235, 0x2f919e28, 0xd5842fab, 0x03a40f2a]
 
     my_sha256.init()
     for i in range(n):
