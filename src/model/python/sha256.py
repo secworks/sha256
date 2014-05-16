@@ -220,6 +220,12 @@ class SHA256():
         return (n >> r)
 
 
+#-------------------------------------------------------------------
+# compare_digests()
+#
+# Helper function that checks if the given digest matches the
+# expected digest.
+#-------------------------------------------------------------------
 def compare_digests(digest, expected):
     if (digest != expected):
         print("Error:")
@@ -291,7 +297,7 @@ def main():
 
 
     # TC3: Huge message with n blocks
-    n = 10000
+    n = 10
     print("TC3: Huge message with %d blocks test case." % n)
     TC3_block = [0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
                  0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
@@ -304,7 +310,7 @@ def main():
     my_sha256.init()
     for i in range(n):
         my_sha256.next(TC3_block)
-    my_digest = my_sha256.get_digest()
+        my_digest = my_sha256.get_digest()
     compare_digests(my_digest, TC3_expected)
     
 
