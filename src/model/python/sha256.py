@@ -222,10 +222,22 @@ class SHA256():
 
 
 #-------------------------------------------------------------------
+# print_digest()
+#
+# Print the given digest.
+#-------------------------------------------------------------------
+def print_digest(digest):
+    print("0x%08x, 0x%08x, 0x%08x, 0x%08x" %\
+          (digest[0], digest[1], digest[2], digest[3]))
+    print("0x%08x, 0x%08x, 0x%08x, 0x%08x" %\
+          (digest[4], digest[5], digest[6], digest[7]))
+    print("")
+
+
+#-------------------------------------------------------------------
 # compare_digests()
 #
-# Helper function that checks if the given digest matches the
-# expected digest.
+# Check that the given digest matches the expected digest.
 #-------------------------------------------------------------------
 def compare_digests(digest, expected):
     if (digest != expected):
@@ -312,6 +324,9 @@ def main():
     for i in range(n):
         my_sha256.next(TC3_block)
         my_digest = my_sha256.get_digest()
+        if (VERBOSE):
+            print("Digest for block %d:" % i)
+            print_digest(my_digest)
     compare_digests(my_digest, TC3_expected)
     
 
