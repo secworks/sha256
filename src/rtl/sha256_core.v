@@ -184,10 +184,10 @@ module sha256_core(
   //----------------------------------------------------------------
   // reg_update
   // Update functionality for all registers in the core.
-  // All registers are positive edge triggered with synchronous
+  // All registers are positive edge triggered with asynchronous
   // active low reset. All registers have write enable.
   //----------------------------------------------------------------
-  always @ (posedge clk)
+  always @ (posedge clk or negedge reset_n)
     begin : reg_update
       if (!reset_n)
         begin
