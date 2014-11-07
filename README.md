@@ -49,35 +49,50 @@ processing the previous block.
 ### Altera Cyclone FPGAs ###
 Implementation results using Altera Quartus-II 13.1.
 
-***Cyclone IV E***
+*** Cyclone IV E ***
 - EP4CE6F17C6
 - 3882 LEs
 - 1813 registers
 - 74 MHz
 - 66 cycles latency
 
-***Cyclone IV GX***
+*** Cyclone IV GX ***
 - EP4CGX22CF19C6
 - 3773 LEs
 - 1813 registers
 - 76 MHz
 - 66 cycles latency
 
-***Cyclone V***
+*** Cyclone V ***
 - 5CGXFC7C7F23C8
 - 1469 ALMs
 - 1813 registers
 - 79 MHz
 - 66 cycles latency
 
+### Xilinx FPGAs ###
+Implementation results using ISE 14.7.
+
+*** Spartan-6 ***
+- xc6slx45-3csg324
+- 2012 LUTs
+- 688 Slices
+- 1929 regs
+- 70 MHz
+- 66 cycles latency
+
 
 ## TODO ##
-- Cleanup of the code.
 - Complete documentation.
-- Debug of the Wishbone interface.
 
 
 ## Status ##
+
+***(2013-02-25)***
+
+Added results for Spartan-6.
+
+
 ***(2013-02-25)***
 
 Updated README with some more information about the design.
@@ -118,7 +133,7 @@ clock frequency.
 - There is also an experimental Wishbone wrapper (wb_sha256.v) as an
   alternative to the standard top. There is also a testbench for the
   Wisbone top.
-  
+
 
 ***(2014-02-04)***
 - Completed testbench for top level wrapper. The top level interface can
@@ -154,6 +169,3 @@ debugged. There are testbenches for the core, the wrapper as well as the
 message word scheduler memory.
 
 - The Python model is almost verified.
-
-
-
