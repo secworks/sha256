@@ -129,7 +129,7 @@ module tb_sha256_w_mem();
   //
   // Dump the current state of all W registers.
   //----------------------------------------------------------------
-  task dump_w_state();
+  task dump_w_state;
     begin
       $display("W state:");
       
@@ -154,7 +154,7 @@ module tb_sha256_w_mem();
   //----------------------------------------------------------------
   // reset_dut
   //----------------------------------------------------------------
-  task reset_dut();
+  task reset_dut;
     begin
       $display("*** Toggle reset.");
       tb_reset_n = 0;
@@ -167,7 +167,7 @@ module tb_sha256_w_mem();
   //----------------------------------------------------------------
   // init_sim
   //----------------------------------------------------------------
-  task init_sim();
+  task init_sim;
     begin
       $display("*** Simulation init.");
       tb_clk = 0;
@@ -186,7 +186,7 @@ module tb_sha256_w_mem();
   // Test that W scheduling happens and work correctly.
   // Note: Currently not a self checking test case.
   //----------------------------------------------------------------
-  task test_w_schedule();
+  task test_w_schedule;
     begin
       $display("*** Test of W schedule processing. --");
       tb_block = 512'h61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018;
