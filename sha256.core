@@ -1,0 +1,39 @@
+CAPI=1
+
+[main]
+description = sha256 core
+
+simulators = icarus
+
+[verilog]
+src_files =
+ src/rtl/sha256_core.v
+ src/rtl/sha256_k_constants.v
+ src/rtl/sha256_w_mem.v
+ src/rtl/sha256_stream.v
+ src/rtl/sha256.v
+tb_private_src_files =
+ src/tb/tb_sha256_core.v
+ src/tb/tb_sha256_stream.v
+ src/tb/tb_sha256.v
+
+[simulator]
+toplevel = tb_sha256
+
+[icarus]
+depend = stream_utils-1.1 vlog_tb_utils-1.0
+
+[isim]
+depend = stream_utils-1.1 vlog_tb_utils-1.0
+
+[modelsim]
+depend = stream_utils-1.1 vlog_tb_utils-1.0
+
+[xsim]
+depend = stream_utils-1.1 vlog_tb_utils-1.0
+
+[parameter file]
+datatype    = file
+description = Input file to digest
+paramtype   = plusarg
+scope       = private
