@@ -120,7 +120,7 @@ module tb_sha256_stream();
 
       c = $fread(word, f);
       while (c) begin
-	 writer.write_word(word, 1'b0);
+	 writer.write_word(word);
 	 c = $fread(word, f);
       end
       filesize = $ftell(f);
