@@ -10,7 +10,8 @@ there is no sharing of operations such as adders.
 The hardware implementation is complemented by a functional model
 written in Python.
 
-The core is basically done and ready for use. (I think.)
+The core supports and has been included in the
+[FuseSoC](https://github.com/olofk/fusesoc) package manager.
 
 
 ## Implementation details ##
@@ -82,11 +83,28 @@ Implementation results using ISE 14.7.
 - 66 cycles latency
 
 
+Implementation results using ISE 14.7.
+
+*** Zynq-7030 ***
+- xc7z030fbg676-1
+- 2308 LUTs
+- 796 Slices
+- 2116 regs
+- 116 MHz
+- 66 cycles latency
+
+
 ## TODO ##
 - Complete documentation.
 
 
 ## Status ##
+
+***(2016-03-04)***
+Merged the stream interface and FuseSoC support kindly contributed by
+[olofk](https://github.com/olofk). Also added implementation results for
+Xilinx Zynq devices.
+
 
 ***(2013-02-25)***
 
