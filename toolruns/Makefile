@@ -46,6 +46,7 @@ TOP_SRC=../src/rtl/sha256.v $(CORE_SRC)
 TOP_TB_SRC=../src/tb/tb_sha256.v
 
 CC=iverilog
+LINT=verilator
 
 
 all: top core wmem
@@ -78,6 +79,11 @@ sim-core: core.sim
 sim-wmem: wmem.sim
 	./wmem.sim
 
+lint:
+	verilator --lint-only ../src/rtl/sha256.v ../src/rtl/sha256_core.v ../src/rtl/sha256_k_constants.v ../src/rtl/sha256_w_mem.v
+	verilator --lint-only ../src/rtl/sha256_stream.v ../src/rtl/sha256_core.v ../src/rtl/sha256_k_constants.v ../src/rtl/sha256_w_mem.v
+
+
 
 debug:
 	@echo "No debug available."
@@ -101,6 +107,7 @@ help:
 	@echo "sim-top:  Run top level simulation."
 	@echo "sim-core: Run core level simulation."
 	@echo "sim-wmem: Run wmem level simulation."
+	@echo "lint:     Run the linter on both the block based and the stream based top levels."
 	@echo "debug:    Print the internal varibles."
 	@echo "clean:    Delete all built files."
 
