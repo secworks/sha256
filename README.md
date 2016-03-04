@@ -101,6 +101,7 @@ Implementation results using Vivado 2014.4.
 ## Status ##
 
 ***(2016-03-04)***
+
 Merged the stream interface and FuseSoC support kindly contributed by
 [olofk](https://github.com/olofk). Also added implementation results for
 Xilinx Zynq devices.
