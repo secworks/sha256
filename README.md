@@ -83,7 +83,7 @@ Implementation results using ISE 14.7.
 - 66 cycles latency
 
 
-Implementation results using ISE 14.7.
+Implementation results using Vivado 2014.4.
 
 *** Zynq-7030 ***
 - xc7z030fbg676-1
