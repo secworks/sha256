@@ -13,6 +13,9 @@ written in Python.
 The core supports and has been included in the
 [FuseSoC](https://github.com/olofk/fusesoc) package manager.
 
+The core has been used in more than one application and is considered
+ready for use and stable.
+
 
 ## Implementation details ##
 The sha256 design is divided into the following sections.
