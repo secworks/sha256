@@ -110,17 +110,17 @@ Merged the stream interface and FuseSoC support kindly contributed by
 Xilinx Zynq devices.
 
 
-***(2013-02-25)***
+***(2014-02-25)***
 
 Added results for Spartan-6.
 
 
-***(2013-02-25)***
+***(2014-02-25)***
 
 Updated README with some more information about the design.
 
 
-***(2013-02-23)***
+***(2014-02-23)***
 
 Cleanup, more results etc. Move all wmem update logic to a separate
 process for a cleaner code.
