@@ -104,13 +104,9 @@ module sha256(
   //----------------------------------------------------------------
   reg init_reg;
   reg init_new;
-  reg init_we;
-  reg init_set;
 
   reg next_reg;
   reg next_new;
-  reg next_we;
-  reg next_set;
 
   reg ready_reg;
 
@@ -223,12 +219,8 @@ module sha256(
         begin
           ready_reg        <= core_ready;
           digest_valid_reg <= core_digest_valid;
-
-          if (init_we)
-            init_reg <= init_new;
-
-          if (next_we)
-            next_reg <= next_new;
+          init_reg         <= init_new;
+          next_reg         <= next_new;
 
           if (core_digest_valid)
             digest_reg <= core_digest;
@@ -285,42 +277,6 @@ module sha256(
 
 
   //----------------------------------------------------------------
-  // flag_reset
-  //
-  // Logic to reset init and next flags that has been set.
-  //----------------------------------------------------------------
-  always @*
-    begin : flag_reset
-      init_new = 0;
-      init_we  = 0;
-      next_new = 0;
-      next_we  = 0;
-
-      if (init_set)
-        begin
-          init_new = 1;
-          init_we  = 1;
-        end
-      else if (init_reg)
-        begin
-          init_new = 0;
-          init_we  = 1;
-        end
-
-      if (next_set)
-        begin
-          next_new = 1;
-          next_we  = 1;
-        end
-      else if (next_reg)
-        begin
-          next_new = 0;
-          next_we  = 1;
-        end
-    end
-
-
-  //----------------------------------------------------------------
   // api_logic
   //
   // Implementation of the api logic. If cs is enabled will either
@@ -328,8 +284,8 @@ module sha256(
   //----------------------------------------------------------------
   always @*
     begin : api_logic
-      init_set      = 0;
-      next_set      = 0;
+      init_new      = 0;
+      next_new      = 0;
       block0_we     = 0;
       block1_we     = 0;
       block2_we     = 0;
@@ -357,8 +313,8 @@ module sha256(
                 // Write operations.
                 ADDR_CTRL:
                   begin
-                    init_set = write_data[CTRL_INIT_BIT];
-                    next_set = write_data[CTRL_NEXT_BIT];
+                    init_new = write_data[CTRL_INIT_BIT];
+                    next_new = write_data[CTRL_NEXT_BIT];
                   end
 
                 ADDR_BLOCK0:
