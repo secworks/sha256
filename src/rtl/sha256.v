@@ -318,9 +318,7 @@ module sha256(
                   end
 
                 ADDR_BLOCK0:
-                  begin
-                    block0_we = 1;
-                   end
+                  block0_we = 1;
 
                 ADDR_BLOCK1:
                   begin
