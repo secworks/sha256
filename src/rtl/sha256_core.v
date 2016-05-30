@@ -43,6 +43,7 @@ module sha256_core(
 
                    input wire            init,
                    input wire            next,
+                   input wire            mode,
 
                    input wire [511 : 0]  block,
 
@@ -56,14 +57,23 @@ module sha256_core(
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
-  parameter H0_0 = 32'h6a09e667;
-  parameter H0_1 = 32'hbb67ae85;
-  parameter H0_2 = 32'h3c6ef372;
-  parameter H0_3 = 32'ha54ff53a;
-  parameter H0_4 = 32'h510e527f;
-  parameter H0_5 = 32'h9b05688c;
-  parameter H0_6 = 32'h1f83d9ab;
-  parameter H0_7 = 32'h5be0cd19;
+  parameter SHA224_H0_0 = 32'hc1059ed8;
+  parameter SHA224_H0_1 = 32'h367cd507;
+  parameter SHA224_H0_2 = 32'h3070dd17;
+  parameter SHA224_H0_3 = 32'hf70e5939;
+  parameter SHA224_H0_4 = 32'hffc00b31;
+  parameter SHA224_H0_5 = 32'h68581511;
+  parameter SHA224_H0_6 = 32'h64f98fa7;
+  parameter SHA224_H0_7 = 32'hbefa4fa4;
+
+  parameter SHA256_H0_0 = 32'h6a09e667;
+  parameter SHA256_H0_1 = 32'hbb67ae85;
+  parameter SHA256_H0_2 = 32'h3c6ef372;
+  parameter SHA256_H0_3 = 32'ha54ff53a;
+  parameter SHA256_H0_4 = 32'h510e527f;
+  parameter SHA256_H0_5 = 32'h9b05688c;
+  parameter SHA256_H0_6 = 32'h1f83d9ab;
+  parameter SHA256_H0_7 = 32'h5be0cd19;
 
   parameter SHA256_ROUNDS = 63;
 
@@ -213,7 +223,6 @@ module sha256_core(
         end
       else
         begin
-
           if (a_h_we)
             begin
               a_reg <= a_new;
@@ -275,16 +284,30 @@ module sha256_core(
 
       if (digest_init)
         begin
-          H0_new = H0_0;
-          H1_new = H0_1;
-          H2_new = H0_2;
-          H3_new = H0_3;
-          H4_new = H0_4;
-          H5_new = H0_5;
-          H6_new = H0_6;
-          H7_new = H0_7;
-          H_we = 1;
-        end
+          if (mode)
+            begin
+              H0_new = SHA256_H0_0;
+              H1_new = SHA256_H0_1;
+              H2_new = SHA256_H0_2;
+              H3_new = SHA256_H0_3;
+              H4_new = SHA256_H0_4;
+              H5_new = SHA256_H0_5;
+              H6_new = SHA256_H0_6;
+              H7_new = SHA256_H0_7;
+              H_we = 1;
+            end
+          else
+            begin
+              H0_new = SHA224_H0_0;
+              H1_new = SHA224_H0_1;
+              H2_new = SHA224_H0_2;
+              H3_new = SHA224_H0_3;
+              H4_new = SHA224_H0_4;
+              H5_new = SHA224_H0_5;
+              H6_new = SHA224_H0_6;
+              H7_new = SHA224_H0_7;
+              H_we = 1;
+            end
 
       if (digest_update)
         begin
