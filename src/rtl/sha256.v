@@ -63,7 +63,6 @@ module sha256(
   parameter ADDR_CTRL        = 8'h08;
   parameter CTRL_INIT_BIT    = 0;
   parameter CTRL_NEXT_BIT    = 1;
-  parameter CTRL_MODE_BIT    = 2;
 
   parameter ADDR_STATUS      = 8'h09;
   parameter STATUS_READY_BIT = 0;
@@ -99,9 +98,6 @@ module sha256(
   parameter CORE_NAME1     = 32'h2d323536; // "-256"
   parameter CORE_VERSION   = 32'h302e3830; // "0.80"
 
-  parameter MODE_224       = 1'h0;
-  parameter MODE_256       = 1'h1;
-
 
   //----------------------------------------------------------------
   // Registers including update variables and write enable.
@@ -111,10 +107,6 @@ module sha256(
 
   reg next_reg;
   reg next_new;
-
-  reg mode_reg;
-  reg mode_new;
-  reg mode_we;
 
   reg ready_reg;
 
@@ -218,7 +210,6 @@ module sha256(
         begin
           init_reg         <= 0;
           next_reg         <= 0;
-          mode_reg         <= MODE_256;
           ready_reg        <= 0;
           digest_reg       <= 256'h0;
           digest_valid_reg <= 0;
@@ -230,9 +221,6 @@ module sha256(
           digest_valid_reg <= core_digest_valid;
           init_reg         <= init_new;
           next_reg         <= next_new;
-
-          if (mode_we)
-            mode_reg <= mode_new;
 
           if (core_digest_valid)
             digest_reg <= core_digest;
@@ -298,8 +286,6 @@ module sha256(
     begin : api_logic
       init_new      = 0;
       next_new      = 0;
-      mode_new      = 0;
-      mode_we       = 0;
       block0_we     = 0;
       block1_we     = 0;
       block2_we     = 0;
@@ -329,8 +315,6 @@ module sha256(
                   begin
                     init_new = write_data[CTRL_INIT_BIT];
                     next_new = write_data[CTRL_NEXT_BIT];
-                    mode_new = write_data[CTRL_MODE_BIT];
-                    mode_we  = 1;
                   end
 
                 ADDR_BLOCK0:
