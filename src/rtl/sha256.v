@@ -112,6 +112,10 @@ module sha256(
   reg next_reg;
   reg next_new;
 
+  reg mode_reg;
+  reg mode_new;
+  reg mode_we;
+
   reg ready_reg;
 
   reg [31 : 0] block0_reg;
@@ -214,6 +218,7 @@ module sha256(
         begin
           init_reg         <= 0;
           next_reg         <= 0;
+          mode_reg         <= MODE_256;
           ready_reg        <= 0;
           digest_reg       <= 256'h0;
           digest_valid_reg <= 0;
@@ -225,6 +230,9 @@ module sha256(
           digest_valid_reg <= core_digest_valid;
           init_reg         <= init_new;
           next_reg         <= next_new;
+
+          if (mode_we)
+            mode_reg <= mode_new;
 
           if (core_digest_valid)
             digest_reg <= core_digest;
@@ -290,6 +298,8 @@ module sha256(
     begin : api_logic
       init_new      = 0;
       next_new      = 0;
+      mode_new      = 0;
+      mode_we       = 0;
       block0_we     = 0;
       block1_we     = 0;
       block2_we     = 0;
@@ -319,6 +329,8 @@ module sha256(
                   begin
                     init_new = write_data[CTRL_INIT_BIT];
                     next_new = write_data[CTRL_NEXT_BIT];
+                    mode_new = write_data[CTRL_MODE_BIT];
+                    mode_we  = 1;
                   end
 
                 ADDR_BLOCK0:
