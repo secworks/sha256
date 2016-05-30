@@ -63,6 +63,7 @@ module sha256(
   parameter ADDR_CTRL        = 8'h08;
   parameter CTRL_INIT_BIT    = 0;
   parameter CTRL_NEXT_BIT    = 1;
+  parameter CTRL_MODE_BIT    = 2;
 
   parameter ADDR_STATUS      = 8'h09;
   parameter STATUS_READY_BIT = 0;
@@ -97,6 +98,9 @@ module sha256(
   parameter CORE_NAME0     = 32'h73686132; // "sha2"
   parameter CORE_NAME1     = 32'h2d323536; // "-256"
   parameter CORE_VERSION   = 32'h302e3830; // "0.80"
+
+  parameter MODE_224       = 1'h0;
+  parameter MODE_256       = 1'h1;
 
 
   //----------------------------------------------------------------
