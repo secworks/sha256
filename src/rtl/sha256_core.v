@@ -56,14 +56,14 @@ module sha256_core(
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
-  parameter H0_0 = 32'h6a09e667;
-  parameter H0_1 = 32'hbb67ae85;
-  parameter H0_2 = 32'h3c6ef372;
-  parameter H0_3 = 32'ha54ff53a;
-  parameter H0_4 = 32'h510e527f;
-  parameter H0_5 = 32'h9b05688c;
-  parameter H0_6 = 32'h1f83d9ab;
-  parameter H0_7 = 32'h5be0cd19;
+  parameter SHA256_H0_0 = 32'h6a09e667;
+  parameter SHA256_H0_1 = 32'hbb67ae85;
+  parameter SHA256_H0_2 = 32'h3c6ef372;
+  parameter SHA256_H0_3 = 32'ha54ff53a;
+  parameter SHA256_H0_4 = 32'h510e527f;
+  parameter SHA256_H0_5 = 32'h9b05688c;
+  parameter SHA256_H0_6 = 32'h1f83d9ab;
+  parameter SHA256_H0_7 = 32'h5be0cd19;
 
   parameter SHA256_ROUNDS = 63;
 
@@ -275,14 +275,14 @@ module sha256_core(
 
       if (digest_init)
         begin
-          H0_new = H0_0;
-          H1_new = H0_1;
-          H2_new = H0_2;
-          H3_new = H0_3;
-          H4_new = H0_4;
-          H5_new = H0_5;
-          H6_new = H0_6;
-          H7_new = H0_7;
+          H0_new = SHA256_H0_0;
+          H1_new = SHA256_H0_1;
+          H2_new = SHA256_H0_2;
+          H3_new = SHA256_H0_3;
+          H4_new = SHA256_H0_4;
+          H5_new = SHA256_H0_5;
+          H6_new = SHA256_H0_6;
+          H7_new = SHA256_H0_7;
           H_we = 1;
         end
 
@@ -363,14 +363,14 @@ module sha256_core(
         begin
           if (first_block)
             begin
-              a_new  = H0_0;
-              b_new  = H0_1;
-              c_new  = H0_2;
-              d_new  = H0_3;
-              e_new  = H0_4;
-              f_new  = H0_5;
-              g_new  = H0_6;
-              h_new  = H0_7;
+              a_new  = SHA256_H0_0;
+              b_new  = SHA256_H0_1;
+              c_new  = SHA256_H0_2;
+              d_new  = SHA256_H0_3;
+              e_new  = SHA256_H0_4;
+              f_new  = SHA256_H0_5;
+              g_new  = SHA256_H0_6;
+              h_new  = SHA256_H0_7;
               a_h_we = 1;
             end
           else
