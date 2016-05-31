@@ -97,7 +97,7 @@ module sha256(
 
   parameter CORE_NAME0     = 32'h73686132; // "sha2"
   parameter CORE_NAME1     = 32'h2d323536; // "-256"
-  parameter CORE_VERSION   = 32'h302e3830; // "0.80"
+  parameter CORE_VERSION   = 32'h312e3830; // "1.80"
 
   parameter MODE_SHA_224   = 1'h0;
   parameter MODE_SHA_256   = 1'h1;
