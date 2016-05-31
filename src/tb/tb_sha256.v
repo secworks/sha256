@@ -95,6 +95,9 @@ module tb_sha256();
   parameter ADDR_DIGEST6   = 8'h26;
   parameter ADDR_DIGEST7   = 8'h27;
 
+  parameter SHA224_MODE    = 0;
+  parameter SHA256_MODE    = 1;
+
 
   //----------------------------------------------------------------
   // Register and Wire declarations.
@@ -419,16 +422,26 @@ module tb_sha256();
   //
   // Perform test of a single block digest.
   //----------------------------------------------------------------
-  task single_block_test(input [511 : 0] block,
+  task single_block_test(input           mode,
+                         input [511 : 0] block,
                          input [255 : 0] expected);
     begin
       $display("*** TC%01d - Single block test started.", tc_ctr);
 
       write_block(block);
-      write_word(ADDR_CTRL, (CTRL_MODE_VALUE + CTRL_INIT_VALUE));
+
+      if (mode)
+        write_word(ADDR_CTRL, (CTRL_MODE_VALUE + CTRL_INIT_VALUE));
+      else
+        write_word(ADDR_CTRL, CTRL_INIT_VALUE);
+
       #(CLK_PERIOD);
       wait_ready();
       read_digest();
+
+      // We need to ignore the LSW in SHA224 mode.
+      if (mode == SHA224_MODE)
+        digest_data[31 : 0] = 32'h0;
 
       if (digest_data == expected)
         begin
@@ -454,7 +467,8 @@ module tb_sha256();
   // Perform test of a double block digest. Note that we check
   // the digests for both the first and final block.
   //----------------------------------------------------------------
-  task double_block_test(input [511 : 0] block0,
+  task double_block_test(input           mode,
+                         input [511 : 0] block0,
                          input [255 : 0] expected0,
                          input [511 : 0] block1,
                          input [255 : 0] expected1
@@ -464,10 +478,19 @@ module tb_sha256();
 
       // First block
       write_block(block0);
-      write_word(ADDR_CTRL, (CTRL_MODE_VALUE + CTRL_INIT_VALUE));
+
+      if (mode)
+        write_word(ADDR_CTRL, (CTRL_MODE_VALUE + CTRL_INIT_VALUE));
+      else
+        write_word(ADDR_CTRL, CTRL_INIT_VALUE);
+
       #(CLK_PERIOD);
       wait_ready();
       read_digest();
+
+      // We need to ignore the LSW in SHA224 mode.
+      if (mode == SHA224_MODE)
+        digest_data[31 : 0] = 32'h0;
 
       if (digest_data == expected0)
         begin
@@ -483,10 +506,19 @@ module tb_sha256();
 
       // Final block
       write_block(block1);
-      write_word(ADDR_CTRL, (CTRL_MODE_VALUE + CTRL_NEXT_VALUE));
+
+      if (mode)
+        write_word(ADDR_CTRL, (CTRL_MODE_VALUE + CTRL_NEXT_VALUE));
+      else
+        write_word(ADDR_CTRL, CTRL_NEXT_VALUE);
+
       #(CLK_PERIOD);
       wait_ready();
       read_digest();
+
+      // We need to ignore the LSW in SHA224 mode.
+      if (mode == SHA224_MODE)
+        digest_data[31 : 0] = 32'h0;
 
       if (digest_data == expected1)
         begin
@@ -504,6 +536,41 @@ module tb_sha256();
       tc_ctr = tc_ctr + 1;
     end
   endtask // double_block_test
+
+
+  //----------------------------------------------------------------
+  // sha224_tests()
+  //
+  // Run test cases for sha224.
+  // Test cases taken from:
+  // http://csrc.nist.gov/groups/ST/toolkit/documents/Examples/SHA224.pdf
+  //----------------------------------------------------------------
+  task sha224_tests;
+    begin : sha224_tests_block
+      reg [511 : 0] tc0;
+      reg [255 : 0] res0;
+
+      reg [511 : 0] tc1_0;
+      reg [255 : 0] res1_0;
+      reg [511 : 0] tc1_1;
+      reg [255 : 0] res1_1;
+
+      $display("*** Testcases for sha224 functionality started.");
+
+      tc0 = 512'h61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018;
+
+      res0 = 256'h23097D223405D8228642A477BDA255B32AADBCE4BDA0B3F7E36C9DA700000000;
+      single_block_test(SHA224_MODE, tc0, res0);
+
+      tc1_0 = 512'h6162636462636465636465666465666765666768666768696768696A68696A6B696A6B6C6A6B6C6D6B6C6D6E6C6D6E6F6D6E6F706E6F70718000000000000000;
+      res1_0 = 256'h8250e65dbcf62f8466659c3333e5e91a10c8b7b0953927691f1419c200000000;
+      tc1_1 = 512'h000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001C0;
+      res1_1 = 256'h75388b16512776cc5dba5da1fd890150b0c6455cb4f58b195252252500000000;
+      double_block_test(SHA224_MODE, tc1_0, res1_0, tc1_1, res1_1);
+
+      $display("*** Testcases for sha224 functionality completed.");
+    end
+  endtask // sha224_tests
 
 
   //----------------------------------------------------------------
@@ -527,13 +594,13 @@ module tb_sha256();
 
       tc0 = 512'h61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018;
       res0 = 256'hBA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD;
-      single_block_test(tc0, res0);
+      single_block_test(SHA256_MODE, tc0, res0);
 
       tc1_0 = 512'h6162636462636465636465666465666765666768666768696768696A68696A6B696A6B6C6A6B6C6D6B6C6D6E6C6D6E6F6D6E6F706E6F70718000000000000000;
       res1_0 = 256'h85E655D6417A17953363376A624CDE5C76E09589CAC5F811CC4B32C1F20E533A;
       tc1_1 = 512'h000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001C0;
       res1_1 = 256'h248D6A61D20638B8E5C026930C3E6039A33CE45964FF2167F6ECEDD419DB06C1;
-      double_block_test(tc1_0, res1_0, tc1_1, res1_1);
+      double_block_test(SHA256_MODE, tc1_0, res1_0, tc1_1, res1_1);
 
       $display("*** Testcases for sha256 functionality completed.");
     end
@@ -552,6 +619,7 @@ module tb_sha256();
       reset_dut();
 
       check_name_version();
+      sha224_tests();
       sha256_tests();
 
       display_test_result();
