@@ -63,6 +63,7 @@ module tb_sha256();
   parameter ADDR_CTRL        = 8'h08;
   parameter CTRL_INIT_VALUE  = 8'h01;
   parameter CTRL_NEXT_VALUE  = 8'h02;
+  parameter CTRL_MODE_VALUE  = 8'h04;
 
   parameter ADDR_STATUS      = 8'h09;
   parameter STATUS_READY_BIT = 0;
@@ -424,7 +425,7 @@ module tb_sha256();
       $display("*** TC%01d - Single block test started.", tc_ctr);
 
       write_block(block);
-      write_word(ADDR_CTRL, CTRL_INIT_VALUE);
+      write_word(ADDR_CTRL, (CTRL_MODE_VALUE + CTRL_INIT_VALUE));
       #(CLK_PERIOD);
       wait_ready();
       read_digest();
@@ -463,7 +464,7 @@ module tb_sha256();
 
       // First block
       write_block(block0);
-      write_word(ADDR_CTRL, CTRL_INIT_VALUE);
+      write_word(ADDR_CTRL, (CTRL_MODE_VALUE + CTRL_INIT_VALUE));
       #(CLK_PERIOD);
       wait_ready();
       read_digest();
@@ -482,7 +483,7 @@ module tb_sha256();
 
       // Final block
       write_block(block1);
-      write_word(ADDR_CTRL, CTRL_NEXT_VALUE);
+      write_word(ADDR_CTRL, (CTRL_MODE_VALUE + CTRL_NEXT_VALUE));
       #(CLK_PERIOD);
       wait_ready();
       read_digest();
