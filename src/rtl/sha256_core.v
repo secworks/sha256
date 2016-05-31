@@ -43,11 +43,11 @@ module sha256_core(
 
                    input wire            init,
                    input wire            next,
+                   input wire            mode,
 
                    input wire [511 : 0]  block,
 
                    output wire           ready,
-
                    output wire [255 : 0] digest,
                    output wire           digest_valid
                   );
