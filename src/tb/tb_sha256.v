@@ -507,14 +507,14 @@ module tb_sha256();
 
 
   //----------------------------------------------------------------
-  // sha256_test
-  // The main test functionality.
+  // sha256_tests()
   //
+  // Run test cases for sha256.
   // Test cases taken from:
   // http://csrc.nist.gov/groups/ST/toolkit/documents/Examples/SHA256.pdf
   //----------------------------------------------------------------
-  initial
-    begin : sha256_test
+  task sha256_tests;
+    begin : sha256_tests_block
       reg [511 : 0] tc0;
       reg [255 : 0] res0;
 
@@ -523,17 +523,7 @@ module tb_sha256();
       reg [511 : 0] tc1_1;
       reg [255 : 0] res1_1;
 
-      $display("   -- Testbench for sha256 started --");
-
-      init_sim();
-      reset_dut();
-      check_name_version();
-
-      // dump_dut_state();
-      // write_word(ADDR_BLOCK0, 32'hdeadbeef);
-      // dump_dut_state();
-      // read_word(ADDR_BLOCK0);
-      // dump_dut_state();
+      $display("*** Testcases for sha256 functionality started.");
 
       tc0 = 512'h61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018;
       res0 = 256'hBA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD;
@@ -544,6 +534,25 @@ module tb_sha256();
       tc1_1 = 512'h000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001C0;
       res1_1 = 256'h248D6A61D20638B8E5C026930C3E6039A33CE45964FF2167F6ECEDD419DB06C1;
       double_block_test(tc1_0, res1_0, tc1_1, res1_1);
+
+      $display("*** Testcases for sha256 functionality completed.");
+    end
+  endtask // sha256_tests
+
+
+  //----------------------------------------------------------------
+  // sha256_top_test
+  // The main test functionality.
+  //----------------------------------------------------------------
+  initial
+    begin : sha256_top_test
+      $display("   -- Testbench for sha256 started --");
+
+      init_sim();
+      reset_dut();
+
+      check_name_version();
+      sha256_tests();
 
       display_test_result();
 
