@@ -35,15 +35,9 @@ The top level entity is called sha256_core. This entity has wide
 interfaces (512 bit block input, 256 bit digest). In order to make it
 usable you probably want to wrap the core with a bus interface.
 
-Unless you want to provide your own interface you therefore also need to
-select one top level wrapper. There are two wrappers provided:
-- sha256.v - A wrapper with a 32-bit memory like interface.
-- wb_sha256.v - A wrapper that implements a [Wishbone](http://opencores.org/opencores,wishbone) interface.
-
-***Do not include both wrappers in the same project.***
-
-The core (sha256_core) will sample all data inputs when given the init
-or next signal. the wrappers provided contains additional data
+The provided top level wrapper, sha256.v provides a simple 32-bit memory
+like interface. The core (sha256_core) will sample all data inputs when
+given the init or next signal. the wrapper contains additional data
 registers. This allows you to load a new block while the core is
 processing the previous block.
 
@@ -102,6 +96,25 @@ Implementation results using Vivado 2014.4.
 
 
 ## Status ##
+***(2016-06-01)***
+
+The core now supports both sha224 and sha256 modes. The default mode is
+sha256.
+
+NOTE: The mode bit is located in the ADDR_CTRL API register and this
+means that when writing to this register to start processing a block,
+care must be taken to set the mode bit to the intended mode. This means
+that old code that for example simply wrote 0x01 to initiate SHA256
+processing will now initiate SHA224 processing. Writing 0x05 will
+now initiate SHA256 processing.
+
+The API version has been bumped a major number to reflect this change.
+
+Regarding SHA224, it is up to the user to only read seven, not eight
+words from the digest registers. The core will update the LSW too.
+
+Removed description of the WB wrapper which has been removed.
+
 
 ***(2016-03-04)***
 
