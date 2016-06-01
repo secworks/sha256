@@ -49,23 +49,19 @@ CC=iverilog
 LINT=verilator
 
 
-all: top core wmem
+all: top.sim core.sim wmem.sim
 
 
-top: $(TOP_TB_SRC) $(TOP_SRC)
+top.sim: $(TOP_TB_SRC) $(TOP_SRC)
 	$(CC) -o top.sim $(TOP_TB_SRC) $(TOP_SRC)
 
 
-core: $(CORE_TB_SRC) $(CORE_SRC)
+core.sim: $(CORE_TB_SRC) $(CORE_SRC)
 	$(CC) -o core.sim $(CORE_SRC) $(CORE_TB_SRC)
 
 
-wmem: $(WMEM_SRC) $(WMEM_TB_SRC)
+wmem.sim: $(WMEM_SRC) $(WMEM_TB_SRC)
 	$(CC) -o wmem.sim $(WMEM_SRC) $(WMEM_TB_SRC)
-
-
-sim-wb: wb.sim
-	./wb.sim
 
 
 sim-top: top.sim
