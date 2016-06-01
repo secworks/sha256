@@ -159,8 +159,6 @@ module sha256(
   //----------------------------------------------------------------
   // Wires.
   //----------------------------------------------------------------
-  wire           core_init;
-  wire           core_next;
   wire           core_ready;
   wire [511 : 0] core_block;
   wire [255 : 0] core_digest;
@@ -173,10 +171,6 @@ module sha256(
   //----------------------------------------------------------------
   // Concurrent connectivity for ports etc.
   //----------------------------------------------------------------
-  assign core_init = init_reg;
-
-  assign core_next = next_reg;
-
   assign core_block = {block0_reg, block1_reg, block2_reg, block3_reg,
                        block4_reg, block5_reg, block6_reg, block7_reg,
                        block8_reg, block9_reg, block10_reg, block11_reg,
@@ -193,8 +187,8 @@ module sha256(
                    .clk(clk),
                    .reset_n(reset_n),
 
-                   .init(core_init),
-                   .next(core_next),
+                   .init(init_reg),
+                   .next(next_reg),
                    .mode(mode_reg),
 
                    .block(core_block),
@@ -341,74 +335,46 @@ module sha256(
                   block1_we = 1;
 
                 ADDR_BLOCK2:
-                  begin
-                    block2_we = 1;
-                  end
+                  block2_we = 1;
 
                 ADDR_BLOCK3:
-                  begin
                     block3_we = 1;
-                  end
 
                 ADDR_BLOCK4:
-                  begin
-                    block4_we = 1;
-                  end
+                  block4_we = 1;
 
                 ADDR_BLOCK5:
-                  begin
-                    block5_we = 1;
-                  end
+                  block5_we = 1;
 
                 ADDR_BLOCK6:
-                  begin
-                    block6_we = 1;
-                  end
+                  block6_we = 1;
 
                 ADDR_BLOCK7:
-                  begin
-                    block7_we = 1;
-                  end
+                  block7_we = 1;
 
                 ADDR_BLOCK8:
-                  begin
-                    block8_we = 1;
-                  end
+                  block8_we = 1;
 
                 ADDR_BLOCK9:
-                  begin
-                    block9_we = 1;
-                  end
+                  block9_we = 1;
 
                 ADDR_BLOCK10:
-                  begin
-                    block10_we = 1;
-                  end
+                  block10_we = 1;
 
                 ADDR_BLOCK11:
-                  begin
-                    block11_we = 1;
-                  end
+                  block11_we = 1;
 
                 ADDR_BLOCK12:
-                  begin
-                    block12_we = 1;
-                  end
+                  block12_we = 1;
 
                 ADDR_BLOCK13:
-                  begin
-                    block13_we = 1;
-                  end
+                  block13_we = 1;
 
                 ADDR_BLOCK14:
-                  begin
-                    block14_we = 1;
-                  end
+                  block14_we = 1;
 
                 ADDR_BLOCK15:
-                  begin
-                    block15_we = 1;
-                  end
+                  block15_we = 1;
 
                 default:
                   begin
@@ -422,149 +388,91 @@ module sha256(
               case (address)
                 // Read operations.
                 ADDR_NAME0:
-                  begin
-                    tmp_read_data = CORE_NAME0;
-                  end
+                  tmp_read_data = CORE_NAME0;
 
                 ADDR_NAME1:
-                  begin
-                    tmp_read_data = CORE_NAME1;
-                  end
+                  tmp_read_data = CORE_NAME1;
 
                 ADDR_VERSION:
-                  begin
-                    tmp_read_data = CORE_VERSION;
-                  end
+                  tmp_read_data = CORE_VERSION;
 
                 ADDR_CTRL:
-                  begin
-                    tmp_read_data = {29'h0, mode_reg, next_reg, init_reg};
-                  end
+                  tmp_read_data = {29'h0, mode_reg, next_reg, init_reg};
 
                 ADDR_STATUS:
-                  begin
-                    tmp_read_data = {28'h0000000, 2'b00, digest_valid_reg, ready_reg};
-                  end
+                  tmp_read_data = {30'h0, digest_valid_reg, ready_reg};
 
                 ADDR_BLOCK0:
-                  begin
-                    tmp_read_data = block0_reg;
-                  end
+                  tmp_read_data = block0_reg;
 
                 ADDR_BLOCK1:
-                  begin
-                    tmp_read_data = block1_reg;
-                  end
+                  tmp_read_data = block1_reg;
 
                 ADDR_BLOCK2:
-                  begin
-                    tmp_read_data = block2_reg;
-                  end
+                  tmp_read_data = block2_reg;
 
                 ADDR_BLOCK3:
-                  begin
-                    tmp_read_data = block3_reg;
-                  end
+                  tmp_read_data = block3_reg;
 
                 ADDR_BLOCK4:
-                  begin
-                    tmp_read_data = block4_reg;
-                  end
+                  tmp_read_data = block4_reg;
 
                 ADDR_BLOCK5:
-                  begin
-                    tmp_read_data = block5_reg;
-                  end
+                  tmp_read_data = block5_reg;
 
                 ADDR_BLOCK6:
-                  begin
-                    tmp_read_data = block6_reg;
-                  end
+                  tmp_read_data = block6_reg;
 
                 ADDR_BLOCK7:
-                  begin
-                    tmp_read_data = block7_reg;
-                  end
+                  tmp_read_data = block7_reg;
 
                 ADDR_BLOCK8:
-                  begin
-                    tmp_read_data = block8_reg;
-                  end
+                  tmp_read_data = block8_reg;
 
                 ADDR_BLOCK9:
-                  begin
-                    tmp_read_data = block9_reg;
-                  end
+                  tmp_read_data = block9_reg;
 
                 ADDR_BLOCK10:
-                  begin
-                    tmp_read_data = block10_reg;
-                  end
+                  tmp_read_data = block10_reg;
 
                 ADDR_BLOCK11:
-                  begin
-                    tmp_read_data = block11_reg;
-                  end
+                  tmp_read_data = block11_reg;
 
                 ADDR_BLOCK12:
-                  begin
-                    tmp_read_data = block12_reg;
-                  end
+                  tmp_read_data = block12_reg;
 
                 ADDR_BLOCK13:
-                  begin
-                    tmp_read_data = block13_reg;
-                  end
+                  tmp_read_data = block13_reg;
 
                 ADDR_BLOCK14:
-                  begin
-                    tmp_read_data = block14_reg;
-                  end
+                  tmp_read_data = block14_reg;
 
                 ADDR_BLOCK15:
-                  begin
-                    tmp_read_data = block15_reg;
-                  end
+                  tmp_read_data = block15_reg;
 
                 ADDR_DIGEST0:
-                  begin
-                    tmp_read_data = digest_reg[255 : 224];
-                  end
+                  tmp_read_data = digest_reg[255 : 224];
 
                 ADDR_DIGEST1:
-                  begin
-                    tmp_read_data = digest_reg[223 : 192];
-                  end
+                  tmp_read_data = digest_reg[223 : 192];
 
                 ADDR_DIGEST2:
-                  begin
-                    tmp_read_data = digest_reg[191 : 160];
-                  end
+                  tmp_read_data = digest_reg[191 : 160];
 
                 ADDR_DIGEST3:
-                  begin
-                    tmp_read_data = digest_reg[159 : 128];
-                  end
+                  tmp_read_data = digest_reg[159 : 128];
 
                 ADDR_DIGEST4:
-                  begin
-                    tmp_read_data = digest_reg[127 :  96];
-                  end
+                  tmp_read_data = digest_reg[127 :  96];
 
                 ADDR_DIGEST5:
-                  begin
-                    tmp_read_data = digest_reg[95  :  64];
-                  end
+                  tmp_read_data = digest_reg[95  :  64];
 
                 ADDR_DIGEST6:
-                  begin
-                    tmp_read_data = digest_reg[63  :  32];
-                  end
+                  tmp_read_data = digest_reg[63  :  32];
 
                 ADDR_DIGEST7:
-                  begin
-                    tmp_read_data = digest_reg[31  :   0];
-                  end
+                  tmp_read_data = digest_reg[31  :   0];
 
                 default:
                   begin
