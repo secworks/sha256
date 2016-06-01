@@ -9,30 +9,30 @@
 // Author: Joachim Strombergson
 // Copyright (c) 2013, Secworks Sweden AB
 // All rights reserved.
-// 
-// Redistribution and use in source and binary forms, with or 
-// without modification, are permitted provided that the following 
-// conditions are met: 
-// 
-// 1. Redistributions of source code must retain the above copyright 
-//    notice, this list of conditions and the following disclaimer. 
-// 
-// 2. Redistributions in binary form must reproduce the above copyright 
-//    notice, this list of conditions and the following disclaimer in 
-//    the documentation and/or other materials provided with the 
-//    distribution. 
-// 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
-// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS 
-// FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE 
-// COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, 
-// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
+//
+// Redistribution and use in source and binary forms, with or
+// without modification, are permitted provided that the following
+// conditions are met:
+//
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+//
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in
+//    the documentation and/or other materials provided with the
+//    distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+// FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+// COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
 // BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
-// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //======================================================================
@@ -48,14 +48,14 @@ module sha256_w_mem(
                     output wire [31 : 0] w
                    );
 
-  
+
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
   parameter CTRL_IDLE   = 0;
   parameter CTRL_UPDATE = 1;
-  
-  
+
+
   //----------------------------------------------------------------
   // Registers including update variables and write enable.
   //----------------------------------------------------------------
@@ -77,31 +77,31 @@ module sha256_w_mem(
   reg [31 : 0] w_mem14_new;
   reg [31 : 0] w_mem15_new;
   reg          w_mem_we;
-  
+
   reg [5 : 0] w_ctr_reg;
   reg [5 : 0] w_ctr_new;
   reg         w_ctr_we;
   reg         w_ctr_inc;
   reg         w_ctr_rst;
-  
+
   reg [1 : 0]  sha256_w_mem_ctrl_reg;
   reg [1 : 0]  sha256_w_mem_ctrl_new;
   reg          sha256_w_mem_ctrl_we;
-  
-  
+
+
   //----------------------------------------------------------------
   // Wires.
   //----------------------------------------------------------------
   reg [31 : 0] w_tmp;
   reg [31 : 0] w_new;
-  
-  
+
+
   //----------------------------------------------------------------
   // Concurrent connectivity for ports etc.
   //----------------------------------------------------------------
   assign w = w_tmp;
-  
-  
+
+
   //----------------------------------------------------------------
   // reg_update
   // Update functionality for all registers in the core.
@@ -112,22 +112,22 @@ module sha256_w_mem(
     begin : reg_update
       if (!reset_n)
         begin
-          w_mem[00]             <= 32'h00000000;
-          w_mem[01]             <= 32'h00000000;
-          w_mem[02]             <= 32'h00000000;
-          w_mem[03]             <= 32'h00000000;
-          w_mem[04]             <= 32'h00000000;
-          w_mem[05]             <= 32'h00000000;
-          w_mem[06]             <= 32'h00000000;
-          w_mem[07]             <= 32'h00000000;
-          w_mem[08]             <= 32'h00000000;
-          w_mem[09]             <= 32'h00000000;
-          w_mem[10]             <= 32'h00000000;
-          w_mem[11]             <= 32'h00000000;
-          w_mem[12]             <= 32'h00000000;
-          w_mem[13]             <= 32'h00000000;
-          w_mem[14]             <= 32'h00000000;
-          w_mem[15]             <= 32'h00000000;
+          w_mem[00]             <= 32'h0;
+          w_mem[01]             <= 32'h0;
+          w_mem[02]             <= 32'h0;
+          w_mem[03]             <= 32'h0;
+          w_mem[04]             <= 32'h0;
+          w_mem[05]             <= 32'h0;
+          w_mem[06]             <= 32'h0;
+          w_mem[07]             <= 32'h0;
+          w_mem[08]             <= 32'h0;
+          w_mem[09]             <= 32'h0;
+          w_mem[10]             <= 32'h0;
+          w_mem[11]             <= 32'h0;
+          w_mem[12]             <= 32'h0;
+          w_mem[13]             <= 32'h0;
+          w_mem[14]             <= 32'h0;
+          w_mem[15]             <= 32'h0;
           w_ctr_reg             <= 6'h00;
           sha256_w_mem_ctrl_reg <= CTRL_IDLE;
         end
@@ -152,20 +152,16 @@ module sha256_w_mem(
               w_mem[14] <= w_mem14_new;
               w_mem[15] <= w_mem15_new;
             end
-          
+
           if (w_ctr_we)
-            begin
-              w_ctr_reg <= w_ctr_new;
-            end
-          
+            w_ctr_reg <= w_ctr_new;
+
           if (sha256_w_mem_ctrl_we)
-            begin
-              sha256_w_mem_ctrl_reg <= sha256_w_mem_ctrl_new;
-            end
+            sha256_w_mem_ctrl_reg <= sha256_w_mem_ctrl_new;
         end
     end // reg_update
 
-  
+
   //----------------------------------------------------------------
   // select_w
   //
@@ -183,7 +179,7 @@ module sha256_w_mem(
           w_tmp = w_new;
         end
     end // select_w
-  
+
 
   //----------------------------------------------------------------
   // w_new_logic
@@ -200,39 +196,39 @@ module sha256_w_mem(
       reg [31 : 0] d0;
       reg [31 : 0] d1;
 
-      w_mem00_new = 32'h00000000;
-      w_mem01_new = 32'h00000000;
-      w_mem02_new = 32'h00000000;
-      w_mem03_new = 32'h00000000;
-      w_mem04_new = 32'h00000000;
-      w_mem05_new = 32'h00000000;
-      w_mem06_new = 32'h00000000;
-      w_mem07_new = 32'h00000000;
-      w_mem08_new = 32'h00000000;
-      w_mem09_new = 32'h00000000;
-      w_mem10_new = 32'h00000000;
-      w_mem11_new = 32'h00000000;
-      w_mem12_new = 32'h00000000;
-      w_mem13_new = 32'h00000000;
-      w_mem14_new = 32'h00000000;
-      w_mem15_new = 32'h00000000;
+      w_mem00_new = 32'h0;
+      w_mem01_new = 32'h0;
+      w_mem02_new = 32'h0;
+      w_mem03_new = 32'h0;
+      w_mem04_new = 32'h0;
+      w_mem05_new = 32'h0;
+      w_mem06_new = 32'h0;
+      w_mem07_new = 32'h0;
+      w_mem08_new = 32'h0;
+      w_mem09_new = 32'h0;
+      w_mem10_new = 32'h0;
+      w_mem11_new = 32'h0;
+      w_mem12_new = 32'h0;
+      w_mem13_new = 32'h0;
+      w_mem14_new = 32'h0;
+      w_mem15_new = 32'h0;
       w_mem_we    = 0;
-      
+
       w_0  = w_mem[0];
       w_1  = w_mem[1];
       w_9  = w_mem[9];
       w_14 = w_mem[14];
 
-      d0 = {w_1[6  : 0], w_1[31 :  7]} ^ 
-           {w_1[17 : 0], w_1[31 : 18]} ^ 
+      d0 = {w_1[6  : 0], w_1[31 :  7]} ^
+           {w_1[17 : 0], w_1[31 : 18]} ^
            {3'b000, w_1[31 : 3]};
-      
-      d1 = {w_14[16 : 0], w_14[31 : 17]} ^ 
-           {w_14[18 : 0], w_14[31 : 19]} ^ 
+
+      d1 = {w_14[16 : 0], w_14[31 : 17]} ^
+           {w_14[18 : 0], w_14[31 : 19]} ^
            {10'b0000000000, w_14[31 : 10]};
-      
+
       w_new = d1 + w_9 + d0 + w_0;
-      
+
       if (init)
         begin
           w_mem00_new = block[511 : 480];
@@ -274,8 +270,8 @@ module sha256_w_mem(
           w_mem_we    = 1;
         end
     end // w_mem_update_logic
-  
-  
+
+
   //----------------------------------------------------------------
   // w_ctr
   // W schedule adress counter. Counts from 0x10 to 0x3f and
@@ -285,7 +281,7 @@ module sha256_w_mem(
     begin : w_ctr
       w_ctr_new = 0;
       w_ctr_we  = 0;
-      
+
       if (w_ctr_rst)
         begin
           w_ctr_new = 6'h00;
@@ -299,7 +295,7 @@ module sha256_w_mem(
         end
     end // w_ctr
 
-  
+
   //----------------------------------------------------------------
   // sha256_w_mem_fsm
   // Logic for the w shedule FSM.
@@ -308,10 +304,10 @@ module sha256_w_mem(
     begin : sha256_w_mem_fsm
       w_ctr_rst = 0;
       w_ctr_inc = 0;
-      
+
       sha256_w_mem_ctrl_new = CTRL_IDLE;
       sha256_w_mem_ctrl_we  = 0;
-      
+
       case (sha256_w_mem_ctrl_reg)
         CTRL_IDLE:
           begin
@@ -322,14 +318,14 @@ module sha256_w_mem(
                 sha256_w_mem_ctrl_we  = 1;
               end
           end
-        
+
         CTRL_UPDATE:
           begin
             if (next)
               begin
                 w_ctr_inc = 1;
               end
-            
+
             if (w_ctr_reg == 6'h3f)
               begin
                 sha256_w_mem_ctrl_new = CTRL_IDLE;
