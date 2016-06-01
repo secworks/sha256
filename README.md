@@ -1,8 +1,8 @@
 # sha256 #
-Hardware implementation of the SHA-256 cryptographic hash function. The
-implementation is written in Verilog 2001 compliant code. The
-implementation includes a core and wrappers that provides interfaces for
-simple integration.
+Hardware implementation of the SHA-256 cryptographic hash function with
+support for both SHA-256 and SHA-224. The implementation is written in
+Verilog 2001 compliant code. The implementation includes a core and
+wrappers that provides interfaces for simple integration.
 
 This is a low area implementation that iterates over the rounds but
 there is no sharing of operations such as adders.
