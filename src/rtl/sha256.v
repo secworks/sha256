@@ -118,38 +118,8 @@ module sha256(
 
   reg ready_reg;
 
-  reg [31 : 0] block0_reg;
-  reg          block0_we;
-  reg [31 : 0] block1_reg;
-  reg          block1_we;
-  reg [31 : 0] block2_reg;
-  reg          block2_we;
-  reg [31 : 0] block3_reg;
-  reg          block3_we;
-  reg [31 : 0] block4_reg;
-  reg          block4_we;
-  reg [31 : 0] block5_reg;
-  reg          block5_we;
-  reg [31 : 0] block6_reg;
-  reg          block6_we;
-  reg [31 : 0] block7_reg;
-  reg          block7_we;
-  reg [31 : 0] block8_reg;
-  reg          block8_we;
-  reg [31 : 0] block9_reg;
-  reg          block9_we;
-  reg [31 : 0] block10_reg;
-  reg          block10_we;
-  reg [31 : 0] block11_reg;
-  reg          block11_we;
-  reg [31 : 0] block12_reg;
-  reg          block12_we;
-  reg [31 : 0] block13_reg;
-  reg          block13_we;
-  reg [31 : 0] block14_reg;
-  reg          block14_we;
-  reg [31 : 0] block15_reg;
-  reg          block15_we;
+  reg [31 : 0] block_reg [0 : 15];
+  reg          block_we;
 
   reg [255 : 0] digest_reg;
 
@@ -171,10 +141,10 @@ module sha256(
   //----------------------------------------------------------------
   // Concurrent connectivity for ports etc.
   //----------------------------------------------------------------
-  assign core_block = {block0_reg, block1_reg, block2_reg, block3_reg,
-                       block4_reg, block5_reg, block6_reg, block7_reg,
-                       block8_reg, block9_reg, block10_reg, block11_reg,
-                       block12_reg, block13_reg, block14_reg, block15_reg};
+  assign core_block = {block_reg[00], block_reg[01], block_reg[02], block_reg[03],
+                       block_reg[04], block_reg[05], block_reg[06], block_reg[07],
+                       block_reg[08], block_reg[09], block_reg[10], block_reg[11],
+                       block_reg[12], block_reg[13], block_reg[14], block_reg[15]};
 
   assign read_data = tmp_read_data;
   assign error     = tmp_error;
@@ -208,7 +178,9 @@ module sha256(
   // active low reset. All registers have write enable.
   //----------------------------------------------------------------
   always @ (posedge clk or negedge reset_n)
-    begin
+    begin : reg_update
+      integer i;
+
       if (!reset_n)
         begin
           init_reg         <= 0;
@@ -217,7 +189,9 @@ module sha256(
           mode_reg         <= MODE_SHA_256;
           digest_reg       <= 256'h0;
           digest_valid_reg <= 0;
-          block0_reg       <= 32'h0;
+
+          for (i = 0 ; i < 32 ; i = i + 1)
+            block_reg[i] <= 32'h0;
         end
       else
         begin
@@ -232,53 +206,8 @@ module sha256(
           if (core_digest_valid)
             digest_reg <= core_digest;
 
-          if (block0_we)
-            block0_reg <= write_data;
-
-          if (block1_we)
-            block1_reg <= write_data;
-
-          if (block2_we)
-            block2_reg <= write_data;
-
-          if (block3_we)
-            block3_reg <= write_data;
-
-          if (block4_we)
-            block4_reg <= write_data;
-
-          if (block5_we)
-            block5_reg <= write_data;
-
-          if (block6_we)
-            block6_reg <= write_data;
-
-          if (block7_we)
-            block7_reg <= write_data;
-
-          if (block8_we)
-            block8_reg <= write_data;
-
-          if (block9_we)
-            block9_reg <= write_data;
-
-          if (block10_we)
-            block10_reg <= write_data;
-
-          if (block11_we)
-            block11_reg <= write_data;
-
-          if (block12_we)
-            block12_reg <= write_data;
-
-          if (block13_we)
-            block13_reg <= write_data;
-
-          if (block14_we)
-            block14_reg <= write_data;
-
-          if (block15_we)
-            block15_reg <= write_data;
+          if (block_we)
+            block_reg[address[3 : 0]] <= write_data;
         end
     end // reg_update
 
@@ -295,22 +224,7 @@ module sha256(
       next_new      = 0;
       mode_new      = 0;
       mode_we       = 0;
-      block0_we     = 0;
-      block1_we     = 0;
-      block2_we     = 0;
-      block3_we     = 0;
-      block4_we     = 0;
-      block5_we     = 0;
-      block6_we     = 0;
-      block7_we     = 0;
-      block8_we     = 0;
-      block9_we     = 0;
-      block10_we    = 0;
-      block11_we    = 0;
-      block12_we    = 0;
-      block13_we    = 0;
-      block14_we    = 0;
-      block15_we    = 0;
+      block_we      = 0;
       tmp_read_data = 32'h0;
       tmp_error     = 0;
 
@@ -318,73 +232,23 @@ module sha256(
         begin
           if (we)
             begin
-              case (address)
-                // Write operations.
-                ADDR_CTRL:
-                  begin
-                    init_new = write_data[CTRL_INIT_BIT];
-                    next_new = write_data[CTRL_NEXT_BIT];
-                    mode_new = write_data[CTRL_MODE_BIT];
-                    mode_we  = 1;
-                  end
+              if (address == ADDR_CTRL)
+                begin
+                  init_new = write_data[CTRL_INIT_BIT];
+                  next_new = write_data[CTRL_NEXT_BIT];
+                  mode_new = write_data[CTRL_MODE_BIT];
+                  mode_we  = 1;
+                end
 
-                ADDR_BLOCK0:
-                  block0_we = 1;
-
-                ADDR_BLOCK1:
-                  block1_we = 1;
-
-                ADDR_BLOCK2:
-                  block2_we = 1;
-
-                ADDR_BLOCK3:
-                    block3_we = 1;
-
-                ADDR_BLOCK4:
-                  block4_we = 1;
-
-                ADDR_BLOCK5:
-                  block5_we = 1;
-
-                ADDR_BLOCK6:
-                  block6_we = 1;
-
-                ADDR_BLOCK7:
-                  block7_we = 1;
-
-                ADDR_BLOCK8:
-                  block8_we = 1;
-
-                ADDR_BLOCK9:
-                  block9_we = 1;
-
-                ADDR_BLOCK10:
-                  block10_we = 1;
-
-                ADDR_BLOCK11:
-                  block11_we = 1;
-
-                ADDR_BLOCK12:
-                  block12_we = 1;
-
-                ADDR_BLOCK13:
-                  block13_we = 1;
-
-                ADDR_BLOCK14:
-                  block14_we = 1;
-
-                ADDR_BLOCK15:
-                  block15_we = 1;
-
-                default:
-                  begin
-                    tmp_error = 1;
-                  end
-              endcase // case (address)
+              if ((address >= ADDR_BLOCK0) && (address <= ADDR_BLOCK15))
+                block_we = 1;
             end // if (we)
 
           else
             begin
+              if ((address >= ADDR_BLOCK0) && (address <= ADDR_BLOCK15))
+                tmp_read_data = block_reg[address[3 : 0]];
+
               case (address)
                 // Read operations.
                 ADDR_NAME0:
@@ -401,54 +265,6 @@ module sha256(
 
                 ADDR_STATUS:
                   tmp_read_data = {30'h0, digest_valid_reg, ready_reg};
-
-                ADDR_BLOCK0:
-                  tmp_read_data = block0_reg;
-
-                ADDR_BLOCK1:
-                  tmp_read_data = block1_reg;
-
-                ADDR_BLOCK2:
-                  tmp_read_data = block2_reg;
-
-                ADDR_BLOCK3:
-                  tmp_read_data = block3_reg;
-
-                ADDR_BLOCK4:
-                  tmp_read_data = block4_reg;
-
-                ADDR_BLOCK5:
-                  tmp_read_data = block5_reg;
-
-                ADDR_BLOCK6:
-                  tmp_read_data = block6_reg;
-
-                ADDR_BLOCK7:
-                  tmp_read_data = block7_reg;
-
-                ADDR_BLOCK8:
-                  tmp_read_data = block8_reg;
-
-                ADDR_BLOCK9:
-                  tmp_read_data = block9_reg;
-
-                ADDR_BLOCK10:
-                  tmp_read_data = block10_reg;
-
-                ADDR_BLOCK11:
-                  tmp_read_data = block11_reg;
-
-                ADDR_BLOCK12:
-                  tmp_read_data = block12_reg;
-
-                ADDR_BLOCK13:
-                  tmp_read_data = block13_reg;
-
-                ADDR_BLOCK14:
-                  tmp_read_data = block14_reg;
-
-                ADDR_BLOCK15:
-                  tmp_read_data = block15_reg;
 
                 ADDR_DIGEST0:
                   tmp_read_data = digest_reg[255 : 224];

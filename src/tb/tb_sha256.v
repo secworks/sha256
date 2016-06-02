@@ -187,14 +187,14 @@ module tb_sha256();
 
       $display("Message block:");
       $display("block0  = 0x%08x, block1  = 0x%08x, block2  = 0x%08x,  block3  = 0x%08x",
-               dut.block0_reg, dut.block1_reg, dut.block2_reg, dut.block3_reg);
-      $display("block4  = 0x%08x, block5  = 0x%08x, block6  = 0x%08x,  block7  = 0x%08x",
-               dut.block4_reg, dut.block5_reg, dut.block6_reg, dut.block7_reg);
+               dut.block_reg[00], dut.block_reg[01], dut.block_reg[02], dut.block_reg[03]);
+//      $display("block4  = 0x%08x, block5  = 0x%08x, block6  = 0x%08x,  block7  = 0x%08x",
+//               dut.block_reg[04], dut.block_reg[05], dut.block_reg[06], dut.block_reg[07]);
 
       $display("block8  = 0x%08x, block9  = 0x%08x, block10 = 0x%08x,  block11 = 0x%08x",
-               dut.block8_reg, dut.block9_reg, dut.block10_reg, dut.block11_reg);
-     $display("block12 = 0x%08x, block13 = 0x%08x, block14 = 0x%08x,  block15 = 0x%08x",
-               dut.block12_reg, dut.block13_reg, dut.block14_reg, dut.block15_reg);
+               dut.block_reg[08], dut.block_reg[09], dut.block_reg[10], dut.block_reg[11]);
+      $display("block12 = 0x%08x, block13 = 0x%08x, block14 = 0x%08x,  block15 = 0x%08x",
+               dut.block_reg[12], dut.block_reg[13], dut.block_reg[14], dut.block_reg[15]);
       $display("");
 
       $display("Digest:");
