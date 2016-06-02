@@ -87,6 +87,7 @@ module tb_sha256_stream();
    sha256_stream dut
      (.clk            (clk),
       .rst            (rst),
+      .mode           (1'b1),
       .s_tdata_i      (tdata_resized),
       .s_tlast_i      (1'b0),
       .s_tvalid_i     (tvalid_resized),
