@@ -56,51 +56,45 @@ module sha256(
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
-  parameter ADDR_NAME0       = 8'h00;
-  parameter ADDR_NAME1       = 8'h01;
-  parameter ADDR_VERSION     = 8'h02;
-
-  parameter ADDR_CTRL        = 8'h08;
-  parameter CTRL_INIT_BIT    = 0;
-  parameter CTRL_NEXT_BIT    = 1;
-  parameter CTRL_MODE_BIT    = 2;
-
-  parameter ADDR_STATUS      = 8'h09;
-  parameter STATUS_READY_BIT = 0;
-  parameter STATUS_VALID_BIT = 1;
-
-  parameter ADDR_BLOCK0    = 8'h10;
-  parameter ADDR_BLOCK1    = 8'h11;
-  parameter ADDR_BLOCK2    = 8'h12;
-  parameter ADDR_BLOCK3    = 8'h13;
-  parameter ADDR_BLOCK4    = 8'h14;
-  parameter ADDR_BLOCK5    = 8'h15;
-  parameter ADDR_BLOCK6    = 8'h16;
-  parameter ADDR_BLOCK7    = 8'h17;
-  parameter ADDR_BLOCK8    = 8'h18;
-  parameter ADDR_BLOCK9    = 8'h19;
-  parameter ADDR_BLOCK10   = 8'h1a;
-  parameter ADDR_BLOCK11   = 8'h1b;
-  parameter ADDR_BLOCK12   = 8'h1c;
-  parameter ADDR_BLOCK13   = 8'h1d;
-  parameter ADDR_BLOCK14   = 8'h1e;
-  parameter ADDR_BLOCK15   = 8'h1f;
-
-  parameter ADDR_DIGEST0   = 8'h20;
-  parameter ADDR_DIGEST1   = 8'h21;
-  parameter ADDR_DIGEST2   = 8'h22;
-  parameter ADDR_DIGEST3   = 8'h23;
-  parameter ADDR_DIGEST4   = 8'h24;
-  parameter ADDR_DIGEST5   = 8'h25;
-  parameter ADDR_DIGEST6   = 8'h26;
-  parameter ADDR_DIGEST7   = 8'h27;
-
-  parameter CORE_NAME0     = 32'h73686132; // "sha2"
-  parameter CORE_NAME1     = 32'h2d323536; // "-256"
-  parameter CORE_VERSION   = 32'h312e3830; // "1.80"
-
-  parameter MODE_SHA_224   = 1'h0;
-  parameter MODE_SHA_256   = 1'h1;
+  localparam ADDR_NAME0       = 8'h00;
+  localparam ADDR_NAME1       = 8'h01;
+  localparam ADDR_VERSION     = 8'h02;
+  localparam ADDR_CTRL        = 8'h08;
+  localparam CTRL_INIT_BIT    = 0;
+  localparam CTRL_NEXT_BIT    = 1;
+  localparam CTRL_MODE_BIT    = 2;
+  localparam ADDR_STATUS      = 8'h09;
+  localparam STATUS_READY_BIT = 0;
+  localparam STATUS_VALID_BIT = 1;
+  localparam ADDR_BLOCK0    = 8'h10;
+  localparam ADDR_BLOCK1    = 8'h11;
+  localparam ADDR_BLOCK2    = 8'h12;
+  localparam ADDR_BLOCK3    = 8'h13;
+  localparam ADDR_BLOCK4    = 8'h14;
+  localparam ADDR_BLOCK5    = 8'h15;
+  localparam ADDR_BLOCK6    = 8'h16;
+  localparam ADDR_BLOCK7    = 8'h17;
+  localparam ADDR_BLOCK8    = 8'h18;
+  localparam ADDR_BLOCK9    = 8'h19;
+  localparam ADDR_BLOCK10   = 8'h1a;
+  localparam ADDR_BLOCK11   = 8'h1b;
+  localparam ADDR_BLOCK12   = 8'h1c;
+  localparam ADDR_BLOCK13   = 8'h1d;
+  localparam ADDR_BLOCK14   = 8'h1e;
+  localparam ADDR_BLOCK15   = 8'h1f;
+  localparam ADDR_DIGEST0   = 8'h20;
+  localparam ADDR_DIGEST1   = 8'h21;
+  localparam ADDR_DIGEST2   = 8'h22;
+  localparam ADDR_DIGEST3   = 8'h23;
+  localparam ADDR_DIGEST4   = 8'h24;
+  localparam ADDR_DIGEST5   = 8'h25;
+  localparam ADDR_DIGEST6   = 8'h26;
+  localparam ADDR_DIGEST7   = 8'h27;
+  localparam CORE_NAME0     = 32'h73686132; // "sha2"
+  localparam CORE_NAME1     = 32'h2d323536; // "-256"
+  localparam CORE_VERSION   = 32'h312e3830; // "1.80"
+  localparam MODE_SHA_224   = 1'h0;
+  localparam MODE_SHA_256   = 1'h1;
 
 
   //----------------------------------------------------------------
