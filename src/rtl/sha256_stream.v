@@ -40,6 +40,7 @@
 module sha256_stream
   (input 	  clk,
    input 	  rst,
+   input 	  mode,
    input [511:0]  s_tdata_i,
    input 	  s_tlast_i,
    input 	  s_tvalid_i,
@@ -64,6 +65,7 @@ module sha256_stream
 
       .init(s_tvalid_i & first_block),
       .next(s_tvalid_i & !first_block),
+      .mode (mode),
 
       .block(s_tdata_i),
 
