@@ -59,40 +59,26 @@ module sha256(
   localparam ADDR_NAME0       = 8'h00;
   localparam ADDR_NAME1       = 8'h01;
   localparam ADDR_VERSION     = 8'h02;
+
   localparam ADDR_CTRL        = 8'h08;
   localparam CTRL_INIT_BIT    = 0;
   localparam CTRL_NEXT_BIT    = 1;
   localparam CTRL_MODE_BIT    = 2;
+
   localparam ADDR_STATUS      = 8'h09;
   localparam STATUS_READY_BIT = 0;
   localparam STATUS_VALID_BIT = 1;
+
   localparam ADDR_BLOCK0    = 8'h10;
-  localparam ADDR_BLOCK1    = 8'h11;
-  localparam ADDR_BLOCK2    = 8'h12;
-  localparam ADDR_BLOCK3    = 8'h13;
-  localparam ADDR_BLOCK4    = 8'h14;
-  localparam ADDR_BLOCK5    = 8'h15;
-  localparam ADDR_BLOCK6    = 8'h16;
-  localparam ADDR_BLOCK7    = 8'h17;
-  localparam ADDR_BLOCK8    = 8'h18;
-  localparam ADDR_BLOCK9    = 8'h19;
-  localparam ADDR_BLOCK10   = 8'h1a;
-  localparam ADDR_BLOCK11   = 8'h1b;
-  localparam ADDR_BLOCK12   = 8'h1c;
-  localparam ADDR_BLOCK13   = 8'h1d;
-  localparam ADDR_BLOCK14   = 8'h1e;
   localparam ADDR_BLOCK15   = 8'h1f;
+
   localparam ADDR_DIGEST0   = 8'h20;
-  localparam ADDR_DIGEST1   = 8'h21;
-  localparam ADDR_DIGEST2   = 8'h22;
-  localparam ADDR_DIGEST3   = 8'h23;
-  localparam ADDR_DIGEST4   = 8'h24;
-  localparam ADDR_DIGEST5   = 8'h25;
-  localparam ADDR_DIGEST6   = 8'h26;
   localparam ADDR_DIGEST7   = 8'h27;
+
   localparam CORE_NAME0     = 32'h73686132; // "sha2"
   localparam CORE_NAME1     = 32'h2d323536; // "-256"
   localparam CORE_VERSION   = 32'h312e3830; // "1.80"
+
   localparam MODE_SHA_224   = 1'h0;
   localparam MODE_SHA_256   = 1'h1;
 
@@ -243,6 +229,9 @@ module sha256(
               if ((address >= ADDR_BLOCK0) && (address <= ADDR_BLOCK15))
                 tmp_read_data = block_reg[address[3 : 0]];
 
+              if ((address >= ADDR_DIGEST0) && (address <= ADDR_DIGEST7))
+                tmp_read_data = digest_reg[(7 - (address - ADDR_DIGEST0)) * 32 +: 32];
+
               case (address)
                 // Read operations.
                 ADDR_NAME0:
@@ -260,33 +249,8 @@ module sha256(
                 ADDR_STATUS:
                   tmp_read_data = {30'h0, digest_valid_reg, ready_reg};
 
-                ADDR_DIGEST0:
-                  tmp_read_data = digest_reg[255 : 224];
-
-                ADDR_DIGEST1:
-                  tmp_read_data = digest_reg[223 : 192];
-
-                ADDR_DIGEST2:
-                  tmp_read_data = digest_reg[191 : 160];
-
-                ADDR_DIGEST3:
-                  tmp_read_data = digest_reg[159 : 128];
-
-                ADDR_DIGEST4:
-                  tmp_read_data = digest_reg[127 :  96];
-
-                ADDR_DIGEST5:
-                  tmp_read_data = digest_reg[95  :  64];
-
-                ADDR_DIGEST6:
-                  tmp_read_data = digest_reg[63  :  32];
-
-                ADDR_DIGEST7:
-                  tmp_read_data = digest_reg[31  :   0];
-
                 default:
                   begin
-                    tmp_error = 1;
                   end
               endcase // case (address)
             end
