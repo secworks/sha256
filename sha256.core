@@ -39,6 +39,12 @@ depend = stream_utils-1.1 vlog_tb_utils-1.0
 [xsim]
 depend = stream_utils-1.1 vlog_tb_utils-1.0
 
+[parameter expected_sha]
+datatype    = int
+description = Expected sha (decimal integer)
+paramtype   = plusarg
+scope       = private
+
 [parameter file]
 datatype    = file
 description = Input file to digest
