@@ -87,6 +87,7 @@ module tb_sha256_stream();
    sha256_stream dut
      (.clk            (clk),
       .rst            (rst),
+      .mode           (1'b1),
       .s_tdata_i      (tdata_resized),
       .s_tlast_i      (1'b0),
       .s_tvalid_i     (tvalid_resized),
@@ -107,10 +108,16 @@ module tb_sha256_stream();
    integer 	    f;
    integer 	    c;
 
+   reg [255:0] 	    expected_sha;
+
    initial begin
       if (!$value$plusargs("file=%s", filename)) begin
 	 $display("No file specified");
 	 $finish;
+      end
+
+      if (!$value$plusargs("expected_sha=%d", expected_sha)) begin
+	 $display("No expected SHA specified. Will only print SHA, not verify");
       end
 
       @(negedge rst);
@@ -129,6 +136,11 @@ module tb_sha256_stream();
       while(digested_blocks*64 < filesize)
 	@(posedge clk);
       $display("%h", digest);
+      if (expected_sha)
+	if (expected_sha == digest)
+	  $display("SHA ok");
+	else
+	  $display("SHA failed! Expected %h", expected_sha);
       $finish;
    end
 
