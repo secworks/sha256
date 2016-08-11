@@ -7,38 +7,33 @@
 //
 // Copyright (c) 2013, Secworks Sweden AB
 // All rights reserved.
-// 
-// Redistribution and use in source and binary forms, with or 
-// without modification, are permitted provided that the following 
-// conditions are met: 
-// 
-// 1. Redistributions of source code must retain the above copyright 
-//    notice, this list of conditions and the following disclaimer. 
-// 
-// 2. Redistributions in binary form must reproduce the above copyright 
-//    notice, this list of conditions and the following disclaimer in 
-//    the documentation and/or other materials provided with the 
-//    distribution. 
-// 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
-// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS 
-// FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE 
-// COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, 
-// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
+//
+// Redistribution and use in source and binary forms, with or
+// without modification, are permitted provided that the following
+// conditions are met:
+//
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+//
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in
+//    the documentation and/or other materials provided with the
+//    distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+// FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+// COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
 // BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
-// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //======================================================================
-
-//------------------------------------------------------------------
-// Simulator directives.
-//------------------------------------------------------------------
-`timescale 1ns/10ps
 
 module tb_sha256_w_mem();
 
@@ -50,12 +45,12 @@ module tb_sha256_w_mem();
 
   parameter CLK_HALF_PERIOD = 2;
 
-  
+
   //----------------------------------------------------------------
   // Registers including update variables and write enable.
   //----------------------------------------------------------------
 
-  
+
   //----------------------------------------------------------------
   // Wires.
   //----------------------------------------------------------------
@@ -70,35 +65,35 @@ module tb_sha256_w_mem();
   reg [63 : 0] cycle_ctr;
   reg [31 : 0] error_ctr;
   reg [31 : 0] tc_ctr;
-  
-  
+
+
   //----------------------------------------------------------------
   // Device Under Test.
   //----------------------------------------------------------------
   sha256_w_mem dut(
                    .clk(tb_clk),
                    .reset_n(tb_reset_n),
-                   
+
                    .block(tb_block),
-                   
+
                    .init(tb_init),
                    .next(tb_next),
 
                    .w(tb_w)
                   );
-  
+
 
   //----------------------------------------------------------------
   // clk_gen
   //
-  // Clock generator process. 
+  // Clock generator process.
   //----------------------------------------------------------------
-  always 
+  always
     begin : clk_gen
       #CLK_HALF_PERIOD tb_clk = !tb_clk;
     end // clk_gen
 
-  
+
   //--------------------------------------------------------------------
   // dut_monitor
   //
@@ -113,7 +108,7 @@ module tb_sha256_w_mem();
         begin
           $display("cycle = %016x:", cycle_ctr);
         end
-      
+
       if (DEBUG)
         begin
           $display("dut ctrl_state = %02x:", dut.sha256_w_mem_ctrl_reg);
@@ -122,8 +117,8 @@ module tb_sha256_w_mem();
           dump_w_state();
         end
     end // dut_monitor
-      
-  
+
+
   //----------------------------------------------------------------
   // dump_w_state()
   //
@@ -132,25 +127,25 @@ module tb_sha256_w_mem();
   task dump_w_state;
     begin
       $display("W state:");
-      
-      $display("w0_reg  = %08x, w1_reg  = %08x, w2_reg  = %08x, w3_reg  = %08x", 
+
+      $display("w0_reg  = %08x, w1_reg  = %08x, w2_reg  = %08x, w3_reg  = %08x",
                dut.w_mem[00], dut.w_mem[01], dut.w_mem[02], dut.w_mem[03]);
 
-      $display("w4_reg  = %08x, w5_reg  = %08x, w6_reg  = %08x, w7_reg  = %08x", 
+      $display("w4_reg  = %08x, w5_reg  = %08x, w6_reg  = %08x, w7_reg  = %08x",
                dut.w_mem[04], dut.w_mem[05], dut.w_mem[06], dut.w_mem[07]);
 
-      $display("w8_reg  = %08x, w9_reg  = %08x, w10_reg = %08x, w11_reg = %08x", 
+      $display("w8_reg  = %08x, w9_reg  = %08x, w10_reg = %08x, w11_reg = %08x",
                dut.w_mem[08], dut.w_mem[09], dut.w_mem[10], dut.w_mem[11]);
 
-      $display("w12_reg = %08x, w13_reg = %08x, w14_reg = %08x, w15_reg = %08x", 
+      $display("w12_reg = %08x, w13_reg = %08x, w14_reg = %08x, w15_reg = %08x",
                dut.w_mem[12], dut.w_mem[13], dut.w_mem[14], dut.w_mem[15]);
 
       $display("w_new = %08x", dut.w_new);
       $display("");
     end
   endtask // dump_state
-  
-  
+
+
   //----------------------------------------------------------------
   // reset_dut
   //----------------------------------------------------------------
@@ -162,8 +157,8 @@ module tb_sha256_w_mem();
       tb_reset_n = 1;
     end
   endtask // reset_dut
-  
-  
+
+
   //----------------------------------------------------------------
   // init_sim
   //----------------------------------------------------------------
@@ -173,13 +168,13 @@ module tb_sha256_w_mem();
       tb_clk = 0;
       tb_reset_n = 1;
       cycle_ctr = 0;
-      
+
       tb_init = 0;
       tb_block = 512'h00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
     end
   endtask // reset_dut
-  
-  
+
+
   //----------------------------------------------------------------
   // test_w_schedule()
   //
@@ -199,10 +194,10 @@ module tb_sha256_w_mem();
       #(150 * CLK_HALF_PERIOD);
     end
   endtask // test_w_schedule
-  
-    
+
+
   //----------------------------------------------------------------
-  // The main test functionality. 
+  // The main test functionality.
   //----------------------------------------------------------------
   initial
     begin : w_mem_test
@@ -214,9 +209,9 @@ module tb_sha256_w_mem();
       $display("*** Simulation done.");
       $finish;
     end
-  
+
 endmodule // w_mem_test
-  
+
 //======================================================================
 // EOF tb_sha256_w_mem.v
 //======================================================================
