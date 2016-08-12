@@ -1,8 +1,8 @@
 # sha256 #
 Hardware implementation of the SHA-256 cryptographic hash function with
 support for both SHA-256 and SHA-224. The implementation is written in
-Verilog 2001 compliant code. The implementation includes a core and
-wrappers that provides interfaces for simple integration.
+Verilog 2001 compliant code. The implementation includes the main core
+as well as wrappers that provides interfaces for simple integration.
 
 This is a low area implementation that iterates over the rounds but
 there is no sharing of operations such as adders.
@@ -24,11 +24,13 @@ The sha256 design is divided into the following sections.
 - src/model/python - Functional model written in python
 - doc - documentation (currently not done.)
 - toolruns - Where tools are supposed to be run. Includes a Makefile for
-building and simulating the design using [Icarus Verilog](http://iverilog.icarus.com/)
+building and simulating the design using
+[Icarus Verilog](http://iverilog.icarus.com/). There are also targets
+for linting the core using [Verilator](http://www.veripool.org/wiki/verilator).
 
 The actual core consists of the following files:
 - sha256_core.v - The core itself with wide interfaces.
-- sha256_w_mem.v - W message block memort and expansion logic.
+- sha256_w_mem.v - W message block memory and block expansion logic.
 - sha256_k_constants.v - K constants ROM memory.
 
 The top level entity is called sha256_core. This entity has wide
