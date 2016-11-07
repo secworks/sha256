@@ -506,9 +506,9 @@ module sha256_core(
 
             if (next)
               begin
+                t_ctr_rst        = 1;
                 w_init           = 1;
                 state_init       = 1;
-                t_ctr_rst        = 1;
                 digest_valid_new = 0;
                 digest_valid_we  = 1;
                 sha256_ctrl_new  = CTRL_ROUNDS;

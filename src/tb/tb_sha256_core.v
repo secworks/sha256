@@ -69,19 +69,19 @@ module tb_sha256_core();
   // Device Under Test.
   //----------------------------------------------------------------
   sha256_core dut(
-                   .clk(tb_clk),
-                   .reset_n(tb_reset_n),
+                  .clk(tb_clk),
+                  .reset_n(tb_reset_n),
 
-                   .init(tb_init),
-                   .next(tb_next),
-                   .mode(tb_mode),
+                  .init(tb_init),
+                  .next(tb_next),
+                  .mode(tb_mode),
 
-                   .block(tb_block),
+                  .block(tb_block),
 
-                   .ready(tb_ready),
+                  .ready(tb_ready),
 
-                   .digest(tb_digest),
-                   .digest_valid(tb_digest_valid)
+                  .digest(tb_digest),
+                  .digest_valid(tb_digest_valid)
                  );
 
 
@@ -294,6 +294,7 @@ module tb_sha256_core();
                          input [255 : 0] expected2);
 
      reg [255 : 0] db_digest1;
+     reg [255 : 0] db_digest2;
      reg           db_error;
    begin
      $display("*** TC %0d double block test case started.", tc_number);
@@ -304,6 +305,7 @@ module tb_sha256_core();
      tb_block = block1;
      tb_init = 1;
      #(CLK_PERIOD);
+     tb_init = 0;
      wait_ready();
      db_digest1 = tb_digest;
      $display("*** TC %0d first block done.", tc_number);
@@ -312,7 +314,9 @@ module tb_sha256_core();
      tb_block = block2;
      tb_next = 1;
      #(CLK_PERIOD);
+     tb_next = 0;
      wait_ready();
+     db_digest2 = tb_digest;
      $display("*** TC %0d second block done.", tc_number);
 
      if (db_digest1 == expected1)
@@ -329,7 +333,7 @@ module tb_sha256_core();
          db_error = 1;
        end
 
-     if (db_digest1 == expected1)
+     if (db_digest2 == expected2)
        begin
          $display("*** TC %0d second block successful", tc_number);
          $display("");
@@ -338,7 +342,7 @@ module tb_sha256_core();
        begin
          $display("*** ERROR: TC %0d second block NOT successful", tc_number);
          $display("Expected: 0x%064x", expected2);
-         $display("Got:      0x%064x", tb_digest);
+         $display("Got:      0x%064x", db_digest2);
          $display("");
          db_error = 1;
        end
