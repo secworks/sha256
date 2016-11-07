@@ -319,6 +319,16 @@ module tb_sha256_core();
      db_digest2 = tb_digest;
      $display("*** TC %0d second block done.", tc_number);
 
+     if (DEBUG)
+       begin
+         $display("Generated digests:");
+         $display("Expected 1: 0x%064x", expected1);
+         $display("Got      1: 0x%064x", db_digest1);
+         $display("Expected 2: 0x%064x", expected2);
+         $display("Got      2: 0x%064x", db_digest2);
+         $display("");
+       end
+
      if (db_digest1 == expected1)
        begin
          $display("*** TC %0d first block successful", tc_number);
