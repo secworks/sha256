@@ -44,7 +44,15 @@ registers. This allows you to load a new block while the core is
 processing the previous block.
 
 
-## FPGA-results ##
+## ASIC-results ##
+Implementation in 40 nm low power standard cell process.
+Area: 14200 um2
+Combinational cells: 2344.9230
+Non-combinational cells: 2902.4856
+Clock frequency: 250 MHz
+
+
+## Fpga-results ##
 
 ### Altera Cyclone FPGAs ###
 Implementation results using Altera Quartus-II 13.1.
@@ -98,6 +106,10 @@ Implementation results using Vivado 2014.4.
 
 
 ## Status ##
+***(2017-08-25)***
+Added implementation results for ASIC process.
+
+
 ***(2016-06-01)***
 
 The core now supports both sha224 and sha256 modes. The default mode is
