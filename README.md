@@ -46,10 +46,10 @@ processing the previous block.
 
 ## ASIC-results ##
 Implementation in 40 nm low power standard cell process.
-Area: 14200 um2
-Combinational cells: 2344.9230
-Non-combinational cells: 2902.4856
-Clock frequency: 250 MHz
+- Area: 14200 um2
+- Combinational cells: 2344.9230
+- Non-combinational cells: 2902.4856
+- Clock frequency: 250 MHz
 
 
 ## Fpga-results ##
