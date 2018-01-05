@@ -50,10 +50,10 @@ import sys
 # Constants.
 #-------------------------------------------------------------------
 VERBOSE = True
-
+HUGE = False
 
 #-------------------------------------------------------------------
-# ChaCha()
+# SHA256()
 #-------------------------------------------------------------------
 class SHA256():
     def __init__(self, mode="sha256", verbose = 0):
@@ -264,8 +264,8 @@ def compare_digests(digest, expected):
 # Tests for the SHA224 mode.
 #-------------------------------------------------------------------
 def sha224_tests():
-
-    my_sha224 = SHA256(mode="sha224", verbose=0);
+    print("Running test cases for SHA224:")
+    my_sha224 = SHA256(mode="sha224", verbose=0)
 
     # TC1: NIST testcase with message "abc"
     print("TC1: Single block message test specified by NIST.")
@@ -314,25 +314,27 @@ def sha224_tests():
     print("")
 
 
-    # TC3: Huge message with n blocks
-    n = 1000
-    print("TC3: Huge message with %d blocks test case." % n)
-    TC3_block = [0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
-                 0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
-                 0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
-                 0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f]
+    if (HUGE):
+        # TC3: Huge message with n blocks
+        n = 1000
+        print("TC3: Huge message with %d blocks test case." % n)
+        TC3_block = [0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
+                    0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
+                    0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
+                    0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f]
 
-    TC3_expected = [0x7638f3bc, 0x500dd1a6, 0x586dd4d0, 0x1a1551af,
-                    0xd821d235, 0x2f919e28, 0xd5842fab, 0x03a40f2a]
+        TC3_expected = [0x7638f3bc, 0x500dd1a6, 0x586dd4d0, 0x1a1551af,
+                        0xd821d235, 0x2f919e28, 0xd5842fab, 0x03a40f2a]
 
-    my_sha224.init()
-    for i in range(n):
-        my_sha224.next(TC3_block)
+        my_sha224.init()
+        for i in range(n):
+            my_sha224.next(TC3_block)
         my_digest = my_sha224.get_digest()
         if (VERBOSE):
             print("Digest for block %d:" % i)
             print_digest(my_digest)
-    compare_digests(my_digest, TC3_expected)
+        compare_digests(my_digest, TC3_expected)
+        print("")
 
 
 #-------------------------------------------------------------------
@@ -341,8 +343,8 @@ def sha224_tests():
 # Tests for the SHA256 mode.
 #-------------------------------------------------------------------
 def sha256_tests():
-
-    my_sha256 = SHA256(verbose=0);
+    print("Running test cases for SHA256:")
+    my_sha256 = SHA256(verbose=0)
 
     # TC1: NIST testcase with message "abc"
     print("TC1: Single block message test specified by NIST.")
@@ -391,25 +393,27 @@ def sha256_tests():
     print("")
 
 
-    # TC3: Huge message with n blocks
-    n = 1000
-    print("TC3: Huge message with %d blocks test case." % n)
-    TC3_block = [0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
-                 0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
-                 0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
-                 0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f]
+    if (HUGE):
+        # TC3: Huge message with n blocks
+        n = 1000
+        print("TC3: Huge message with %d blocks test case." % n)
+        TC3_block = [0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
+                    0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
+                    0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f,
+                    0xaa55aa55, 0xdeadbeef, 0x55aa55aa, 0xf00ff00f]
 
-    TC3_expected = [0x7638f3bc, 0x500dd1a6, 0x586dd4d0, 0x1a1551af,
-                    0xd821d235, 0x2f919e28, 0xd5842fab, 0x03a40f2a]
+        TC3_expected = [0x7638f3bc, 0x500dd1a6, 0x586dd4d0, 0x1a1551af,
+                        0xd821d235, 0x2f919e28, 0xd5842fab, 0x03a40f2a]
 
-    my_sha256.init()
-    for i in range(n):
-        my_sha256.next(TC3_block)
+        my_sha256.init()
+        for i in range(n):
+            my_sha256.next(TC3_block)
         my_digest = my_sha256.get_digest()
         if (VERBOSE):
             print("Digest for block %d:" % i)
             print_digest(my_digest)
-    compare_digests(my_digest, TC3_expected)
+        compare_digests(my_digest, TC3_expected)
+        print("")
 
 
 #-------------------------------------------------------------------
