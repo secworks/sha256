@@ -234,11 +234,15 @@ class SHA256():
 #
 # Print the given digest.
 #-------------------------------------------------------------------
-def print_digest(digest):
+def print_digest(digest, length = 8):
     print("0x%08x, 0x%08x, 0x%08x, 0x%08x" %\
           (digest[0], digest[1], digest[2], digest[3]))
-    print("0x%08x, 0x%08x, 0x%08x, 0x%08x" %\
-          (digest[4], digest[5], digest[6], digest[7]))
+    if length == 8:
+        print("0x%08x, 0x%08x, 0x%08x, 0x%08x" %\
+            (digest[4], digest[5], digest[6], digest[7]))
+    else:
+        print("0x%08x, 0x%08x, 0x%08x" %\
+            (digest[4], digest[5], digest[6]))
     print("")
 
 
@@ -256,9 +260,9 @@ def compare_digests(digest, expected, length = 8):
     if (not correct):
         print("Error:")
         print("Got:")
-        print_digest(digest)
+        print_digest(digest, length)
         print("Expected:")
-        print_digest(expected)
+        print_digest(expected, length)
 
     else:
         print("Test case ok.")
@@ -304,7 +308,7 @@ def sha224_tests():
                    0x00000000, 0x00000000, 0x00000000, 0x000001C0]
 
     TC2_1_expected = [0x8250e65d, 0xbcf62f84, 0x66659c33, 0x33e5e91a,
-                      0x10c8b7b0, 0x95392769, 0x1f1419c2]
+                      0x10c8b7b0, 0x95392769, 0x1f1419c3]
 
     TC2_2_expected = [0x75388b16, 0x512776cc, 0x5dba5da1, 0xfd890150,
                       0xb0c6455c, 0xb4f58b19, 0x52522525]
@@ -339,7 +343,7 @@ def sha224_tests():
         my_digest = my_sha224.get_digest()
         if (VERBOSE):
             print("Digest for block %d:" % i)
-            print_digest(my_digest)
+            print_digest(my_digest, 7)
         compare_digests(my_digest, TC3_expected)
         print("")
 
