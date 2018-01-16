@@ -247,13 +247,19 @@ def print_digest(digest):
 #
 # Check that the given digest matches the expected digest.
 #-------------------------------------------------------------------
-def compare_digests(digest, expected):
-    if (digest != expected):
+def compare_digests(digest, expected, length = 8):
+    correct = True
+    for i in range(length):
+        if digest[i] != expected[i]:
+            correct = False
+
+    if (not correct):
         print("Error:")
         print("Got:")
         print_digest(digest)
         print("Expected:")
         print_digest(expected)
+
     else:
         print("Test case ok.")
 
@@ -274,13 +280,13 @@ def sha224_tests():
                  0x00000000, 0x00000000, 0x00000000, 0x00000000,
                  0x00000000, 0x00000000, 0x00000000, 0x00000018]
 
-    TC1_expected = [0xBA7816BF, 0x8F01CFEA, 0x414140DE, 0x5DAE2223,
-                    0xB00361A3, 0x96177A9C, 0xB410FF61, 0xF20015AD]
+    TC1_expected = [0x23097D22, 0x3405D822, 0x8642A477, 0xBDA255B3,
+                    0x2AADBCE4, 0xBDA0B3F7, 0xE36C9DA7]
 
     my_sha224.init()
     my_sha224.next(TC1_block)
     my_digest = my_sha224.get_digest()
-    compare_digests(my_digest, TC1_expected)
+    compare_digests(my_digest, TC1_expected, 7)
     print("")
 
 
@@ -297,20 +303,21 @@ def sha224_tests():
                    0x00000000, 0x00000000, 0x00000000, 0x00000000,
                    0x00000000, 0x00000000, 0x00000000, 0x000001C0]
 
-    TC2_1_expected = [0x85E655D6, 0x417A1795, 0x3363376A, 0x624CDE5C,
-                      0x76E09589, 0xCAC5F811, 0xCC4B32C1, 0xF20E533A]
+    TC2_1_expected = [0x8250e65d, 0xbcf62f84, 0x66659c33, 0x33e5e91a,
+                      0x10c8b7b0, 0x95392769, 0x1f1419c2]
 
-    TC2_2_expected = [0x248D6A61, 0xD20638B8, 0xE5C02693, 0x0C3E6039,
-                      0xA33CE459, 0x64FF2167, 0xF6ECEDD4, 0x19DB06C1]
+    TC2_2_expected = [0x75388b16, 0x512776cc, 0x5dba5da1, 0xfd890150,
+                      0xb0c6455c, 0xb4f58b19, 0x52522525]
+
 
     my_sha224.init()
     my_sha224.next(TC2_1_block)
     my_digest = my_sha224.get_digest()
-    compare_digests(my_digest, TC2_1_expected)
+    compare_digests(my_digest, TC2_1_expected, 7)
 
     my_sha224.next(TC2_2_block)
     my_digest = my_sha224.get_digest()
-    compare_digests(my_digest, TC2_2_expected)
+    compare_digests(my_digest, TC2_2_expected, 7)
     print("")
 
 
