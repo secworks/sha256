@@ -58,7 +58,7 @@ HUGE = False
 class SHA256():
     def __init__(self, mode="sha256", verbose = 0):
         if mode not in ["sha224", "sha256"]:
-            print("Given mode %s is not supporte." % mode)
+            print("Error: Given %s is not a supported mode." % mode)
             return 0
 
         self.mode = mode
