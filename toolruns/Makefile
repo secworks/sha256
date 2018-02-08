@@ -46,22 +46,25 @@ TOP_SRC=../src/rtl/sha256.v $(CORE_SRC)
 TOP_TB_SRC=../src/tb/tb_sha256.v
 
 CC=iverilog
+CC_FLAGS= -Wall
+
 LINT=verilator
+LINTFLAGS = +1364-2001ext+ --lint-only  -Wall -Wno-fatal -Wno-DECLFILENAME
 
 
 all: top.sim core.sim wmem.sim
 
 
 top.sim: $(TOP_TB_SRC) $(TOP_SRC)
-	$(CC) -o top.sim $(TOP_TB_SRC) $(TOP_SRC)
+	$(CC) $(CC_FLAGS) -o top.sim $(TOP_TB_SRC) $(TOP_SRC)
 
 
 core.sim: $(CORE_TB_SRC) $(CORE_SRC)
-	$(CC) -o core.sim $(CORE_SRC) $(CORE_TB_SRC)
+	$(CC) $(CC_FLAGS) -o core.sim $(CORE_SRC) $(CORE_TB_SRC)
 
 
 wmem.sim: $(WMEM_SRC) $(WMEM_TB_SRC)
-	$(CC) -o wmem.sim $(WMEM_SRC) $(WMEM_TB_SRC)
+	$(CC) $(CC_FLAGS) -o wmem.sim $(WMEM_SRC) $(WMEM_TB_SRC)
 
 #The stream testbench computes the digest of a randomly created reference file,
 # and compares it to the output of Python's hashlib library
@@ -99,10 +102,9 @@ sim-core: core.sim
 sim-wmem: wmem.sim
 	./wmem.sim
 
-lint:
-	verilator --lint-only ../src/rtl/sha256.v ../src/rtl/sha256_core.v ../src/rtl/sha256_k_constants.v ../src/rtl/sha256_w_mem.v
-	verilator --lint-only ../src/rtl/sha256_stream.v ../src/rtl/sha256_core.v ../src/rtl/sha256_k_constants.v ../src/rtl/sha256_w_mem.v
 
+lint: $(TOP_SRC)
+	$(CC) $(CC_FLAGS) $(TOP_SRC)
 
 
 debug:
