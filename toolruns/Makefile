@@ -49,7 +49,7 @@ CC=iverilog
 CC_FLAGS= -Wall
 
 LINT=verilator
-LINTFLAGS = +1364-2001ext+ --lint-only  -Wall -Wno-fatal -Wno-DECLFILENAME
+LINT_FLAGS = +1364-2001ext+ --lint-only -Wall -Wno-fatal -Wno-DECLFILENAME
 
 
 all: top.sim core.sim wmem.sim
@@ -104,7 +104,7 @@ sim-wmem: wmem.sim
 
 
 lint: $(TOP_SRC)
-	$(CC) $(CC_FLAGS) $(TOP_SRC)
+	$(LINT) $(LINT_FLAGS) $(TOP_SRC)
 
 
 debug:
