@@ -45,10 +45,10 @@ CORE_TB_SRC=../src/tb/tb_sha256_core.v
 TOP_SRC=../src/rtl/sha256.v $(CORE_SRC)
 TOP_TB_SRC=../src/tb/tb_sha256.v
 
-CC=iverilog
-CC_FLAGS= -Wall
+CC = iverilog
+CC_FLAGS = -Wall
 
-LINT=verilator
+LINT = verilator
 LINT_FLAGS = +1364-2001ext+ --lint-only -Wall -Wno-fatal -Wno-DECLFILENAME
 
 
