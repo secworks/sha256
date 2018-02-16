@@ -107,10 +107,6 @@ lint: $(TOP_SRC)
 	$(LINT) $(LINT_FLAGS) $(TOP_SRC)
 
 
-debug:
-	@echo "No debug available."
-
-
 clean:
 	rm -f top.sim
 	rm -f core.sim
@@ -130,7 +126,6 @@ help:
 	@echo "sim-core: Run core level simulation."
 	@echo "sim-wmem: Run wmem level simulation."
 	@echo "lint:     Run the linter on both the block based and the stream based top levels."
-	@echo "debug:    Print the internal varibles."
 	@echo "clean:    Delete all built files."
 
 #===================================================================
