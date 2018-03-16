@@ -17,8 +17,8 @@ The core supports and has been included in the
 ## Implementation status ##
 
 The core has been completed for a long time and been used in several
-designs in ASICs as well as in FPGAs. The core is mature and ready for
-use. Minor changes are non-functional cleanups of code.
+designs in ASICs as well as in FPGAs. The core is considered mature and
+ready for use. Minor changes are non-functional cleanups of code.
 
 
 ## Implementation details ##
@@ -104,6 +104,14 @@ Implementation results using ISE 14.7.
 - 688 Slices
 - 1929 regs
 - 70 MHz
+- 66 cycles latency
+
+**Artix-7**
+- xc7a200t-3fbg484
+- 2471 LUTs
+- 747 Slices
+- 1930 regs
+- 108 MHz
 - 66 cycles latency
 
 
