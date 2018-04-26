@@ -81,12 +81,6 @@ module sha256_w_mem(
   reg [5 : 0] w_ctr_reg;
   reg [5 : 0] w_ctr_new;
   reg         w_ctr_we;
-  reg         w_ctr_inc;
-  reg         w_ctr_rst;
-
-  reg [1 : 0]  sha256_w_mem_ctrl_reg;
-  reg [1 : 0]  sha256_w_mem_ctrl_new;
-  reg          sha256_w_mem_ctrl_we;
 
 
   //----------------------------------------------------------------
@@ -129,7 +123,6 @@ module sha256_w_mem(
           w_mem[14]             <= 32'h0;
           w_mem[15]             <= 32'h0;
           w_ctr_reg             <= 6'h00;
-          sha256_w_mem_ctrl_reg <= CTRL_IDLE;
         end
       else
         begin
@@ -155,9 +148,6 @@ module sha256_w_mem(
 
           if (w_ctr_we)
             w_ctr_reg <= w_ctr_new;
-
-          if (sha256_w_mem_ctrl_we)
-            sha256_w_mem_ctrl_reg <= sha256_w_mem_ctrl_new;
         end
     end // reg_update
 
@@ -279,61 +269,21 @@ module sha256_w_mem(
   //----------------------------------------------------------------
   always @*
     begin : w_ctr
-      w_ctr_new = 0;
-      w_ctr_we  = 0;
+      w_ctr_new = 6'h0;
+      w_ctr_we  = 1'h0;
 
-      if (w_ctr_rst)
+      if (init)
         begin
-          w_ctr_new = 6'h00;
-          w_ctr_we  = 1;
+          w_ctr_new = 6'h0;
+          w_ctr_we  = 1'h1;
         end
 
-      if (w_ctr_inc)
+      if (next)
         begin
           w_ctr_new = w_ctr_reg + 6'h01;
-          w_ctr_we  = 1;
+          w_ctr_we  = 1'h1;
         end
     end // w_ctr
-
-
-  //----------------------------------------------------------------
-  // sha256_w_mem_fsm
-  // Logic for the w shedule FSM.
-  //----------------------------------------------------------------
-  always @*
-    begin : sha256_w_mem_fsm
-      w_ctr_rst = 0;
-      w_ctr_inc = 0;
-
-      sha256_w_mem_ctrl_new = CTRL_IDLE;
-      sha256_w_mem_ctrl_we  = 0;
-
-      case (sha256_w_mem_ctrl_reg)
-        CTRL_IDLE:
-          begin
-            if (init)
-              begin
-                w_ctr_rst             = 1;
-                sha256_w_mem_ctrl_new = CTRL_UPDATE;
-                sha256_w_mem_ctrl_we  = 1;
-              end
-          end
-
-        CTRL_UPDATE:
-          begin
-            if (next)
-              begin
-                w_ctr_inc = 1;
-              end
-
-            if (w_ctr_reg == 6'h3f)
-              begin
-                sha256_w_mem_ctrl_new = CTRL_IDLE;
-                sha256_w_mem_ctrl_we  = 1;
-              end
-          end
-      endcase // case (sha256_ctrl_reg)
-    end // sha256_ctrl_fsm
 
 endmodule // sha256_w_mem
 
