@@ -106,7 +106,6 @@ module tb_sha256_w_mem();
 
       if (DEBUG)
         begin
-          $display("dut ctrl_state = %02x:", dut.sha256_w_mem_ctrl_reg);
           $display("dut w_ctr      = %02x:", dut.w_ctr_reg);
           $display("dut w_tmp      = %02x:", dut.w_tmp);
           dump_w_state();

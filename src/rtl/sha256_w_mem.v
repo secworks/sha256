@@ -104,25 +104,14 @@ module sha256_w_mem(
   //----------------------------------------------------------------
   always @ (posedge clk or negedge reset_n)
     begin : reg_update
+      integer i;
+
       if (!reset_n)
         begin
-          w_mem[00]             <= 32'h0;
-          w_mem[01]             <= 32'h0;
-          w_mem[02]             <= 32'h0;
-          w_mem[03]             <= 32'h0;
-          w_mem[04]             <= 32'h0;
-          w_mem[05]             <= 32'h0;
-          w_mem[06]             <= 32'h0;
-          w_mem[07]             <= 32'h0;
-          w_mem[08]             <= 32'h0;
-          w_mem[09]             <= 32'h0;
-          w_mem[10]             <= 32'h0;
-          w_mem[11]             <= 32'h0;
-          w_mem[12]             <= 32'h0;
-          w_mem[13]             <= 32'h0;
-          w_mem[14]             <= 32'h0;
-          w_mem[15]             <= 32'h0;
-          w_ctr_reg             <= 6'h00;
+          for (i = 0 ; i < 16 ; i = i + 1)
+            w_mem[i] <= 32'h0;
+
+          w_ctr_reg <= 6'h0;
         end
       else
         begin
@@ -161,13 +150,9 @@ module sha256_w_mem(
   always @*
     begin : select_w
       if (w_ctr_reg < 16)
-        begin
-          w_tmp = w_mem[w_ctr_reg[3 : 0]];
-        end
+        w_tmp = w_mem[w_ctr_reg[3 : 0]];
       else
-        begin
-          w_tmp = w_new;
-        end
+        w_tmp = w_new;
     end // select_w
 
 
@@ -239,7 +224,8 @@ module sha256_w_mem(
           w_mem15_new = block[31  :   0];
           w_mem_we    = 1;
         end
-      else if (w_ctr_reg > 15)
+
+      if (next && (w_ctr_reg > 15))
         begin
           w_mem00_new = w_mem[01];
           w_mem01_new = w_mem[02];
@@ -284,7 +270,6 @@ module sha256_w_mem(
           w_ctr_we  = 1'h1;
         end
     end // w_ctr
-
 endmodule // sha256_w_mem
 
 //======================================================================
