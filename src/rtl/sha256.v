@@ -163,15 +163,15 @@ module sha256(
 
       if (!reset_n)
         begin
+          for (i = 0 ; i < 16 ; i = i + 1)
+            block_reg[i] <= 32'h0;
+
           init_reg         <= 0;
           next_reg         <= 0;
           ready_reg        <= 0;
           mode_reg         <= MODE_SHA_256;
           digest_reg       <= 256'h0;
           digest_valid_reg <= 0;
-
-          for (i = 0 ; i < 16 ; i = i + 1)
-            block_reg[i] <= 32'h0;
         end
       else
         begin
