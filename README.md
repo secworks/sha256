@@ -1,4 +1,12 @@
 # sha256 #
+
+## Implementation status ##
+The core has been completed for a long time and been used in several
+designs in ASICs as well as in FPGAs. The core is considered mature and
+ready for use. Minor changes are non-functional cleanups of code.
+
+
+## Introduction
 Hardware implementation of the SHA-256 cryptographic hash function with
 support for both SHA-256 and SHA-224. The implementation is written in
 Verilog 2001 compliant code. The implementation includes the main core
@@ -10,15 +18,12 @@ there is no sharing of operations such as adders.
 The hardware implementation is complemented by a functional model
 written in Python.
 
+Note that the core does **NOT** implement padding of final block. The
+caller is expected to handle padding.
+
 The core supports and has been included in the
 [FuseSoC](https://github.com/olofk/fusesoc) package manager.
 
-
-## Implementation status ##
-
-The core has been completed for a long time and been used in several
-designs in ASICs as well as in FPGAs. The core is considered mature and
-ready for use. Minor changes are non-functional cleanups of code.
 
 
 ## Implementation details ##
