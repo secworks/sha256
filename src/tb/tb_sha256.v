@@ -598,12 +598,102 @@ module tb_sha256();
   endtask // sha256_tests
 
 
+
   //----------------------------------------------------------------
-  // sha256_top_test
+  // issue_test()
+  //----------------------------------------------------------------
+  task issue_test;
+    reg [511 : 0] block0;
+    reg [511 : 0] block1;
+    reg [511 : 0] block2;
+    reg [511 : 0] block3;
+    reg [511 : 0] block4;
+    reg [511 : 0] block5;
+    reg [511 : 0] block6;
+    reg [511 : 0] block7;
+    reg [511 : 0] block8;
+    reg [255 : 0] expected;
+    begin : issue_test;
+      block0 = 512'h6b900001_496e2074_68652061_72656120_6f662049_6f542028_496e7465_726e6574_206f6620_5468696e_6773292c_206d6f72_6520616e_64206d6f_7265626f_6f6d2c20;
+      block1 = 512'h69742068_61732062_65656e20_6120756e_69766572_73616c20_636f6e73_656e7375_73207468_61742064_61746120_69732074_69732061_206e6577_20746563_686e6f6c;
+      block2 = 512'h6f677920_74686174_20696e74_65677261_74657320_64656365_6e747261_6c697a61_74696f6e_2c496e20_74686520_61726561_206f6620_496f5420_28496e74_65726e65;
+      block3 = 512'h74206f66_20546869_6e677329_2c206d6f_72652061_6e64206d_6f726562_6f6f6d2c_20697420_68617320_6265656e_20612075_6e697665_7273616c_20636f6e_73656e73;
+      block4 = 512'h75732074_68617420_64617461_20697320_74697320_61206e65_77207465_63686e6f_6c6f6779_20746861_7420696e_74656772_61746573_20646563_656e7472_616c697a;
+      block5 = 512'h6174696f_6e2c496e_20746865_20617265_61206f66_20496f54_2028496e_7465726e_6574206f_66205468_696e6773_292c206d_6f726520_616e6420_6d6f7265_626f6f6d;
+      block6 = 512'h2c206974_20686173_20626565_6e206120_756e6976_65727361_6c20636f_6e73656e_73757320_74686174_20646174_61206973_20746973_2061206e_65772074_6563686e;
+      block7 = 512'h6f6c6f67_79207468_61742069_6e746567_72617465_73206465_63656e74_72616c69_7a617469_6f6e2c49_6e207468_65206172_6561206f_6620496f_54202849_6e746572;
+      block8 = 512'h6e657420_6f662054_68696e67_73292c20_6d6f7265_20616e64_206d6f72_65800000_00000000_00000000_00000000_00000000_00000000_00000000_00000000_000010e8;
+
+      expected = 256'h7758a30bbdfc9cd92b284b05e9be9ca3d269d3d149e7e82ab4a9ed5e81fbcf9d;
+
+      $display("Running test for 9 block issue.");
+      tc_ctr = tc_ctr + 1;
+      write_block(block0);
+      write_word(ADDR_CTRL, (CTRL_MODE_VALUE + CTRL_INIT_VALUE));
+      #(CLK_PERIOD);
+      wait_ready();
+
+      write_block(block1);
+      write_word(ADDR_CTRL, (CTRL_MODE_VALUE + CTRL_NEXT_VALUE));
+      #(CLK_PERIOD);
+      wait_ready();
+
+      write_block(block2);
+      write_word(ADDR_CTRL, (CTRL_MODE_VALUE + CTRL_NEXT_VALUE));
+      #(CLK_PERIOD);
+      wait_ready();
+
+      write_block(block3);
+      write_word(ADDR_CTRL, (CTRL_MODE_VALUE + CTRL_NEXT_VALUE));
+      #(CLK_PERIOD);
+      wait_ready();
+
+      write_block(block4);
+      write_word(ADDR_CTRL, (CTRL_MODE_VALUE + CTRL_NEXT_VALUE));
+      #(CLK_PERIOD);
+      wait_ready();
+
+      write_block(block5);
+      write_word(ADDR_CTRL, (CTRL_MODE_VALUE + CTRL_NEXT_VALUE));
+      #(CLK_PERIOD);
+      wait_ready();
+
+      write_block(block6);
+      write_word(ADDR_CTRL, (CTRL_MODE_VALUE + CTRL_NEXT_VALUE));
+      #(CLK_PERIOD);
+      wait_ready();
+
+      write_block(block7);
+      write_word(ADDR_CTRL, (CTRL_MODE_VALUE + CTRL_NEXT_VALUE));
+      #(CLK_PERIOD);
+      wait_ready();
+
+      write_block(block8);
+      write_word(ADDR_CTRL, (CTRL_MODE_VALUE + CTRL_NEXT_VALUE));
+      #(CLK_PERIOD);
+      wait_ready();
+
+      read_digest();
+      if (digest_data == expected)
+        begin
+          $display("Digest ok.");
+        end
+      else
+        begin
+          $display("ERROR in digest");
+          $display("Expected: 0x%064x", expected);
+          $display("Got:      0x%064x", digest_data);
+          error_ctr = error_ctr + 1;
+        end
+    end
+  endtask // issue_test
+
+
+  //----------------------------------------------------------------
   // The main test functionality.
   //----------------------------------------------------------------
   initial
-    begin : sha256_top_test
+    begin : main
       $display("   -- Testbench for sha256 started --");
 
       init_sim();
@@ -612,12 +702,13 @@ module tb_sha256();
       check_name_version();
       sha224_tests();
       sha256_tests();
+      issue_test();
 
       display_test_result();
 
       $display("   -- Testbench for sha256 done. --");
       $finish;
-    end // sha256_test
+    end // main
 endmodule // tb_sha256
 
 //======================================================================

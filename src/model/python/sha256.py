@@ -428,17 +428,94 @@ def sha256_tests():
 
 
 #-------------------------------------------------------------------
+# sha256_issue_test()
+# Testcase to test and drive debugging of issue with messages
+# that span more than eight blocks.
+#-------------------------------------------------------------------
+def sha256_issue_test():
+    block0 = [0x6b900001, 0x496e2074, 0x68652061, 0x72656120,
+              0x6f662049, 0x6f542028, 0x496e7465, 0x726e6574,
+              0x206f6620, 0x5468696e, 0x6773292c, 0x206d6f72,
+              0x6520616e, 0x64206d6f, 0x7265626f, 0x6f6d2c20]
+
+    block1 = [0x69742068, 0x61732062, 0x65656e20, 0x6120756e,
+              0x69766572, 0x73616c20, 0x636f6e73, 0x656e7375,
+              0x73207468, 0x61742064, 0x61746120, 0x69732074,
+              0x69732061, 0x206e6577, 0x20746563, 0x686e6f6c]
+
+    block2 = [0x6f677920, 0x74686174, 0x20696e74, 0x65677261,
+              0x74657320, 0x64656365, 0x6e747261, 0x6c697a61,
+              0x74696f6e, 0x2c496e20, 0x74686520, 0x61726561,
+              0x206f6620, 0x496f5420, 0x28496e74, 0x65726e65]
+
+    block3 = [0x74206f66, 0x20546869, 0x6e677329, 0x2c206d6f,
+              0x72652061, 0x6e64206d, 0x6f726562, 0x6f6f6d2c,
+              0x20697420, 0x68617320, 0x6265656e, 0x20612075,
+              0x6e697665, 0x7273616c, 0x20636f6e, 0x73656e73]
+
+    block4 = [0x75732074, 0x68617420, 0x64617461, 0x20697320,
+              0x74697320, 0x61206e65, 0x77207465, 0x63686e6f,
+              0x6c6f6779, 0x20746861, 0x7420696e, 0x74656772,
+              0x61746573, 0x20646563, 0x656e7472, 0x616c697a]
+
+    block5 = [0x6174696f, 0x6e2c496e, 0x20746865, 0x20617265,
+              0x61206f66, 0x20496f54, 0x2028496e, 0x7465726e,
+              0x6574206f, 0x66205468, 0x696e6773, 0x292c206d,
+              0x6f726520, 0x616e6420, 0x6d6f7265, 0x626f6f6d]
+
+    block6 = [0x2c206974, 0x20686173, 0x20626565, 0x6e206120,
+              0x756e6976, 0x65727361, 0x6c20636f, 0x6e73656e,
+              0x73757320, 0x74686174, 0x20646174, 0x61206973,
+              0x20746973, 0x2061206e, 0x65772074, 0x6563686e]
+
+    block7 = [0x6f6c6f67, 0x79207468, 0x61742069, 0x6e746567,
+              0x72617465, 0x73206465, 0x63656e74, 0x72616c69,
+              0x7a617469, 0x6f6e2c49, 0x6e207468, 0x65206172,
+              0x6561206f, 0x6620496f, 0x54202849, 0x6e746572]
+
+    # Padding calculation:
+    # Length: 8 * 512 + 7 * 32 + 8 = 0x10e8
+    block8 = [0x6e657420, 0x6f662054, 0x68696e67, 0x73292c20,
+              0x6d6f7265, 0x20616e64, 0x206d6f72, 0x65800000,
+              0x00000000, 0x00000000, 0x00000000, 0x00000000,
+              0x00000000, 0x00000000, 0x00000000, 0x000010e8]
+
+    expected = [0x7758a30b, 0xbdfc9cd9, 0x2b284b05, 0xe9be9ca3,
+                0xd269d3d1, 0x49e7e82a, 0xb4a9ed5e, 0x81fbcf9d]
+
+    print("Running test for issue:")
+    my_sha256 = SHA256(verbose=0)
+    my_sha256.init()
+    my_sha256.next(block0)
+    my_sha256.next(block1)
+    my_sha256.next(block2)
+    my_sha256.next(block3)
+    my_sha256.next(block4)
+    my_sha256.next(block5)
+    my_sha256.next(block6)
+    my_sha256.next(block7)
+    my_sha256.next(block8)
+    my_digest = my_sha256.get_digest()
+
+    print("Digest for message:")
+    print_digest(my_digest)
+    compare_digests(my_digest, expected)
+    print("")
+
+
+#-------------------------------------------------------------------
 # main()
 #
-# If executed tests the ChaCha class using known test vectors.
+# If executed tests the sha256 class using known test vectors.
 #-------------------------------------------------------------------
 def main():
     print("Testing the SHA-256 Python model.")
     print("---------------------------------")
-    print
+    print("")
 
     sha224_tests()
     sha256_tests()
+    sha256_issue_test()
 
 
 #-------------------------------------------------------------------
