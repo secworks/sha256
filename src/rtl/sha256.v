@@ -1,58 +1,78 @@
-//======================================================================
-//
-// sha256.v
-// --------
-// Top level wrapper for the SHA-256 hash function providing
-// a simple memory like interface with 32 bit data access.
-//
-//
-// Author: Joachim Strombergson
-// Copyright (c) 2013, 201, Secworks Sweden AB
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or
-// without modification, are permitted provided that the following
-// conditions are met:
-//
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-//
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in
-//    the documentation and/or other materials provided with the
-//    distribution.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-// FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-// COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-// BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
-// ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//======================================================================
 
-module sha256(
-              // Clock and reset.
-              input wire           clk,
-              input wire           reset_n,
+`timescale 1 ns / 1 ps
 
-              // Control.
-              input wire           cs,
-              input wire           we,
+  module SHA256_v2_0 #
+  (
+    // Users to add parameters here
 
-              // Data ports.
-              input wire  [7 : 0]  address,
-              input wire  [31 : 0] write_data,
-              output wire [31 : 0] read_data,
-              output wire          error
-             );
+    // User parameters ends
+    // Do not modify the parameters beyond this line
 
+
+    // Parameters of Axi Slave Bus Interface S00_AXI
+    parameter integer C_S00_AXI_DATA_WIDTH  = 32,
+    parameter integer C_S00_AXI_ADDR_WIDTH  = 8
+  )
+  (
+    // Users to add ports here
+
+    // User ports ends
+    output wire hash_complete,
+    // Do not modify the ports beyond this line
+
+
+    // Ports of Axi Slave Bus Interface S00_AXI
+    input wire  s00_axi_aclk,
+    input wire  s00_axi_aresetn,
+    input wire [C_S00_AXI_ADDR_WIDTH-1 : 0] s00_axi_awaddr,
+    input wire [2 : 0] s00_axi_awprot,
+    input wire  s00_axi_awvalid,
+    output wire  s00_axi_awready,
+    input wire [C_S00_AXI_DATA_WIDTH-1 : 0] s00_axi_wdata,
+    input wire [(C_S00_AXI_DATA_WIDTH/8)-1 : 0] s00_axi_wstrb,
+    input wire  s00_axi_wvalid,
+    output wire  s00_axi_wready,
+    output wire [1 : 0] s00_axi_bresp,
+    output wire  s00_axi_bvalid,
+    input wire  s00_axi_bready,
+    input wire [C_S00_AXI_ADDR_WIDTH-1 : 0] s00_axi_araddr,
+    input wire [2 : 0] s00_axi_arprot,
+    input wire  s00_axi_arvalid,
+    output wire  s00_axi_arready,
+    output wire [C_S00_AXI_DATA_WIDTH-1 : 0] s00_axi_rdata,
+    output wire [1 : 0] s00_axi_rresp,
+    output wire  s00_axi_rvalid,
+    input wire  s00_axi_rready
+  );
+// Instantiation of Axi Bus Interface S00_AXI
+  SHA256_v2_0_S00_AXI # ( 
+    .C_S_AXI_DATA_WIDTH(C_S00_AXI_DATA_WIDTH),
+    .C_S_AXI_ADDR_WIDTH(C_S00_AXI_ADDR_WIDTH)
+  ) SHA256_v2_0_S00_AXI_inst (
+    .S_AXI_ACLK(s00_axi_aclk),
+    .S_AXI_ARESETN(s00_axi_aresetn),
+    .S_AXI_AWADDR(s00_axi_awaddr),
+    .S_AXI_AWPROT(s00_axi_awprot),
+    .S_AXI_AWVALID(s00_axi_awvalid),
+    .S_AXI_AWREADY(s00_axi_awready),
+    .S_AXI_WDATA(s00_axi_wdata),
+    .S_AXI_WSTRB(s00_axi_wstrb),
+    .S_AXI_WVALID(s00_axi_wvalid),
+    .S_AXI_WREADY(s00_axi_wready),
+    .S_AXI_BRESP(s00_axi_bresp),
+    .S_AXI_BVALID(s00_axi_bvalid),
+    .S_AXI_BREADY(s00_axi_bready),
+    .S_AXI_ARADDR(s00_axi_araddr),
+    .S_AXI_ARPROT(s00_axi_arprot),
+    .S_AXI_ARVALID(s00_axi_arvalid),
+    .S_AXI_ARREADY(s00_axi_arready),
+    .S_AXI_RDATA(s00_axi_rdata),
+    .S_AXI_RRESP(s00_axi_rresp),
+    .S_AXI_RVALID(s00_axi_rvalid),
+    .S_AXI_RREADY(s00_axi_rready)
+  );
+
+  // Add user logic here
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
@@ -104,6 +124,9 @@ module sha256(
   reg [255 : 0] digest_reg;
 
   reg digest_valid_reg;
+  reg hash_complete;
+  //reg s00_axi_arvalid;
+  //reg s00_axi_bvalid;
 
 
   //----------------------------------------------------------------
@@ -114,6 +137,7 @@ module sha256(
   wire [255 : 0] core_digest;
   wire           core_digest_valid;
 
+  //reg [31 : 0]   s00_axi_rdata;
   reg [31 : 0]   tmp_read_data;
   reg            tmp_error;
 
@@ -126,7 +150,6 @@ module sha256(
                        block_reg[08], block_reg[09], block_reg[10], block_reg[11],
                        block_reg[12], block_reg[13], block_reg[14], block_reg[15]};
 
-  assign read_data = tmp_read_data;
   assign error     = tmp_error;
 
 
@@ -134,8 +157,8 @@ module sha256(
   // core instantiation.
   //----------------------------------------------------------------
   sha256_core core(
-                   .clk(clk),
-                   .reset_n(reset_n),
+                   .s00_axi_aclk(s00_axi_aclk),
+                   .s00_axi_aresetn(s00_axi_aresetn),
 
                    .init(init_reg),
                    .next(next_reg),
@@ -157,11 +180,11 @@ module sha256(
   // All registers are positive edge triggered with asynchronous
   // active low reset. All registers have write enable.
   //----------------------------------------------------------------
-  always @ (posedge clk or negedge reset_n)
+  always @ (posedge s00_axi_aclk or negedge s00_axi_aresetn)
     begin : reg_update
       integer i;
 
-      if (!reset_n)
+      if (!s00_axi_aresetn)
         begin
           for (i = 0 ; i < 16 ; i = i + 1)
             block_reg[i] <= 32'h0;
@@ -172,6 +195,7 @@ module sha256(
           mode_reg         <= MODE_SHA_256;
           digest_reg       <= 256'h0;
           digest_valid_reg <= 0;
+          tmp_read_data  = 32'h0;
         end
       else
         begin
@@ -184,10 +208,17 @@ module sha256(
             mode_reg <= mode_new;
 
           if (core_digest_valid)
+           begin
             digest_reg <= core_digest;
+            hash_complete = 1;
+           end
 
           if (block_we)
-            block_reg[address[3 : 0]] <= write_data;
+          begin
+            hash_complete = 0;
+            block_reg[s00_axi_awaddr[3 : 0]] <= s00_axi_wdata;
+            //$display("block reg written = 0x%08x", block_reg[s00_axi_awaddr[3:0]]);
+          end
         end
     end // reg_update
 
@@ -195,7 +226,7 @@ module sha256(
   //----------------------------------------------------------------
   // api_logic
   //
-  // Implementation of the api logic. If cs is enabled will either
+  // Implementation of the api logic. If s00_axi_awprot is enabled will either
   // try to write to or read from the internal registers.
   //----------------------------------------------------------------
   always @*
@@ -205,34 +236,46 @@ module sha256(
       mode_new      = 0;
       mode_we       = 0;
       block_we      = 0;
-      tmp_read_data = 32'h0;
+      //tmp_read_data = 32'h0;
       tmp_error     = 0;
-
-      if (cs)
+      //s00_axi_arvalid = 0;
+      //s00_axi_bvalid = 0;
+      //hash_complete = 0;
+      if (s00_axi_awprot)
         begin
-          if (we)
+          if (s00_axi_awvalid)
             begin
-              if (address == ADDR_CTRL)
+              if (s00_axi_awaddr == ADDR_CTRL)
                 begin
-                  init_new = write_data[CTRL_INIT_BIT];
-                  next_new = write_data[CTRL_NEXT_BIT];
-                  mode_new = write_data[CTRL_MODE_BIT];
+                  init_new = s00_axi_wdata[CTRL_INIT_BIT];
+                  next_new = s00_axi_wdata[CTRL_NEXT_BIT];
+                  mode_new = s00_axi_wdata[CTRL_MODE_BIT];
                   mode_we  = 1;
                 end
 
-              if ((address >= ADDR_BLOCK0) && (address <= ADDR_BLOCK15))
+              if ((s00_axi_awaddr >= ADDR_BLOCK0) && (s00_axi_awaddr <= ADDR_BLOCK15))
+               begin
+                //$display("block enable of address = 0x%08x", s00_axi_awaddr);
                 block_we = 1;
-            end // if (we)
+               end
+            end // if (s00_axi_awvalid)
 
           else
             begin
-              if ((address >= ADDR_BLOCK0) && (address <= ADDR_BLOCK15))
-                tmp_read_data = block_reg[address[3 : 0]];
+              if ((s00_axi_araddr >= ADDR_BLOCK0) && (s00_axi_araddr <= ADDR_BLOCK15))
+                tmp_read_data = block_reg[s00_axi_awaddr[3 : 0]];
 
-              if ((address >= ADDR_DIGEST0) && (address <= ADDR_DIGEST7))
-                tmp_read_data = digest_reg[(7 - (address - ADDR_DIGEST0)) * 32 +: 32];
+              if ((s00_axi_araddr >= ADDR_DIGEST0) && (s00_axi_araddr <= ADDR_DIGEST7))
+               begin
+                //hash_complete = 1;
+                tmp_read_data = digest_reg[(7 - (s00_axi_araddr - ADDR_DIGEST0)) * 32 +: 32] ;
+                //s00_axi_arvalid = 1;
+                //s00_axi_bvalid = 1;
+                $display("0x%08x", tmp_read_data);
+                //s00_axi_rdata = digest_reg[(7 - (s00_axi_araddr - ADDR_DIGEST0)) * 32 +: 32];
+               end
 
-              case (address)
+              case (s00_axi_araddr)
                 // Read operations.
                 ADDR_NAME0:
                   tmp_read_data = CORE_NAME0;
@@ -252,12 +295,10 @@ module sha256(
                 default:
                   begin
                   end
-              endcase // case (address)
+              endcase // case (s00_axi_awaddr)
             end
         end
     end // addr_decoder
-endmodule // sha256
-
-//======================================================================
-// EOF sha256.v
-//======================================================================
+  // User logic ends
+    assign s00_axi_rdata = tmp_read_data;
+  endmodule
