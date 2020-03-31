@@ -151,6 +151,7 @@
                        block_reg[12], block_reg[13], block_reg[14], block_reg[15]};
 
   assign error     = tmp_error;
+  assign s00_axi_rdata = tmp_read_data;
 
 
   //----------------------------------------------------------------
@@ -159,7 +160,6 @@
   sha256_core core(
                    .s00_axi_aclk(s00_axi_aclk),
                    .s00_axi_aresetn(s00_axi_aresetn),
-
                    .init(init_reg),
                    .next(next_reg),
                    .mode(mode_reg),
@@ -195,7 +195,7 @@
           mode_reg         <= MODE_SHA_256;
           digest_reg       <= 256'h0;
           digest_valid_reg <= 0;
-          tmp_read_data  = 32'h0;
+          //tmp_read_data  = 32'h0;
         end
       else
         begin
@@ -236,7 +236,7 @@
       mode_new      = 0;
       mode_we       = 0;
       block_we      = 0;
-      //tmp_read_data = 32'h0;
+      tmp_read_data = 32'h0;
       tmp_error     = 0;
       //s00_axi_arvalid = 0;
       //s00_axi_bvalid = 0;
@@ -300,5 +300,4 @@
         end
     end // addr_decoder
   // User logic ends
-    assign s00_axi_rdata = tmp_read_data;
   endmodule
