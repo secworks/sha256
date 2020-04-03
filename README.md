@@ -46,6 +46,15 @@ The top level entity is called sha256_core. This entity has wide
 interfaces (512 bit block input, 256 bit digest). In order to make it
 usable you probably want to wrap the core with a bus interface.
 
+## AXI4 Wrapped Core ##
+Have now added a AXI4-wrapped core which wraps the core (sha256_core).
+It has a AXI4-Lite slave Interface with added hash complete interrupt 
+signal. Chip select is implemented via axi_awprot signal.
+
+- src/rtl/axi4 - RTL source file for wrapped core
+- src/tb/axi4 - Testbench for the wrapped core (**NOTE** - You can
+expect bugs as this is still under development)
+
 The provided top level wrapper, sha256.v provides a simple 32-bit memory
 like interface. The core (sha256_core) will sample all data inputs when
 given the init or next signal. the wrapper contains additional data
@@ -133,3 +142,5 @@ Implementation results using Vivado 2014.4.
 
 ## TODO ##
 - Complete documentation.
+- Bug fixes for Testbench of AXI4 wrapped core
+- Add implementation results of the wrapped core on **PYNQ-Z2**
