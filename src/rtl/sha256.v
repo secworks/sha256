@@ -66,7 +66,7 @@
     .S_AXI_ARPROT(s00_axi_arprot),
     .S_AXI_ARVALID(s00_axi_arvalid),
     .S_AXI_ARREADY(s00_axi_arready),
-    .S_AXI_RDATA(s00_axi_rdata),
+    //.S_AXI_RDATA(s00_axi_rdata),
     .S_AXI_RRESP(s00_axi_rresp),
     .S_AXI_RVALID(s00_axi_rvalid),
     .S_AXI_RREADY(s00_axi_rready)
@@ -125,8 +125,6 @@
 
   reg digest_valid_reg;
   reg hash_complete;
-  //reg s00_axi_arvalid;
-  //reg s00_axi_bvalid;
 
 
   //----------------------------------------------------------------
@@ -136,8 +134,6 @@
   wire [511 : 0] core_block;
   wire [255 : 0] core_digest;
   wire           core_digest_valid;
-
-  //reg [31 : 0]   s00_axi_rdata;
   reg [31 : 0]   tmp_read_data;
   reg            tmp_error;
 
@@ -195,7 +191,6 @@
           mode_reg         <= MODE_SHA_256;
           digest_reg       <= 256'h0;
           digest_valid_reg <= 0;
-          //tmp_read_data  = 32'h0;
         end
       else
         begin
@@ -217,7 +212,6 @@
           begin
             hash_complete = 0;
             block_reg[s00_axi_awaddr[3 : 0]] <= s00_axi_wdata;
-            //$display("block reg written = 0x%08x", block_reg[s00_axi_awaddr[3:0]]);
           end
         end
     end // reg_update
@@ -238,9 +232,6 @@
       block_we      = 0;
       tmp_read_data = 32'h0;
       tmp_error     = 0;
-      //s00_axi_arvalid = 0;
-      //s00_axi_bvalid = 0;
-      //hash_complete = 0;
       if (s00_axi_awprot)
         begin
           if (s00_axi_awvalid)
@@ -255,7 +246,6 @@
 
               if ((s00_axi_awaddr >= ADDR_BLOCK0) && (s00_axi_awaddr <= ADDR_BLOCK15))
                begin
-                //$display("block enable of address = 0x%08x", s00_axi_awaddr);
                 block_we = 1;
                end
             end // if (s00_axi_awvalid)
@@ -265,14 +255,10 @@
               if ((s00_axi_araddr >= ADDR_BLOCK0) && (s00_axi_araddr <= ADDR_BLOCK15))
                 tmp_read_data = block_reg[s00_axi_awaddr[3 : 0]];
 
+
               if ((s00_axi_araddr >= ADDR_DIGEST0) && (s00_axi_araddr <= ADDR_DIGEST7))
                begin
-                //hash_complete = 1;
                 tmp_read_data = digest_reg[(7 - (s00_axi_araddr - ADDR_DIGEST0)) * 32 +: 32] ;
-                //s00_axi_arvalid = 1;
-                //s00_axi_bvalid = 1;
-                $display("0x%08x", tmp_read_data);
-                //s00_axi_rdata = digest_reg[(7 - (s00_axi_araddr - ADDR_DIGEST0)) * 32 +: 32];
                end
 
               case (s00_axi_araddr)
