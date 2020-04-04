@@ -1,8 +1,8 @@
 //======================================================================
 //
-// sha256v2_tb.v
+// tb_sha256_axi4.v
 // ----------------
-// Testbench for the SHA-256 AXI IP.
+// Testbench for the SHA256 AXI4 wrapper.
 //
 //
 // Author: Sanjay A Menon
@@ -36,7 +36,7 @@
 //
 //======================================================================
 
-module sha256v2_tb();
+module tb_sha256_axi4();
 
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
@@ -91,7 +91,7 @@ module sha256v2_tb();
   //----------------------------------------------------------------
   // Device Under Test.
   //----------------------------------------------------------------
-  SHA256_v2_0 dut(
+  sha256_axi4 dut(
                   .hash_complete(complete),
                   .s00_axi_aclk(tb_clk),
                   .s00_axi_aresetn(tb_reset_n),
@@ -231,7 +231,7 @@ module sha256v2_tb();
       tb_clk = 0;
       tb_reset_n = 1;
 
-      
+
       tb_awaddr = 8'h00;
       tb_awprot = 3'b000;
       tb_awvalid = 0;
@@ -315,7 +315,7 @@ module sha256v2_tb();
    begin
      $display("*** TC %0d single block test case started.", tc_number);
      tc_ctr = tc_ctr + 1;
-     
+
      tb_awprot = 1;
      //tb_awvalid = 1;
      //tb_wvalid = 1;
@@ -331,7 +331,7 @@ module sha256v2_tb();
      tb_wdata = block[31:0];
      #(CLK_PERIOD);
      wait_ready();
-     
+
 
      //tb_awvalid = 1;
      //tb_wvalid = 1;
@@ -347,7 +347,7 @@ module sha256v2_tb();
      #(CLK_PERIOD);
      wait_ready();
      //$display(dut.block_reg[1]);
-     
+
 
      //tb_awvalid = 1;
      //tb_wvalid = 1;
@@ -362,7 +362,7 @@ module sha256v2_tb();
      #(CLK_PERIOD);
      wait_ready();
      //$display(dut.block_reg[2]);
-     
+
      //tb_awvalid = 1;
      //tb_wvalid = 1;
      //tb_awaddr = 8'h08;
@@ -376,7 +376,7 @@ module sha256v2_tb();
      #(CLK_PERIOD);
      wait_ready();
      //$display(dut.block_reg[3]);
-     
+
      //tb_awvalid = 1;
      //tb_wvalid = 1;
      //tb_awaddr = 8'h08;
@@ -390,7 +390,7 @@ module sha256v2_tb();
      #(CLK_PERIOD);
      wait_ready();
      //$display(dut.block_reg[4]);
-     
+
      //tb_awvalid = 1;
      //tb_wvalid = 1;
      //tb_awaddr = 8'h08;
@@ -404,7 +404,7 @@ module sha256v2_tb();
      #(CLK_PERIOD);
      wait_ready();
      //$display(dut.block_reg[5]);
-     
+
      //tb_awvalid = 1;
      //tb_wvalid = 1;
      //tb_awaddr = 8'h08;
@@ -418,7 +418,7 @@ module sha256v2_tb();
      #(CLK_PERIOD);
      wait_ready();
      //$display(dut.block_reg[6]);
-     
+
      //tb_awvalid = 1;
      //tb_wvalid = 1;
      //tb_awaddr = 8'h08;
@@ -432,7 +432,7 @@ module sha256v2_tb();
      #(CLK_PERIOD);
      wait_ready();
      //$display(dut.block_reg[7]);
-     
+
      //tb_awvalid = 1;
      //tb_wvalid = 1;
      //tb_awaddr = 8'h08;
@@ -460,7 +460,7 @@ module sha256v2_tb();
      #(CLK_PERIOD);
      wait_ready();
      //$display(dut.block_reg[9]);
-     
+
      //tb_awvalid = 1;
      //tb_wvalid = 1;
      //tb_awaddr = 8'h08;
@@ -488,7 +488,7 @@ module sha256v2_tb();
      #(CLK_PERIOD);
      wait_ready();
      //$display(dut.block_reg[11]);
-     
+
      //tb_awvalid = 1;
      //tb_wvalid = 1;
      //tb_awaddr = 8'h08;
@@ -502,7 +502,7 @@ module sha256v2_tb();
      #(CLK_PERIOD);
      wait_ready();
      //$display(dut.block_reg[12]);
-     
+
      //tb_awvalid = 1;
      //tb_wvalid = 1;
      //tb_awaddr = 8'h08;
@@ -560,13 +560,13 @@ module sha256v2_tb();
      //tb_init = 1;
      //tb_mode = 1;
      //output section
-          
+
      wait_hash_complete();
      tb_awvalid = 0;
      tb_wvalid = 0;
      //tb_bready = 0;
      //tb_init = 0;
-     
+
      tb_araddr = 8'h20;
      tb_arprot = 1;
      tb_arvalid = 1;
@@ -583,56 +583,56 @@ module sha256v2_tb();
      tb_arvalid = 1;
      tb_rready = 1;
      tb_araddr = 8'h21;
-     tb_digest[63:32] = tb_rdata; 
+     tb_digest[63:32] = tb_rdata;
      #(CLK_PERIOD);
      wait_read();
 
      //tb_arvalid = 1;
      //tb_rready = 1;
      //tb_araddr = 8'h22;
-     //tb_digest[95:64] = tb_rdata; 
+     //tb_digest[95:64] = tb_rdata;
      //#(CLK_PERIOD);
      //wait_read();
 
      //tb_arvalid = 1;
      //tb_rready = 1;
      //tb_araddr = 8'h23;
-     //tb_digest[127:96] = tb_rdata; 
+     //tb_digest[127:96] = tb_rdata;
      //#(CLK_PERIOD);
      //wait_read();
 
      //tb_arvalid = 1;
      //tb_rready = 1;
      //tb_araddr = 8'h24;
-     //tb_digest[159:128] = tb_rdata; 
+     //tb_digest[159:128] = tb_rdata;
      //#(CLK_PERIOD);
      //wait_read();
 
      //tb_arvalid = 1;
      //tb_rready = 1;
      //tb_araddr = 8'h25;
-     //tb_digest[191:160] = tb_rdata; 
+     //tb_digest[191:160] = tb_rdata;
      //#(CLK_PERIOD);
      //wait_read();
 
      //tb_arvalid = 1;
      //tb_rready = 1;
      //tb_araddr = 8'h26;
-     //tb_digest[223:192] = tb_rdata; 
+     //tb_digest[223:192] = tb_rdata;
      //#(CLK_PERIOD);
      //wait_read();
 
      //tb_arvalid = 1;
      //tb_rready = 1;
      //tb_araddr = 8'h27;
-     //tb_digest[255:224] = tb_rdata; 
+     //tb_digest[255:224] = tb_rdata;
      //#(CLK_PERIOD);
      //wait_read();
 
 
      //wait_ready();
 
-    
+
  //    if (tb_digest == expected)
  //      begin
  //        $display("*** TC %0d successful.", tc_number);
@@ -647,7 +647,7 @@ module sha256v2_tb();
  //        error_ctr = error_ctr + 1;
  //      end
     end
-   
+
   endtask // single_block_test
 
 
@@ -869,7 +869,7 @@ module sha256v2_tb();
   //----------------------------------------------------------------
   initial
     begin : main
-      $display("   -- Testbench for sha256 core started --");
+      $display("   -- Testbench for sha256_axi4 started --");
 
       init_sim();
       //dump_dut_state();
@@ -883,8 +883,8 @@ module sha256v2_tb();
       $display("*** Simulation done.");
       $finish;
     end // main
-endmodule // tb_sha256_core
+endmodule // tb_sha256_axi4
 
 //======================================================================
-// EOF tb_sha256_core.v
+// EOF tb_sha256_axi4.v
 //======================================================================

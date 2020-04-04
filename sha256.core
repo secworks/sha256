@@ -10,7 +10,7 @@ files =
  src/rtl/sha256_core.v
  src/rtl/sha256_k_constants.v
  src/rtl/sha256_w_mem.v
- src/rtl/sha256_stream.v
+ src/interfaces/stream/rtl/sha256_stream.v
  src/rtl/sha256.v
 file_type = verilogSource
 usage = sim synth
@@ -18,7 +18,7 @@ usage = sim synth
 [fileset tb]
 files =
  src/tb/tb_sha256_core.v
- src/tb/tb_sha256_stream.v
+ src/interfaces/stream/tb/tb_sha256_stream.v
  src/tb/tb_sha256.v
 file_type = verilogSource
 scope = private

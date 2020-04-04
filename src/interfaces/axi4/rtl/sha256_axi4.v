@@ -1,7 +1,7 @@
 
 `timescale 1 ns / 1 ps
 
-	module SHA256_v2_0 #
+	module sha256_axi4 #
 	(
 		// Users to add parameters here
 
@@ -45,10 +45,10 @@
 		input wire  s00_axi_rready
 	);
 // Instantiation of Axi Bus Interface S00_AXI
-	SHA256_v2_0_S00_AXI # ( 
+	sha256_v2_0_s00_axi # (
 		.C_S_AXI_DATA_WIDTH(C_S00_AXI_DATA_WIDTH),
 		.C_S_AXI_ADDR_WIDTH(C_S00_AXI_ADDR_WIDTH)
-	) SHA256_v2_0_S00_AXI_inst (
+	) sha256_v2_0_s00_axi_inst (
 		.S_AXI_ACLK(s00_axi_aclk),
 		.S_AXI_ARESETN(s00_axi_aresetn),
 		.S_AXI_AWADDR(s00_axi_awaddr),
