@@ -137,7 +137,7 @@
   reg [255 : 0] digest_reg;
 
   reg digest_valid_reg;
-  reg hash_complete;
+  reg hash_complete_reg;
 
 
   //----------------------------------------------------------------
@@ -148,7 +148,6 @@
   wire [255 : 0] core_digest;
   wire           core_digest_valid;
   reg [31 : 0]   tmp_read_data;
-  reg            tmp_error;
 
 
   //----------------------------------------------------------------
@@ -159,8 +158,8 @@
                        block_reg[08], block_reg[09], block_reg[10], block_reg[11],
                        block_reg[12], block_reg[13], block_reg[14], block_reg[15]};
 
-  assign error     = tmp_error;
   assign s00_axi_rdata = tmp_read_data;
+  assign hash_complete = hash_complete_reg;
 
 
   //----------------------------------------------------------------
@@ -198,12 +197,13 @@
           for (i = 0 ; i < 16 ; i = i + 1)
             block_reg[i] <= 32'h0;
 
-          init_reg         <= 0;
-          next_reg         <= 0;
-          ready_reg        <= 0;
-          mode_reg         <= MODE_SHA_256;
-          digest_reg       <= 256'h0;
-          digest_valid_reg <= 0;
+          init_reg          <= 1'h0;
+          next_reg          <= 1'h0;
+          ready_reg         <= 1'h0;
+          mode_reg          <= MODE_SHA_256;
+          digest_reg        <= 256'h0;
+          hash_complete_reg <= 1'h0;
+          digest_valid_reg  <= 1'h0;
         end
       else
         begin
@@ -217,13 +217,13 @@
 
           if (core_digest_valid)
            begin
-            digest_reg <= core_digest;
-            hash_complete = 1;
+            digest_reg        <= core_digest;
+            hash_complete_reg <= 1'h1;
            end
 
           if (block_we)
           begin
-            hash_complete = 0;
+            hash_complete_reg                <= 1'h0;
             block_reg[s00_axi_awaddr[3 : 0]] <= s00_axi_wdata;
           end
         end
@@ -244,7 +244,6 @@
       mode_we       = 0;
       block_we      = 0;
       tmp_read_data = 32'h0;
-      tmp_error     = 0;
       if (s00_axi_awprot)
         begin
           if (s00_axi_awvalid)
