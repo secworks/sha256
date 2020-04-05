@@ -45,7 +45,7 @@ CORE_TB_SRC = ../src/tb/tb_sha256_core.v
 TOP_SRC = ../src/rtl/sha256.v $(CORE_SRC)
 TOP_TB_SRC = ../src/tb/tb_sha256.v
 
-AXI4_SRC = ../src/interfaces/axi4/rtl/sha256_axi4.v ../src/interfaces/axi4/rtl/sha256_v2_0_s00_axi.v $(CORE_SRC)
+AXI4_SRC = ../src/interfaces/axi4/rtl/sha256_axi4.v ../src/interfaces/axi4/rtl/sha256_axi4_slave.v $(CORE_SRC)
 AXI4_TB_SRC = ../src/interfaces/axi4/tb/tb_sha256_axi4.v
 
 

@@ -45,10 +45,10 @@
 		input wire  s00_axi_rready
 	);
 // Instantiation of Axi Bus Interface S00_AXI
-	sha256_v2_0_s00_axi # (
+	sha256_axi4_slave # (
 		.C_S_AXI_DATA_WIDTH(C_S00_AXI_DATA_WIDTH),
 		.C_S_AXI_ADDR_WIDTH(C_S00_AXI_ADDR_WIDTH)
-	) sha256_v2_0_s00_axi_inst (
+	) sha256_axi4_slave_inst (
 		.S_AXI_ACLK(s00_axi_aclk),
 		.S_AXI_ARESETN(s00_axi_aresetn),
 		.S_AXI_AWADDR(s00_axi_awaddr),
@@ -285,5 +285,5 @@
             end
         end
     end // addr_decoder
-	// User logic ends
-	endmodule
+
+endmodule // sha256_axi4

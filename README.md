@@ -65,6 +65,7 @@ now initiate SHA256 processing.
 Regarding SHA224, it is up to the user to only read seven, not eight
 words from the digest registers. The core will update the LSW too.
 
+
 ## Streaming interface ##
 There is a streaming interface for the core contributed by
 [Olof Kindgren](https://github.com/olofk).
@@ -74,18 +75,20 @@ There is a streaming interface for the core contributed by
 
 
 ## AXI4 interface ##
+
+**NOTE** This interface is currently being developed. Expect bugs.s this
+is still under development.
+
 There is now an AXI4 interface for the core contributed by
 [Sanjay A Menon](https://github.com/Sanjay-A-Menon). The interface wraps
 sha256_core, replacing sha256.v
 
-The interface provides a AXI4-Lite slave interface with added hash
+The interface provides an AXI4-Lite slave interface with added hash
 complete interrupt signal. Chip select is implemented via axi_awprot
 signal.
 
 - src/interfaces/axi4/rtl - RTL source file for wrapped core
 - src/interfaces/axi4/tb  - Testbench for the wrapped core
-
-(**NOTE** - You can expect bugs as this is still under development)
 
 
 ## ASIC-results ##

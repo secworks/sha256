@@ -1,7 +1,7 @@
 
 `timescale 1 ns / 1 ps
 
-	module sha256_v2_0_s00_axi #
+	module sha256_axi4_slave #
 	(
 		// Users to add parameters here
 
@@ -1061,4 +1061,4 @@
 
 	// User logic ends
 
-	endmodule
+endmodule // sha256_axi4_slave
