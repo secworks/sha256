@@ -5,6 +5,21 @@
 # Makefile for building sha256 wmem, core and top simulations.
 #
 #
+# Notes for the stream target:
+# The stream testbench computes the digest of a randomly created
+# reference file, and compares it to the output of Python's hashlib
+# library. Before the testbench can be run, the reference file must
+# be padded by the pad.py script, and the expected sha must be
+# calculated by python's hashlib. Any file can be digested in the
+# testbench by running:
+#
+#   REFERENCE_FILE=</path/to/file> make sim-stream
+#
+# Note that this testbench also uses FuseSoC and can be run with
+# different simulators by setting $(SIM) to any of icarus,
+# modelsim, isim or xsim. Default is icarus
+#
+#
 # Author: Joachim Strombergson
 # Copyright (c) 2013, Secworks Sweden AB
 # All rights reserved.
@@ -74,15 +89,6 @@ wmem.sim: $(WMEM_SRC) $(WMEM_TB_SRC)
 axi4.sim: $(AXI4_SRC) $(AXI4_TB_SRC)
 	$(CC) $(CC_FLAGS) -o axi4.sim  $(AXI4_SRC) $(AXI4_TB_SRC)
 
-#The stream testbench computes the digest of a randomly created reference file,
-# and compares it to the output of Python's hashlib library
-# Before the testbench can be run, the reference file must be padded by the
-# pad.py script, and the expected sha must be calculated by python's hashlib
-# Any file can be digested in the testbench by running
-# REFERENCE_FILE=</path/to/file> make sim-stream
-# Note that this testbench also uses FuseSoC and can be run with different
-# simulators by setting $(SIM) to any of icarus, modelsim, isim or xsim.
-# Default is icarus
 
 SIM ?= icarus
 REFERENCE_FILE ?= reference_file
@@ -91,7 +97,7 @@ reference_file:
 	dd if=/dev/random of=$@ count=1 bs=1k
 
 %.padded: %
-	python ../src/scripts/pad.py $<
+	python ../src/interfaces/stream//scripts/pad.py $<
 
 $(REFERENCE_FILE).sha: $(REFERENCE_FILE)
 	python -c "import hashlib;print(int(hashlib.sha256(open('$<', 'rb').read()).hexdigest(), 16))" > $@
