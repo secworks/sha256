@@ -36,14 +36,18 @@
 #
 #===================================================================
 
-WMEM_SRC=../src/rtl/sha256_w_mem.v
-WMEM_TB_SRC=../src/tb/tb_sha256_w_mem.v
+WMEM_SRC = ../src/rtl/sha256_w_mem.v
+WMEM_TB_SRC = ../src/tb/tb_sha256_w_mem.v
 
-CORE_SRC=../src/rtl/sha256_core.v ../src/rtl/sha256_k_constants.v ../src/rtl/sha256_w_mem.v
-CORE_TB_SRC=../src/tb/tb_sha256_core.v
+CORE_SRC = ../src/rtl/sha256_core.v ../src/rtl/sha256_k_constants.v ../src/rtl/sha256_w_mem.v
+CORE_TB_SRC = ../src/tb/tb_sha256_core.v
 
-TOP_SRC=../src/rtl/sha256.v $(CORE_SRC)
-TOP_TB_SRC=../src/tb/tb_sha256.v
+TOP_SRC = ../src/rtl/sha256.v $(CORE_SRC)
+TOP_TB_SRC = ../src/tb/tb_sha256.v
+
+AXI4_SRC = ../src/interfaces/axi4/rtl/sha256_axi4.v ../src/interfaces/axi4/rtl/sha256_v2_0_s00_axi.v $(CORE_SRC)
+AXI4_TB_SRC = ../src/interfaces/axi4/tb/tb_sha256_axi4.v
+
 
 CC = iverilog
 CC_FLAGS = -Wall
@@ -52,7 +56,7 @@ LINT = verilator
 LINT_FLAGS = +1364-2001ext+ --lint-only -Wall -Wno-fatal -Wno-DECLFILENAME
 
 
-all: top.sim core.sim wmem.sim
+all: top.sim core.sim wmem.sim axi4.sim
 
 
 top.sim: $(TOP_TB_SRC) $(TOP_SRC)
@@ -65,6 +69,10 @@ core.sim: $(CORE_TB_SRC) $(CORE_SRC)
 
 wmem.sim: $(WMEM_SRC) $(WMEM_TB_SRC)
 	$(CC) $(CC_FLAGS) -o wmem.sim $(WMEM_SRC) $(WMEM_TB_SRC)
+
+
+axi4.sim: $(AXI4_SRC) $(AXI4_TB_SRC)
+	$(CC) $(CC_FLAGS) -o axi4.sim  $(AXI4_SRC) $(AXI4_TB_SRC)
 
 #The stream testbench computes the digest of a randomly created reference file,
 # and compares it to the output of Python's hashlib library
@@ -91,6 +99,7 @@ $(REFERENCE_FILE).sha: $(REFERENCE_FILE)
 sim-stream: $(REFERENCE_FILE).padded $(REFERENCE_FILE).sha
 	fusesoc --cores-root=.. sim --sim=$(SIM) --testbench=tb_sha256_stream sha256 --file=$< --expected_sha=$(shell cat $(REFERENCE_FILE).sha)
 
+
 sim-top: top.sim
 	./top.sim
 
@@ -103,14 +112,23 @@ sim-wmem: wmem.sim
 	./wmem.sim
 
 
+sim-axi4: axi4.sim
+	./axi4.sim
+
+
 lint: $(TOP_SRC)
 	$(LINT) $(LINT_FLAGS) $(TOP_SRC)
+
+
+lint-axi4: $(AXI4_SRC)
+	$(LINT) $(LINT_FLAGS) $(AXI4_SRC)
 
 
 clean:
 	rm -f top.sim
 	rm -f core.sim
 	rm -f wmem.sim
+	rm -f axi4.sim
 
 
 help:
@@ -121,11 +139,14 @@ help:
 	@echo "top:      Build the top simulation target."
 	@echo "core:     Build the core simulation target."
 	@echo "wmem:     Build the wmem simulation target."
+	@echo "axi4:     Build the AXI4 simulation target."
 	@echo "sim-wb:   Run top Wishbone simulation."
 	@echo "sim-top:  Run top level simulation."
 	@echo "sim-core: Run core level simulation."
 	@echo "sim-wmem: Run wmem level simulation."
-	@echo "lint:     Run the linter on both the block based and the stream based top levels."
+	@echo "sim-axi4: Run AXI4 level simulation."
+	@echo "lint:     Run the linter on the standard sha256 implementation."
+	@echo "lint:     Run the linter on the core with AXI4 interface."
 	@echo "clean:    Delete all built files."
 
 #===================================================================
