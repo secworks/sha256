@@ -66,8 +66,11 @@ Regarding SHA224, it is up to the user to only read seven, not eight
 words from the digest registers. The core will update the LSW too.
 
 ## Streaming interface ##
-There is a streaming interface for the core provided
+There is a streaming interface for the core contributed by
 [Olof Kindgren](https://github.com/olofk).
+
+- src/interfaces/stream/rtl - RTL source file for wrapped core
+- src/interfaces/stream/tb - Testbench for the wrapped core
 
 
 ## AXI4 interface ##
@@ -80,7 +83,7 @@ complete interrupt signal. Chip select is implemented via axi_awprot
 signal.
 
 - src/interfaces/axi4/rtl - RTL source file for wrapped core
-- src/interfaces/axi4/tbb - Testbench for the wrapped core
+- src/interfaces/axi4/tb  - Testbench for the wrapped core
 
 (**NOTE** - You can expect bugs as this is still under development)
 
