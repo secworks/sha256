@@ -166,8 +166,8 @@
   // core instantiation.
   //----------------------------------------------------------------
   sha256_core core(
-                   .s00_axi_aclk(s00_axi_aclk),
-                   .s00_axi_aresetn(s00_axi_aresetn),
+                   .clk(s00_axi_aclk),
+                   .reset_n(s00_axi_aresetn),
                    .init(init_reg),
                    .next(next_reg),
                    .mode(mode_reg),
