@@ -135,7 +135,6 @@ help:
 	@echo "Supported targets:"
 	@echo "------------------"
 	@echo "all:      Build all simulation targets."
-	@echo "wb:       Build the Wishbone simulation target."
 	@echo "top:      Build the top simulation target."
 	@echo "core:     Build the core simulation target."
 	@echo "wmem:     Build the wmem simulation target."
