@@ -76,8 +76,8 @@ There is a streaming interface for the core contributed by
 
 ## AXI4 interface ##
 
-**NOTE** This interface is currently being developed. Expect bugs.s this
-is still under development.
+**NOTE** This interface is currently being developed. Expect bugs as this
+interface is still under development.
 
 There is now an AXI4 interface for the core contributed by
 [Sanjay A Menon](https://github.com/Sanjay-A-Menon). The interface wraps
