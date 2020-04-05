@@ -1,5 +1,17 @@
-
-`timescale 1 ns / 1 ps
+//======================================================================
+//
+// sha256_axi4_slave.v
+// -------------------
+// AXI4 slave interface handler.
+// an AXI4 Slave interface.
+//
+//
+// Author: Sanjay A Menon
+// Copyright (c) 2020.
+//
+// Licence to be added.
+//
+//======================================================================
 
 	module sha256_axi4_slave #
 	(
@@ -1056,9 +1068,8 @@
 	        end
 	    end
 	end
-
-	// Add user logic here
-
-	// User logic ends
-
 endmodule // sha256_axi4_slave
+
+//======================================================================
+// EOF sha256_axi4_slave.v
+//======================================================================
