@@ -126,6 +126,17 @@ Implementation results using Altera Quartus-II 13.1.
 - 66 cycles latency
 
 
+### Microchip ###
+
+***IGLOO2***
+- Tool: Libero v 12.4
+- Device: M2GL090TS-1FG484I
+- LUTs: 2811
+- SLEs: 1900
+- BRAMs: 0
+- Fmax: 114 MHz
+
+
 ### Xilinx FPGAs ###
 Implementation results using ISE 14.7.
 
