@@ -37,6 +37,8 @@
 //
 //======================================================================
 
+`default_nettype none
+
 module sha256_w_mem(
                     input wire           clk,
                     input wire           reset_n,
@@ -47,13 +49,6 @@ module sha256_w_mem(
                     input wire           next,
                     output wire [31 : 0] w
                    );
-
-
-  //----------------------------------------------------------------
-  // Internal constant and parameter definitions.
-  //----------------------------------------------------------------
-  parameter CTRL_IDLE   = 0;
-  parameter CTRL_UPDATE = 1;
 
 
   //----------------------------------------------------------------

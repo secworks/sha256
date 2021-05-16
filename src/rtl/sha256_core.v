@@ -37,6 +37,8 @@
 //
 //======================================================================
 
+`default_nettype none
+
 module sha256_core(
                    input wire            clk,
                    input wire            reset_n,
@@ -56,29 +58,29 @@ module sha256_core(
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
-  parameter SHA224_H0_0 = 32'hc1059ed8;
-  parameter SHA224_H0_1 = 32'h367cd507;
-  parameter SHA224_H0_2 = 32'h3070dd17;
-  parameter SHA224_H0_3 = 32'hf70e5939;
-  parameter SHA224_H0_4 = 32'hffc00b31;
-  parameter SHA224_H0_5 = 32'h68581511;
-  parameter SHA224_H0_6 = 32'h64f98fa7;
-  parameter SHA224_H0_7 = 32'hbefa4fa4;
+  localparam SHA224_H0_0 = 32'hc1059ed8;
+  localparam SHA224_H0_1 = 32'h367cd507;
+  localparam SHA224_H0_2 = 32'h3070dd17;
+  localparam SHA224_H0_3 = 32'hf70e5939;
+  localparam SHA224_H0_4 = 32'hffc00b31;
+  localparam SHA224_H0_5 = 32'h68581511;
+  localparam SHA224_H0_6 = 32'h64f98fa7;
+  localparam SHA224_H0_7 = 32'hbefa4fa4;
 
-  parameter SHA256_H0_0 = 32'h6a09e667;
-  parameter SHA256_H0_1 = 32'hbb67ae85;
-  parameter SHA256_H0_2 = 32'h3c6ef372;
-  parameter SHA256_H0_3 = 32'ha54ff53a;
-  parameter SHA256_H0_4 = 32'h510e527f;
-  parameter SHA256_H0_5 = 32'h9b05688c;
-  parameter SHA256_H0_6 = 32'h1f83d9ab;
-  parameter SHA256_H0_7 = 32'h5be0cd19;
+  localparam SHA256_H0_0 = 32'h6a09e667;
+  localparam SHA256_H0_1 = 32'hbb67ae85;
+  localparam SHA256_H0_2 = 32'h3c6ef372;
+  localparam SHA256_H0_3 = 32'ha54ff53a;
+  localparam SHA256_H0_4 = 32'h510e527f;
+  localparam SHA256_H0_5 = 32'h9b05688c;
+  localparam SHA256_H0_6 = 32'h1f83d9ab;
+  localparam SHA256_H0_7 = 32'h5be0cd19;
 
-  parameter SHA256_ROUNDS = 63;
+  localparam SHA256_ROUNDS = 63;
 
-  parameter CTRL_IDLE   = 0;
-  parameter CTRL_ROUNDS = 1;
-  parameter CTRL_DONE   = 2;
+  localparam CTRL_IDLE   = 0;
+  localparam CTRL_ROUNDS = 1;
+  localparam CTRL_DONE   = 2;
 
 
   //----------------------------------------------------------------
