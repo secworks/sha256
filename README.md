@@ -37,35 +37,35 @@ Create and enter a new workspace
 mkdir workspace && cd workspace
 ~~~
 
-Register aes as a library in the workspace
+Register sha256 as a library in the workspace
 ~~~
-fusesoc library add aes /path/to/aes
+fusesoc library add sha256 /path/to/sha256
 ~~~
 
 ...if repo is available locally or...
 ...to get the upstream repo
 ~~~
-fusesoc library add aes https://github.com/secworks/aes
+fusesoc library add sha256 https://github.com/secworks/sha256
 ~~~
 
 To run lint
 ~~~
-fusesoc run --target=lint secworks:crypto:aes
+fusesoc run --target=lint secworks:crypto:sha256
 ~~~
 
-Run tb_aes testbench
+Run tb_sha256 testbench
 ~~~
-fusesoc run --target=tb_aes secworks:crypto:aes
+fusesoc run --target=tb_sha256 secworks:crypto:sha256
 ~~~
 
 Run with modelsim instead of default tool (icarus)
 ~~~
-fusesoc run --target=tb_aes --tool=modelsim secworks:crypto:aes
+fusesoc run --target=tb_sha256 --tool=modelsim secworks:crypto:sha256
 ~~~
 
 List all targets
 ~~~
-fusesoc core show secworks:crypto:aes
+fusesoc core show secworks:crypto:sha256
 ~~~
 
 
