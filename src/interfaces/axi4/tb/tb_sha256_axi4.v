@@ -316,15 +316,10 @@ module tb_sha256_axi4();
      $display("*** TC %0d single block test case started.", tc_number);
      tc_ctr = tc_ctr + 1;
 
+     //Input Section
+     
      tb_awprot = 1;
-     //tb_awvalid = 1;
-     //tb_wvalid = 1;
-     //tb_awaddr = 8'h08;
-     //tb_wdata = 32'h00000005;
-     //#(CLK_PERIOD);
-     //wait_ready();
      tb_bready = 1;
-     //$display("0x%08x",block[31:0]);
      tb_awvalid = 1;
      tb_wvalid = 1;
      tb_awaddr = 8'h1f;
@@ -332,218 +327,113 @@ module tb_sha256_axi4();
      #(CLK_PERIOD);
      wait_ready();
 
-
-     //tb_awvalid = 1;
-     //tb_wvalid = 1;
-     //tb_awaddr = 8'h08;
-     //tb_wdata = 32'h00000006;
-     //#(CLK_PERIOD);
-     //wait_ready();
-     //tb_bready = 1;
      tb_awvalid = 1;
      tb_wvalid = 1;
      tb_awaddr = 8'h1e;
      tb_wdata = block[63:32];
      #(CLK_PERIOD);
      wait_ready();
-     //$display(dut.block_reg[1]);
 
-
-     //tb_awvalid = 1;
-     //tb_wvalid = 1;
-     //tb_awaddr = 8'h08;
-     //tb_wdata = 32'h00000006;
-     //#(CLK_PERIOD);
-     //wait_ready();
      tb_awvalid = 1;
      tb_wvalid = 1;
      tb_awaddr = 8'h1d;
      tb_wdata = block[95:64];
      #(CLK_PERIOD);
      wait_ready();
-     //$display(dut.block_reg[2]);
 
-     //tb_awvalid = 1;
-     //tb_wvalid = 1;
-     //tb_awaddr = 8'h08;
-     //tb_wdata = 32'h00000006;
-     //#(CLK_PERIOD);
-     //wait_ready();
      tb_awvalid = 1;
      tb_wvalid = 1;
      tb_awaddr = 8'h1c;
      tb_wdata = block[127:96];
      #(CLK_PERIOD);
      wait_ready();
-     //$display(dut.block_reg[3]);
 
-     //tb_awvalid = 1;
-     //tb_wvalid = 1;
-     //tb_awaddr = 8'h08;
-     //tb_wdata = 32'h00000006;
-     //#(CLK_PERIOD);
-     //wait_ready();
      tb_awvalid = 1;
      tb_wvalid = 1;
      tb_awaddr = 8'h1b;
      tb_wdata = block[159:128];
      #(CLK_PERIOD);
      wait_ready();
-     //$display(dut.block_reg[4]);
 
-     //tb_awvalid = 1;
-     //tb_wvalid = 1;
-     //tb_awaddr = 8'h08;
-     //tb_wdata = 32'h00000006;
-     //#(CLK_PERIOD);
-     //wait_ready();
      tb_awvalid = 1;
      tb_wvalid = 1;
      tb_awaddr = 8'h1a;
      tb_wdata = block[191:160];
      #(CLK_PERIOD);
      wait_ready();
-     //$display(dut.block_reg[5]);
 
-     //tb_awvalid = 1;
-     //tb_wvalid = 1;
-     //tb_awaddr = 8'h08;
-     //tb_wdata = 32'h00000006;
-     //#(CLK_PERIOD);
-     //wait_ready();
      tb_awvalid = 1;
      tb_wvalid = 1;
      tb_awaddr = 8'h19;
      tb_wdata = block[223:192];
      #(CLK_PERIOD);
      wait_ready();
-     //$display(dut.block_reg[6]);
 
-     //tb_awvalid = 1;
-     //tb_wvalid = 1;
-     //tb_awaddr = 8'h08;
-     //tb_wdata = 32'h00000006;
-     //#(CLK_PERIOD);
-     //wait_ready();
      tb_awvalid = 1;
      tb_wvalid = 1;
      tb_awaddr = 8'h18;
      tb_wdata = block[255:224];
      #(CLK_PERIOD);
      wait_ready();
-     //$display(dut.block_reg[7]);
 
-     //tb_awvalid = 1;
-     //tb_wvalid = 1;
-     //tb_awaddr = 8'h08;
-     //tb_wdata = 32'h00000006;
-     //#(CLK_PERIOD);
-     //wait_ready();
      tb_awvalid = 1;
      tb_wvalid = 1;
      tb_awaddr = 8'h17;
      tb_wdata = block[287:256];
      #(CLK_PERIOD);
      wait_ready();
-     //$display(dut.block_reg[8]);
 
-     //tb_awvalid = 1;
-     //tb_wvalid = 1;
-     //tb_awaddr = 8'h08;
-     //tb_wdata = 32'h00000006;
-     //#(CLK_PERIOD);
-     //wait_ready();
      tb_awvalid = 1;
      tb_wvalid = 1;
      tb_awaddr = 8'h16;
      tb_wdata = block[319:288];
      #(CLK_PERIOD);
      wait_ready();
-     //$display(dut.block_reg[9]);
 
-     //tb_awvalid = 1;
-     //tb_wvalid = 1;
-     //tb_awaddr = 8'h08;
-     //tb_wdata = 32'h00000006;
-     //#(CLK_PERIOD);
-     //wait_ready();
      tb_awvalid = 1;
      tb_wvalid = 1;
      tb_awaddr = 8'h15;
      tb_wdata = block[351:320];
      #(CLK_PERIOD);
      wait_ready();
-     //$display(dut.block_reg[10]);
 
-     //tb_awvalid = 1;
-     //tb_wvalid = 1;
-     //tb_awaddr = 8'h08;
-     //tb_wdata = 32'h00000006;
-     //#(CLK_PERIOD);
-     //wait_ready();
      tb_awvalid = 1;
      tb_wvalid = 1;
      tb_awaddr = 8'h14;
      tb_wdata = block[383:352];
      #(CLK_PERIOD);
      wait_ready();
-     //$display(dut.block_reg[11]);
 
-     //tb_awvalid = 1;
-     //tb_wvalid = 1;
-     //tb_awaddr = 8'h08;
-     //tb_wdata = 32'h00000006;
-     //#(CLK_PERIOD);
-     //wait_ready();
      tb_awvalid = 1;
      tb_wvalid = 1;
      tb_awaddr = 8'h13;
      tb_wdata = block[415:384];
      #(CLK_PERIOD);
      wait_ready();
-     //$display(dut.block_reg[12]);
 
-     //tb_awvalid = 1;
-     //tb_wvalid = 1;
-     //tb_awaddr = 8'h08;
-     //tb_wdata = 32'h00000006;
-     //#(CLK_PERIOD);
-     //wait_ready();
      tb_awvalid = 1;
      tb_wvalid = 1;
      tb_awaddr = 8'h12;
      tb_wdata = block[447:416];
      #(CLK_PERIOD);
      wait_ready();
-     //$display(dut.block_reg[13]);
 
-     //tb_awvalid = 1;
-     //tb_wvalid = 1;
-     //tb_awaddr = 8'h08;
-     //tb_wdata = 32'h00000006;
-     //#(CLK_PERIOD);
-     //wait_ready();
      tb_awvalid = 1;
      tb_wvalid = 1;
      tb_awaddr = 8'h11;
      tb_wdata = block[479:448];
      #(CLK_PERIOD);
      wait_ready();
-     //$display(dut.block_reg[14]);
 
-     //tb_awvalid = 1;
-     //tb_wvalid = 1;
-     //tb_awaddr = 8'h08;
-     //tb_wdata = 32'h00000006;
-     //#(CLK_PERIOD);
-     //wait_ready();
      tb_awvalid = 1;
      tb_wvalid = 1;
      tb_awaddr = 8'h10;
      tb_wdata = block[511:480];
      #(CLK_PERIOD);
      wait_ready();
-     //$display(dut.block_reg[15]);
+
+    //Computation initiation by specifying block_init/block_next
+
      tb_awvalid = 1;
      tb_wvalid = 1;
      tb_awaddr = 8'h08;
@@ -557,95 +447,96 @@ module tb_sha256_axi4();
      #(CLK_PERIOD);
      wait_ready();
 
-     //tb_init = 1;
-     //tb_mode = 1;
-     //output section
 
+     //output section
+          
      wait_hash_complete();
      tb_awvalid = 0;
      tb_wvalid = 0;
-     //tb_bready = 0;
-     //tb_init = 0;
+     
 
-     tb_araddr = 8'h20;
      tb_arprot = 1;
      tb_arvalid = 1;
      tb_rready = 1;
-     wait_read();
+
+    
+     tb_arvalid = 1;
+     tb_rready = 1;
+     tb_araddr = 8'h20;
      #(CLK_PERIOD);
-     tb_digest[31:0] = tb_rdata;
-     //$display(dut.tmp_read_data);
-     //$display(dut.core_block);
-     $display("abc2= 0x%032x",dut.core_digest);
-     #(CLK_PERIOD);
      wait_read();
+     tb_digest[255:224] <= tb_rdata; 
 
      tb_arvalid = 1;
      tb_rready = 1;
      tb_araddr = 8'h21;
-     tb_digest[63:32] = tb_rdata;
      #(CLK_PERIOD);
      wait_read();
+     tb_digest[223:192] <= tb_rdata; 
 
-     //tb_arvalid = 1;
-     //tb_rready = 1;
-     //tb_araddr = 8'h22;
-     //tb_digest[95:64] = tb_rdata;
-     //#(CLK_PERIOD);
-     //wait_read();
+     tb_arvalid = 1;
+     tb_rready = 1;
+     tb_araddr = 8'h22;
+     #(CLK_PERIOD);
+     wait_read();
+     tb_digest[191:160] <= tb_rdata; 
 
-     //tb_arvalid = 1;
-     //tb_rready = 1;
-     //tb_araddr = 8'h23;
-     //tb_digest[127:96] = tb_rdata;
-     //#(CLK_PERIOD);
-     //wait_read();
+     tb_arvalid = 1;
+     tb_rready = 1;
+     tb_araddr = 8'h23;
+     #(CLK_PERIOD);
+     wait_read();
+     tb_digest[159:128] <= tb_rdata; 
 
-     //tb_arvalid = 1;
-     //tb_rready = 1;
-     //tb_araddr = 8'h24;
-     //tb_digest[159:128] = tb_rdata;
-     //#(CLK_PERIOD);
-     //wait_read();
+     tb_arvalid = 1;
+     tb_rready = 1;
+     tb_araddr = 8'h24;
+     #(CLK_PERIOD);
+     wait_read();
+     tb_digest[127:96] <= tb_rdata; 
 
-     //tb_arvalid = 1;
-     //tb_rready = 1;
-     //tb_araddr = 8'h25;
-     //tb_digest[191:160] = tb_rdata;
-     //#(CLK_PERIOD);
-     //wait_read();
+     tb_arvalid = 1;
+     tb_rready = 1;
+     tb_araddr = 8'h25;
+     #(CLK_PERIOD);
+     wait_read();
+     tb_digest[95:64] <= tb_rdata; 
+     
+     tb_arvalid = 1;
+     tb_rready = 1;
+     tb_araddr = 8'h26;
+     #(CLK_PERIOD);
+     wait_read();
+     tb_digest[63:32] <= tb_rdata; 
+     
+     tb_arvalid = 1;
+     tb_rready = 1;
+     tb_araddr = 8'h27;
+     #(CLK_PERIOD);
+     wait_read();
+     tb_digest[31:0] <= tb_rdata;
 
-     //tb_arvalid = 1;
-     //tb_rready = 1;
-     //tb_araddr = 8'h26;
-     //tb_digest[223:192] = tb_rdata;
-     //#(CLK_PERIOD);
-     //wait_read();
+     tb_arvalid = 1;
+     tb_rready = 1;
+     tb_araddr = 8'h27;
+     #(CLK_PERIOD);
+     wait_read();
+     tb_digest[31:0] <= tb_rdata; 
 
-     //tb_arvalid = 1;
-     //tb_rready = 1;
-     //tb_araddr = 8'h27;
-     //tb_digest[255:224] = tb_rdata;
-     //#(CLK_PERIOD);
-     //wait_read();
-
-
-     //wait_ready();
-
-
- //    if (tb_digest == expected)
- //      begin
- //        $display("*** TC %0d successful.", tc_number);
- //      end
- //    else
- //      begin
- //        $display("*** ERROR: TC %0d NOT successful.", tc_number);
- //        $display("Expected: 0x%064x", expected);
- //        $display("Got:      0x%064x", tb_digest);
- //        $display("");
- //
- //        error_ctr = error_ctr + 1;
- //      end
+    
+     if (tb_digest == expected)
+       begin
+         $display("*** TC %0d successful.", tc_number);
+       end
+     else
+       begin
+         $display("*** ERROR: TC %0d NOT successful.", tc_number);
+         $display("Expected: 0x%064x", expected);
+         $display("Got:      0x%064x", tb_digest);
+         $display("");
+ 
+         error_ctr = error_ctr + 1;
+       end
     end
 
   endtask // single_block_test
