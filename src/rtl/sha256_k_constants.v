@@ -39,7 +39,7 @@
 `default_nettype none
 
 module sha256_k_constants(
-                          input wire  [5 : 0] addr,
+                          input wire  [5 : 0] round,
                           output wire [31 : 0] K
                          );
 
@@ -56,11 +56,11 @@ module sha256_k_constants(
 
 
   //----------------------------------------------------------------
-  // addr_mux
+  // round_mux
   //----------------------------------------------------------------
   always @*
-    begin : addr_mux
-      case(addr)
+    begin : round_mux
+      case(round)
         00: tmp_K = 32'h428a2f98;
         01: tmp_K = 32'h71374491;
         02: tmp_K = 32'hb5c0fbcf;
@@ -125,8 +125,8 @@ module sha256_k_constants(
         61: tmp_K = 32'ha4506ceb;
         62: tmp_K = 32'hbef9a3f7;
         63: tmp_K = 32'hc67178f2;
-      endcase // case (addr)
-    end // block: addr_mux
+      endcase // case (round)
+    end // block: round_mux
 endmodule // sha256_k_constants
 
 //======================================================================

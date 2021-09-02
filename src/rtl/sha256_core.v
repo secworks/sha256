@@ -164,7 +164,7 @@ module sha256_core(
   // Module instantiantions.
   //----------------------------------------------------------------
   sha256_k_constants k_constants_inst(
-                                      .addr(t_ctr_reg),
+                                      .round(t_ctr_reg),
                                       .K(k_data)
                                      );
 
