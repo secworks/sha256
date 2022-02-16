@@ -12,16 +12,8 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: sha256
-      - name: Checkout pdk
-        uses: actions/checkout@v2
-        with:
-          repository: olofk/pdklite
-          path: pdklite
-      - run: echo "PDK_ROOT=$GITHUB_WORKSPACE/pdklite" >> $GITHUB_ENV
-      - run: echo "EDALIZE_LAUNCHER=${GITHUB_WORKSPACE}/$REPO/.github/workflows/openlane_runner.py" >> $GITHUB_ENV
-      - run: pip3 install --user -e "git+https://github.com/olofk/edalize.git#egg=edalize"
+      - run: echo "EDALIZE_LAUNCHER=el_docker" >> $GITHUB_ENV
       - run: pip3 install fusesoc
-#      - run: docker pull efabless/openlane:v0.12
       - run: fusesoc library add $REPO $GITHUB_WORKSPACE/$REPO
       - run: fusesoc run --target=sky130 $VLNV
 
@@ -39,8 +31,6 @@ jobs:
       - run: pip3 install fusesoc
       - run: fusesoc library add $REPO $GITHUB_WORKSPACE/$REPO
       - run: fusesoc run --target=tb_sha256 $VLNV
-      - run: fusesoc run --target=tb_sha256_core $VLNV
-      - run: fusesoc run --target=tb_sha256_w_mem $VLNV
 
   lint-verilator:
     runs-on: ubuntu-latest
