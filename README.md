@@ -211,7 +211,15 @@ Implementation results using Vivado 2014.4.
 - 66 cycles latency
 
 
-## TODO ##
-- Complete documentation.
-- Bug fixes for Testbench of AXI4 wrapped core
-- Add implementation results of the wrapped core on **PYNQ-Z2**
+Implementation results using Vivado v.2019.2
+
+Results kindly provided by
+[Sanjay-A-Menon](https://github.com/Sanjay-A-Menon). Implemented design
+includes the AXI4 wrapper.
+
+**Zynq-7020**
+- Device: 7z020clg400-1
+- Slice LUTs: 2555
+- Slice regs: 2606
+- Fmax: 78 MHz
+- 66 cycles latency
