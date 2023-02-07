@@ -24,53 +24,6 @@ Note that the core does **NOT** implement padding of final block. The
 caller is expected to handle padding.
 
 
-## FuseSoC
-This core is supported by the
-[FuseSoC](https://github.com/olofk/fusesoc) core package manager and
-build system. Some quick  FuseSoC instructions:
-
-install FuseSoC
-~~~
-pip install fusesoc
-~~~
-
-Create and enter a new workspace
-~~~
-mkdir workspace && cd workspace
-~~~
-
-Register sha256 as a library in the workspace
-~~~
-fusesoc library add sha256 /path/to/sha256
-~~~
-
-...if repo is available locally or...
-...to get the upstream repo
-~~~
-fusesoc library add sha256 https://github.com/secworks/sha256
-~~~
-
-To run lint
-~~~
-fusesoc run --target=lint secworks:crypto:sha256
-~~~
-
-Run tb_sha256 testbench
-~~~
-fusesoc run --target=tb_sha256 secworks:crypto:sha256
-~~~
-
-Run with modelsim instead of default tool (icarus)
-~~~
-fusesoc run --target=tb_sha256 --tool=modelsim secworks:crypto:sha256
-~~~
-
-List all targets
-~~~
-fusesoc core show secworks:crypto:sha256
-~~~
-
-
 ## Implementation details ##
 The sha256 design is divided into the following sections.
 - src/rtl - RTL source files
@@ -134,6 +87,54 @@ signal.
 
 - src/interfaces/axi4/rtl - RTL source file for wrapped core
 - src/interfaces/axi4/tb  - Testbench for the wrapped core
+
+
+
+## FuseSoC Integration
+This core is supported by the
+[FuseSoC](https://github.com/olofk/fusesoc) core package manager and
+build system. Some quick  FuseSoC instructions:
+
+install FuseSoC
+~~~
+pip install fusesoc
+~~~
+
+Create and enter a new workspace
+~~~
+mkdir workspace && cd workspace
+~~~
+
+Register sha256 as a library in the workspace
+~~~
+fusesoc library add sha256 /path/to/sha256
+~~~
+
+...if repo is available locally or...
+...to get the upstream repo
+~~~
+fusesoc library add sha256 https://github.com/secworks/sha256
+~~~
+
+To run lint
+~~~
+fusesoc run --target=lint secworks:crypto:sha256
+~~~
+
+Run tb_sha256 testbench
+~~~
+fusesoc run --target=tb_sha256 secworks:crypto:sha256
+~~~
+
+Run with modelsim instead of default tool (icarus)
+~~~
+fusesoc run --target=tb_sha256 --tool=modelsim secworks:crypto:sha256
+~~~
+
+List all targets
+~~~
+fusesoc core show secworks:crypto:sha256
+~~~
 
 
 ## ASIC-results ##
