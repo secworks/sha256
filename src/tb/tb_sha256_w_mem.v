@@ -57,6 +57,7 @@ module tb_sha256_w_mem();
   reg           tb_init;
   reg           tb_next;
   reg [511 : 0] tb_block;
+  reg [5 : 0]   tb_round;
   wire [31 : 0] tb_w;
 
   reg [63 : 0] cycle_ctr;
@@ -72,6 +73,7 @@ module tb_sha256_w_mem();
                    .reset_n(tb_reset_n),
 
                    .block(tb_block),
+                   .round(tb_round),
 
                    .init(tb_init),
                    .next(tb_next),
@@ -108,7 +110,7 @@ module tb_sha256_w_mem();
 
       if (DEBUG)
         begin
-          $display("dut w_ctr      = %02x:", dut.w_ctr_reg);
+          $display("dut round      = %02x:", dut.round);
           $display("dut w_tmp      = %02x:", dut.w_tmp);
           dump_w_state();
         end
@@ -167,6 +169,7 @@ module tb_sha256_w_mem();
 
       tb_init = 0;
       tb_block = 512'h0;
+      tb_round = 6'h0;
     end
   endtask // reset_dut
 
@@ -178,7 +181,8 @@ module tb_sha256_w_mem();
   // Note: Currently not a self checking test case.
   //----------------------------------------------------------------
   task test_w_schedule;
-    begin
+    begin : test_w_schedule
+      integer i;
       $display("*** Test of W schedule processing. --");
       tb_block = 512'h61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018;
       tb_init = 1;
@@ -186,8 +190,13 @@ module tb_sha256_w_mem();
       tb_init = 0;
       dump_w_state();
 
-      tb_next = 1;
-      #(150 * CLK_HALF_PERIOD);
+      tb_round = 0;
+      for (i = 0 ; i < 64 ; i = i + 1) begin
+	#(2 * CLK_HALF_PERIOD);
+	tb_round = tb_round + 1;
+      end
+
+      dump_w_state();
     end
   endtask // test_w_schedule
 

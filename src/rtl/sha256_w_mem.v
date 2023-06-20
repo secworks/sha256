@@ -44,6 +44,7 @@ module sha256_w_mem(
                     input wire           reset_n,
 
                     input wire [511 : 0] block,
+                    input wire [5 : 0]   round,
 
                     input wire           init,
                     input wire           next,
@@ -73,10 +74,6 @@ module sha256_w_mem(
   reg [31 : 0] w_mem15_new;
   reg          w_mem_we;
 
-  reg [5 : 0] w_ctr_reg;
-  reg [5 : 0] w_ctr_new;
-  reg         w_ctr_we;
-
 
   //----------------------------------------------------------------
   // Wires.
@@ -103,10 +100,9 @@ module sha256_w_mem(
 
       if (!reset_n)
         begin
-          for (i = 0 ; i < 16 ; i = i + 1)
+          for (i = 0 ; i < 16 ; i = i + 1) begin
             w_mem[i] <= 32'h0;
-
-          w_ctr_reg <= 6'h0;
+	  end
         end
       else
         begin
@@ -129,9 +125,6 @@ module sha256_w_mem(
               w_mem[14] <= w_mem14_new;
               w_mem[15] <= w_mem15_new;
             end
-
-          if (w_ctr_we)
-            w_ctr_reg <= w_ctr_new;
         end
     end // reg_update
 
@@ -144,8 +137,8 @@ module sha256_w_mem(
   //----------------------------------------------------------------
   always @*
     begin : select_w
-      if (w_ctr_reg < 16)
-        w_tmp = w_mem[w_ctr_reg[3 : 0]];
+      if (round < 16)
+        w_tmp = w_mem[round[3 : 0]];
       else
         w_tmp = w_new;
     end // select_w
@@ -220,7 +213,7 @@ module sha256_w_mem(
           w_mem_we    = 1;
         end
 
-      if (next && (w_ctr_reg > 15))
+      if (next && (round > 15))
         begin
           w_mem00_new = w_mem[01];
           w_mem01_new = w_mem[02];
@@ -241,30 +234,6 @@ module sha256_w_mem(
           w_mem_we    = 1;
         end
     end // w_mem_update_logic
-
-
-  //----------------------------------------------------------------
-  // w_ctr
-  // W schedule adress counter. Counts from 0x10 to 0x3f and
-  // is used to expand the block into words.
-  //----------------------------------------------------------------
-  always @*
-    begin : w_ctr
-      w_ctr_new = 6'h0;
-      w_ctr_we  = 1'h0;
-
-      if (init)
-        begin
-          w_ctr_new = 6'h0;
-          w_ctr_we  = 1'h1;
-        end
-
-      if (next)
-        begin
-          w_ctr_new = w_ctr_reg + 6'h01;
-          w_ctr_we  = 1'h1;
-        end
-    end // w_ctr
 endmodule // sha256_w_mem
 
 //======================================================================

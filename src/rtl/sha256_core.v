@@ -157,6 +157,7 @@ module sha256_core(
 
   reg           w_init;
   reg           w_next;
+  reg [5 : 0]   w_round;
   wire [31 : 0] w_data;
 
 
@@ -174,6 +175,7 @@ module sha256_core(
                           .reset_n(reset_n),
 
                           .block(block),
+                          .round(t_ctr_reg),
 
                           .init(w_init),
                           .next(w_next),
