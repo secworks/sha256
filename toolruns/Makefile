@@ -51,6 +51,9 @@
 #
 #===================================================================
 
+PADDING_SRC = ../src/rtl/sha256_final_padding.v
+PADDING_TB_SRC = ../src/tb/tb_sha256_final_padding.v
+
 WMEM_SRC = ../src/rtl/sha256_w_mem.v
 WMEM_TB_SRC = ../src/tb/tb_sha256_w_mem.v
 
@@ -71,7 +74,7 @@ LINT = verilator
 LINT_FLAGS = +1364-2001ext+ --lint-only -Wall -Wno-fatal -Wno-DECLFILENAME
 
 
-all: top.sim core.sim wmem.sim axi4.sim
+all: top.sim core.sim wmem.sim axi4.sim padding.sim
 
 
 top.sim: $(TOP_TB_SRC) $(TOP_SRC)
@@ -88,6 +91,10 @@ wmem.sim: $(WMEM_SRC) $(WMEM_TB_SRC)
 
 axi4.sim: $(AXI4_SRC) $(AXI4_TB_SRC)
 	$(CC) $(CC_FLAGS) -o axi4.sim  $(AXI4_SRC) $(AXI4_TB_SRC)
+
+
+padding.sim: $(PADDING_SRC) $(PADDING_TB_SRC)
+	$(CC) $(CC_FLAGS) -o padding.sim $(PADDING_SRC) $(PADDING_TB_SRC)
 
 
 SIM ?= icarus
@@ -130,29 +137,36 @@ lint-axi4: $(AXI4_SRC)
 	$(LINT) $(LINT_FLAGS) $(AXI4_SRC)
 
 
+lint-padding: $(AXI4_SRC)
+	$(LINT) $(LINT_FLAGS) $(AXI4_SRC)
+
+
 clean:
 	rm -f top.sim
 	rm -f core.sim
 	rm -f wmem.sim
 	rm -f axi4.sim
-
+	rm -r padding.sim
 
 help:
 	@echo "Supported targets:"
 	@echo "------------------"
-	@echo "all:       Build all simulation targets."
-	@echo "top:       Build the top simulation target."
-	@echo "core:      Build the core simulation target."
-	@echo "wmem:      Build the wmem simulation target."
-	@echo "axi4:      Build the AXI4 simulation target."
-	@echo "sim-wb:    Run top Wishbone simulation."
-	@echo "sim-top:   Run top level simulation."
-	@echo "sim-core:  Run core level simulation."
-	@echo "sim-wmem:  Run wmem level simulation."
-	@echo "sim-axi4:  Run AXI4 level simulation."
-	@echo "lint:      Run the linter on the standard sha256 implementation."
-	@echo "lint-axi4: Run the linter on the core with AXI4 interface."
-	@echo "clean:     Delete all built files."
+	@echo "all:          Build all simulation targets."
+	@echo "top:          Build the top simulation target."
+	@echo "core:         Build the core simulation target."
+	@echo "wmem:         Build the wmem simulation target."
+	@echo "axi4:         Build the AXI4 simulation target."
+	@echo "padding:      Build the final padding simulation target."
+	@echo "sim-wb:       Run top Wishbone simulation."
+	@echo "sim-top:      Run top level simulation."
+	@echo "sim-core:     Run core level simulation."
+	@echo "sim-wmem:     Run wmem level simulation."
+	@echo "sim-axi4:     Run AXI4 level simulation."
+	@echo "sim-padding:  Run AXI4 level simulation."
+	@echo "lint:         Run the linter on the standard sha256 implementation."
+	@echo "lint-axi4:    Run the linter on the core with AXI4 interface."
+	@echo "lint-padding: Run the linter on the core with AXI4 interface."
+	@echo "clean:        Delete all built files."
 
 #===================================================================
 # EOF Makefile
