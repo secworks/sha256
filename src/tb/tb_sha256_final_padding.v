@@ -298,39 +298,77 @@ module tb_sha256_final_padding();
 
   //----------------------------------------------------------------
   // tc2
-  // Test that triggers a the second type od padding where the
-  // padding does not fit and we get a single one block
-  // and a second block with the length at the end.
+  // Test that extends the FIPS 180-4 padding example in chapter
+  // 5.1.1 with a few more chars.
   //----------------------------------------------------------------
   task tc2;
     begin : tc2
-      reg tc2_error;
-      tc2_error = 0;
       tc_ctr = tc_ctr + 1;
-      $display("TC%2d started: Padding that does not fit in the block.", tc_ctr);
+      $display("TC%2d started: Extended NIST FIPS 180-4 padding example.", tc_ctr);
 
       tb_init_in = 1'h1;
       #(CLK_PERIOD);
       tb_init_in = 1'h0;
 
       #(CLK_PERIOD);
-      tb_block_in[511 : 0] = {{15{32'hdeadbeef}}, 32'h0};
-      tb_final_len           = 9'h1e0;
+      tb_block_in            = 512'h0;
+      tb_block_in[511 : 440] = 72'h616263616263616263;
+      tb_final_len           = 9'h048;
       tb_final_in            = 1'h1;
       #(CLK_PERIOD);
       tb_final_in            = 1'h0;
 
-      if (tb_block_out == {{15{32'hdeadbeef}}, 1'h1, 31'h0}) begin
-	$display("Correct first block: 0x%064x", tb_block_out);
+      if (tb_block_out == {72'h616263616263616263, 8'h80, 368'h0,64'h00000048}) begin
+	$display("Correct block: 0x%064x", tb_block_out);
       end
       else begin
-	$display("Incorrect first block:  0x%064x", tb_block_out);
-	$display("Expected first block:   0x%064x", {{15{32'hdeadbeef}}, 1'h1, 31'h0});
-	tc2_error = 1;
+	$display("Incorrect block: 0x%064x", tb_block_out);
+	$display("Expected block:  0x%064x", {72'h616263616263616263, 8'h80, 368'h0,64'h00000048});
+	error_ctr = error_ctr + 1;
       end
-      $display();
 
-      #(2 * CLK_PERIOD);
+      $display("TC%2d completed", tc_ctr);
+      $display();
+    end
+  endtask // tc2
+
+
+  //----------------------------------------------------------------
+  // tc3
+  // Test that triggers a the second type od padding where the
+  // padding does not fit and we get a single one block
+  // and a second block with the length at the end.
+  //----------------------------------------------------------------
+  task tc3;
+    begin : tc3
+      reg tc2_error;
+      tc2_error = 0;
+      tc_ctr = tc_ctr + 1;
+      $display("TC%2d started: Padding that does not fit in the final block.", tc_ctr);
+
+      tb_init_in = 1'h1;
+      #(CLK_PERIOD);
+      tb_init_in = 1'h0;
+
+      #(CLK_PERIOD);
+      tb_block_in[511 : 0] = {{15{32'h13371337}}, 32'h0};
+      tb_final_len           = 9'h1e0;
+      tb_final_in            = 1'h1;
+
+      if (tb_next_out == 1'h1) begin
+	if (tb_block_out == {{15{32'h13371337}}, 1'h1, 31'h0}) begin
+	  $display("Correct first block: 0x%064x", tb_block_out);
+	end
+	else begin
+	  $display("Incorrect first block:  0x%064x", tb_block_out);
+	  $display("Expected first block:   0x%064x", {{15{32'h13371337}}, 1'h1, 31'h0});
+	  tc2_error = 1;
+	end
+      end
+
+      tb_final_in = 1'h0;
+
+      #(10 * CLK_PERIOD);
       tb_core_ready = 1'h1;
       #(CLK_PERIOD);
       tb_core_ready = 1'h0;
@@ -351,7 +389,7 @@ module tb_sha256_final_padding();
       $display("TC%2d completed", tc_ctr);
       $display();
     end
-  endtask // tc2
+  endtask // tc3
 
 
   //----------------------------------------------------------------
@@ -367,6 +405,7 @@ module tb_sha256_final_padding();
       reset_dut();
       tc1();
       tc2();
+      tc3();
 
       display_test_result();
 

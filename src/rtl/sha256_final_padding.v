@@ -54,6 +54,7 @@ module sha256_final_padding(
 
 			    output wire           init_out,
 			    output wire           next_out,
+			    output wire           ready_out,
 			    output wire [511 : 0] block_out
 			   );
 
@@ -61,33 +62,45 @@ module sha256_final_padding(
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
-  localparam CTRL_IDLE   = 1'h0;
-  localparam CTRL_FINAL  = 1'h1;
+  localparam CTRL_IDLE   = 3'h0;
+  localparam CTRL_FINAL  = 3'h1;
+  localparam CTRL_NEXT1  = 3'h2;
+  localparam CTRL_READY1 = 3'h3;
+  localparam CTRL_NEXT2  = 3'h4;
+  localparam CTRL_READY2 = 3'h5;
+
+  localparam NO_INC    = 2'h0;
+  localparam BLOCK_INC = 2'h1;
+  localparam FINAL_INC = 2'h2;
 
 
   //----------------------------------------------------------------
   // Registers including update variables and write enable.
   //----------------------------------------------------------------
-  reg [8 : 0]  final_len_reg;
-  reg [8 : 0]  final_len_we;
+  reg [511 : 0] block_out_reg;
+  reg [511 : 0] block_out_new;
+  reg           block_out_we;
+
+  reg [8 : 0] final_len_reg;
+  reg         final_len_we;
 
   reg [63 : 0] bit_ctr_reg;
   reg [63 : 0] bit_ctr_new;
   reg          bit_ctr_rst;
-  reg          bit_ctr_block_inc;
+  reg [1 : 0]  bit_ctr_inc;
   reg          bit_ctr_we;
 
-  reg          sha256_final_padding_ctrl_reg;
-  reg          sha256_final_padding_ctrl_new;
-  reg          sha256_final_padding_ctrl_we;
+  reg [2 : 0]  sha256_final_padding_ctrl_reg;
+  reg [2 : 0]  sha256_final_padding_ctrl_new;
+  reg [2 : 0]  sha256_final_padding_ctrl_we;
 
 
   //----------------------------------------------------------------
   // Wires.
   //----------------------------------------------------------------
-  reg [1 : 0]   block_out_mux_ctrl;
   reg [511 : 0] tmp_block_out;
   reg           tmp_next_out;
+  reg           tmp_ready_out;
 
 
   //----------------------------------------------------------------
@@ -95,6 +108,7 @@ module sha256_final_padding(
   //----------------------------------------------------------------
   assign init_out  = init_in;
   assign next_out  = tmp_next_out;
+  assign ready_out = tmp_ready_out;
   assign block_out = tmp_block_out;
 
 
@@ -106,14 +120,19 @@ module sha256_final_padding(
       integer i;
 
       if (!reset_n) begin
+	block_out_reg                 <= 512'h0;
 	final_len_reg                 <= 9'h0;
 	bit_ctr_reg                   <= 64'h0;
 	sha256_final_padding_ctrl_reg <= CTRL_IDLE;
       end
 
       else begin
+	if (block_out_we) begin
+	  block_out_reg <= block_out_new;
+	end
+
 	if (final_len_we) begin
-	  final_len_reg <= final_len;
+	  final_len_reg = final_len;
 	end
 
 	if (bit_ctr_we) begin
@@ -140,8 +159,13 @@ module sha256_final_padding(
  	bit_ctr_we  = 1'h1;
       end
 
-      if (bit_ctr_block_inc) begin
+      if (bit_ctr_inc == BLOCK_INC) begin
 	bit_ctr_new = bit_ctr_reg + 9'h100;
+ 	bit_ctr_we  = 1'h1;
+      end
+
+      if (bit_ctr_inc == FINAL_INC) begin
+	bit_ctr_new = bit_ctr_reg + final_len;
  	bit_ctr_we  = 1'h1;
       end
     end
@@ -153,14 +177,14 @@ module sha256_final_padding(
   //----------------------------------------------------------------
   always @*
     begin : sha256_final_padding_ctrl
-      reg [63 : 0] msg_len;
-
-      bit_ctr_rst                   = 1'h0;
-      bit_ctr_block_inc             = 1'h0;
+      block_out_new                 = 512'h0;
+      block_out_we                  = 1'h0;
       final_len_we                  = 1'h0;
-      tmp_block_out                 = 512'h0;
-      tmp_next_out                  = 1'h0;
-      msg_len                       = 64'h0;
+      bit_ctr_rst                   = 1'h0;
+      bit_ctr_inc                   = NO_INC;
+      tmp_block_out                 = block_in;
+      tmp_next_out                  = next_in;
+      tmp_ready_out                 = core_ready;
       sha256_final_padding_ctrl_new = CTRL_IDLE;
       sha256_final_padding_ctrl_we  = 1'h0;
 
@@ -171,59 +195,96 @@ module sha256_final_padding(
 	  end
 
 	  if (next_in) begin
-	    bit_ctr_block_inc = 1'h1;
-	    tmp_block_out     = block_in;
-	    tmp_next_out      = 1'h1;
+	    bit_ctr_inc = BLOCK_INC;
 	  end
 
 	  if (final_in) begin
-	    msg_len = bit_ctr_reg + final_len;
+	    tmp_next_out                  = 1'h0;
+	    tmp_ready_out                 = 1'h0;
+	    final_len_we                  = 1'h1;
+	    block_out_new                 = block_in;
+	    block_out_we                  = 1'h1;
+	    bit_ctr_inc                   = FINAL_INC;
+	    sha256_final_padding_ctrl_new = CTRL_FINAL;
+	    sha256_final_padding_ctrl_we  = 1'h1;
+	  end
+	end
 
-	    if (final_len < 448) begin
-	      // We fit in the final block.
-	      tmp_next_out                     = 1'h1;
-	      tmp_block_out                    = block_in;
-	      tmp_block_out[(511 - final_len)] = 1'h1;
-	      tmp_block_out[63 : 0]            = msg_len;
+	CTRL_FINAL: begin
+	  tmp_next_out  = 1'h0;
+	  tmp_ready_out = 1'h0;
+
+	  if (final_len_reg < 448) begin
+	    block_out_new                        = block_in;
+	    block_out_new[(511 - final_len_reg)] = 1'h1;
+	    block_out_new[63 : 0]                = bit_ctr_reg;
+	    block_out_we                         = 1'h1;
+
+	    sha256_final_padding_ctrl_new = CTRL_NEXT2;
+	    sha256_final_padding_ctrl_we  = 1'h1;
+	  end
+
+	  else if ((final_len >= 448) && (final_len < 511)) begin
+	    block_out_new                        = block_in;
+	    block_out_new[(511 - final_len_reg)] = 1'h1;
+	    block_out_we                         = 1'h1;
+
+	    sha256_final_padding_ctrl_new = CTRL_NEXT1;
+	    sha256_final_padding_ctrl_we  = 1'h1;
+	  end
+
+	  else begin
+	    block_out_new                        = block_in;
+	    block_out_we                         = 1'h1;
+
+	    sha256_final_padding_ctrl_new = CTRL_NEXT1;
+	    sha256_final_padding_ctrl_we  = 1'h1;
+	  end
+	end
+
+	CTRL_NEXT1: begin
+	  tmp_next_out                  = 1'h1;
+	  tmp_ready_out                 = 1'h0;
+	  tmp_block_out                 = block_out_reg;
+	  sha256_final_padding_ctrl_new = CTRL_READY1;
+	  sha256_final_padding_ctrl_we  = 1'h1;
+	end
+
+
+	CTRL_READY1: begin
+	  tmp_next_out  = 1'h0;
+	  tmp_ready_out = 1'h0;
+
+	  if (core_ready) begin
+	    block_out_new[63 : 0] = bit_ctr_reg;;
+	    block_out_we          = 1'h1;
+
+	    if (final_len_reg < 512) begin
+	      block_out_new[511] = 1'h1;
 	    end
 
-	    else if (final_len < 512) begin
-	      // We fit the one, but not the counter.
-	      // We will need another block.
-	      final_len_we                      = 1'h1;
-	      tmp_next_out                      = 1'h1;
-	      tmp_block_out                     = block_in;
-	      tmp_block_out[(511 - final_len)]  = 1'h1;
-	      sha256_final_padding_ctrl_new     = CTRL_FINAL;
-	      sha256_final_padding_ctrl_we      = 1'h1;
-	    end
-
-	    else begin
-	      // The whole block is filled.
-	      // We will need another block.
-	      final_len_we                  = 1'h1;
-	      tmp_next_out                  = 1'h1;
-	      tmp_block_out                 = block_in;
-	      sha256_final_padding_ctrl_new = CTRL_FINAL;
-	      sha256_final_padding_ctrl_we  = 1'h1;
-	    end
+	    sha256_final_padding_ctrl_new = CTRL_NEXT2;
+	    sha256_final_padding_ctrl_we  = 1'h1;
 	  end
 	end
 
 
-	CTRL_FINAL: begin
-	  msg_len                       = bit_ctr_reg + final_len_reg;
-	  sha256_final_padding_ctrl_new = CTRL_IDLE;
+	CTRL_NEXT2: begin
+	  tmp_next_out                  = 1'h1;
+	  tmp_ready_out                 = 1'h0;
+	  tmp_block_out                 = block_out_reg;
+	  sha256_final_padding_ctrl_new = CTRL_READY2;
 	  sha256_final_padding_ctrl_we  = 1'h1;
+	end
+
+
+	CTRL_READY2: begin
+	  tmp_next_out  = 1'h0;
+	  tmp_ready_out = 1'h0;
 
 	  if (core_ready) begin
-	    if (final_len_reg < 512) begin
-	      tmp_block_out[63 : 0] = msg_len;
-	    end
-	    else begin
-	      tmp_block_out[511]    = 1'h1;
-	      tmp_block_out[63 : 0] = msg_len;
-	    end
+	    sha256_final_padding_ctrl_new = CTRL_IDLE;
+	    sha256_final_padding_ctrl_we  = 1'h1;
 	  end
 	end
 
