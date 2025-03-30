@@ -23,8 +23,13 @@ written in Python.
 Note that the core does **NOT** implement padding of final block. The
 caller is expected to handle padding.
 
-## Contact information ##
-For customization and integration work, please contact [Assured Security Consultants](https://www.assured.se/contact).
+
+### Contact information ##
+
+Assured provides customer support including customization, integration
+and system development related to the core. For more informantion,
+please contact [Assured Security
+Consultants](https://www.assured.se/contact).
 
 
 ## Implementation details ##
