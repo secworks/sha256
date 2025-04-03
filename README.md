@@ -1,6 +1,8 @@
 [![build-openlane-sky130](https://github.com/secworks/sha256/actions/workflows/ci.yml/badge.svg?branch=master&event=push)](https://github.com/secworks/sha256/actions/workflows/ci.yml)
 
 # sha256 #
+Hardware implementation of the SHA-256 cryptographic hash function with
+support for both SHA-256 and SHA-224.
 
 ## Implementation status ##
 The core has been completed for a long time and been used in several
@@ -25,9 +27,8 @@ caller is expected to handle padding.
 
 
 ### Contact information ##
-
 Assured provides customer support including customization, integration
-and system development related to the core. For more informantion,
+and system development related to the core. For more information,
 please contact [Assured Security
 Consultants](https://www.assured.se/contact).
 
